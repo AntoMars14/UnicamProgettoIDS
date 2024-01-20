@@ -1,7 +1,14 @@
 package it.unicam.model;
+import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.POIFD;
+import it.unicam.model.util.POIGI;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Comune {
 
@@ -38,5 +45,68 @@ public class Comune {
     public List<POI> getPOIPending() {
         return POIPending;
 
+    }
+
+    public List<POIGI> getAllPOI() {
+        List<POIGI> pois = new ArrayList<>();
+        for (POI p :
+                this.POIValidate) {
+            pois.add(p.getPOIGeneralInfo());
+        }
+        return pois;
+    }
+
+    public boolean isInComune(Coordinates coord) {
+        String apiUrl = String.format(Locale.US, "https://nominatim.openstreetmap.org/reverse?format=json&lat=%.6f&lon=%.6f&zoom=10&addressdetails=1",
+                coord.getLat(), coord.getLon());
+
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                String jsonResponse = new String(connection.getInputStream().readAllBytes());
+                return jsonResponse.contains("\"Camerino\"");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean thereIsPOI(Coordinates c) {
+        for (POI p : this.POIValidate) {
+            if (p.getCoord().equals(c))
+                return true;
+        }
+        for (POI p : this.POIPending) {
+            if (p.getCoord().equals(c))
+                return true;
+        }
+        return false;
+    }
+
+    public List<POIGI> viewPOI(Type type) {
+        List<POIGI> pois = new ArrayList<>();
+        for (POI p :
+                this.POIValidate) {
+            if (p.getType().equals(type)) pois.add(p.getPOIGeneralInfo());
+        }
+        return pois;
+    }
+
+    public POIFD viewSelectedPOI(int POIId) {
+        lastViewedPOI = this.POIValidate.get(POIId - 1).getFullDetailedPOI();
+        return lastViewedPOI;
+    }
+
+    public ContentFD viewContent(int contentID) {
+        if (this.lastViewedPOI != null) {
+            return this.POIValidate.get(this.lastViewedPOI.getId() - 1).getContents().get(contentID - 1).getFullDetailedContent();
+        }
+        return null;
     }
 }
