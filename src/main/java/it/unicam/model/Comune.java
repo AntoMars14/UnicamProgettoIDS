@@ -16,7 +16,8 @@ public class Comune {
     private String name;
     private List<POI> POIValidate = new ArrayList<>();
     private List<POI> POIPending = new ArrayList<>();
-
+    private List<Itinerary> itineraries = new ArrayList<>();
+    private List<Itinerary> itinerariesPending = new ArrayList<>();
     private POIFD lastViewedPOI;
 
     public Comune(String name, Coordinates coord) {
