@@ -1,59 +1,42 @@
 package it.unicam.view;
 
-import it.unicam.model.*;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.POIFD;
+import it.unicam.controller.Controller;
+import it.unicam.model.POIEventoFactory;
+import it.unicam.model.POILuogoConOraFactory;
+import it.unicam.model.POILuogoFactory;
+import it.unicam.model.Type;
+import it.unicam.view.io.FileChooser;
+import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
-public class UserInterface {
-    private Comune c;
-    private POIController p;
-    private Scanner in = new Scanner(System.in);
+public abstract class ContributeView extends ViewerView implements IContributorsView{
 
-    private Desktop desktop = Desktop.getDesktop();
+    protected FileChooser fChooser = new FileChooser();
 
-    private FileChooser fChooser = new FileChooser();
-
-    public UserInterface(Comune c) {
-        this.c = c;
-        this.p = new POIController(c);
+    public ContributeView(Controller controller) {
+        super(controller);
     }
 
-    public void viewPOI() throws IOException {
-        c.getAllPOI().stream().forEach(p -> System.out.println(p.toString()));
-        int poiId = in.nextInt();
-        this.selectedPOI(poiId);
-        int input = -1;
-        while (input != 0){
-            System.out.println("Per visualizzare un contenuto inserire il suo id, per terminare di visualizzare contenuti inserire 0");
-            input = in.nextInt();
-            if(input>0) {
-                this.selectedContent(input);
-            }
-        }
+    @Override
+    public void viewPoi() {
+        super.viewPoi();
     }
 
-
-
-    private void selectedPOI(int poiID){
-        System.out.println(c.viewSelectedPOI(poiID).toString());
+    @Override
+    public void viewItinerary() {
+        super.viewItinerary();
     }
 
-    private void selectedContent(int idContent) throws IOException {
-        desktop.open(c.viewContent(idContent).getFile());
-    }
+    @Override
+    public void insertPOI() {
 
-    public void insertPOI(){
         System.out.println("Seleziona le coordinate sulla mappa del punto di interesse da inserire\n");
-        MapHandler map = p.Map();
+        MapHandler map = controller.map();
         this.selectPoint(map.showMap());
         Type t = null;
         do{
@@ -82,10 +65,11 @@ public class UserInterface {
                 this.insertContent();
             }
         }
+        this.confirmPOI();
     }
 
     private void selectPoint(ICoordinate c){
-        if(!p.selectPoint(c)){
+        if(!controller.selectPoint(c)){
             System.out.println("Coordinate selezionate non valide, seleziona coordinate nel comune e a cui non è già associato un POI");
             this.insertPOI();
         };
@@ -95,14 +79,14 @@ public class UserInterface {
         String name = in.nextLine();
         System.out.println("Inserisci la descrizione del POI");
         String desc = in.nextLine();
-        p.InsertPoiInfo(name, desc);
+        controller.insertPoiInfo(name, desc);
     }
 
     private void selectType(Type t){
         switch (t){
-            case Type.LUOGO -> p.selectType(new POILuogoFactory());
-            case Type.LUOGOCONORA -> p.selectType(new POILuogoConOraFactory());
-            case Type.EVENTO -> p.selectType(new POIEventoFactory());
+            case Type.LUOGO -> controller.selectType(new POILuogoFactory());
+            case Type.LUOGOCONORA -> controller.selectType(new POILuogoConOraFactory());
+            case Type.EVENTO -> controller.selectType(new POIEventoFactory());
         }
     }
 
@@ -116,7 +100,7 @@ public class UserInterface {
             System.out.println("Inserisci ora di chiusura nel formato HH:mm");
             closet[i] = LocalTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
         }
-        p.insertTime(opent, closet);
+        controller.insertTime(opent, closet);
     }
 
     private void insertDate(){
@@ -124,7 +108,7 @@ public class UserInterface {
         LocalDateTime opend = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         System.out.println("Inserire la data di chiusura nel formato gg-mm-yyyy hh:mm");
         LocalDateTime closed = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-        p.insertDate(opend, closed);
+        controller.insertDate(opend, closed);
     }
     private void insertContent(){
         System.out.println("Inserisci il nome del contenuto");
@@ -133,14 +117,8 @@ public class UserInterface {
         String d = in.nextLine();
         System.out.println("Inserisci il file del contenuto");
         File f = fChooser.showFileChooser();
-        p.insertContent(n, d, f);
+        controller.insertContent(n, d, f);
     }
 
-    public void confirmPOI(){
-        p.confirmPoi();
-    }
-
-    public void confirmPOIPending(){
-        p.confirmPoiPending();
-    }
+    public abstract void confirmPOI();
 }

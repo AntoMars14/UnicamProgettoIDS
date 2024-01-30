@@ -1,4 +1,4 @@
-package it.unicam.view;
+package it.unicam.view.io;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

@@ -1,4 +1,4 @@
-package it.unicam.view;
+package it.unicam.view.io;
 
 import it.unicam.model.Coordinates;
 import org.openstreetmap.gui.jmapviewer.Coordinate;

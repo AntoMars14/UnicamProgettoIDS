@@ -1,7 +1,7 @@
 package it.unicam.model;
 
 import it.unicam.model.util.POIGI;
-import it.unicam.view.MapHandler;
+import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 import java.io.File;
