@@ -3,9 +3,7 @@ package it.unicam.controller;
 import it.unicam.model.Comune;
 import it.unicam.model.POIController;
 import it.unicam.model.POIFactory;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.POIFD;
-import it.unicam.model.util.POIGI;
+import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
@@ -72,4 +70,31 @@ public class Controller {
         poiController.confirmPoiPending();
     }
 
+    public List<ItineraryGI> getAllItinerary() {
+       return comune.getAllItinerary();
+    }
+
+    public ItineraryFD selectedItinerary(int i) {
+        return comune.selectedItinerary(i);
+    }
+
+    public List<POIGI> getAllPendingPOI() {
+        return comune.getAllPendingPOI();
+    }
+
+    public POIFD selectedPendingPOI(int i) {
+        return comune.selectedPendingPOI(i);
+    }
+
+    public void validateSelectedPOI() {
+        comune.validateSelectedPOI();
+    }
+
+    public void deletePendingPOI() {
+        comune.deletePendingPOI();
+    }
+
+    public ContentFD viewContentPending(int contentID){
+        return comune.viewContentPending(contentID);
+    }
 }

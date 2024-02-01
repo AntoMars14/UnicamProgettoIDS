@@ -9,26 +9,27 @@ import java.io.File;
 public class FileChooser {
 
     private JFrame frame;
+    private FilteredFileChooser fileChooser = new FilteredFileChooser();
 
     public FileChooser(){
+
+
         frame = new JFrame("File Chooser Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JButton chooseFileButton = new JButton("Choose File");
-        chooseFileButton.addActionListener(new ActionListener() {
+       chooseFileButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                showFileChooser();
-            }
+            public void actionPerformed(ActionEvent e) { showFileChooser(); }
         });
 
         frame.getContentPane().add(chooseFileButton);
+
         frame.setSize(300, 200);
         frame.setVisible(false);
     }
 
     public File showFileChooser() {
-        FilteredFileChooser fileChooser = new FilteredFileChooser();
         File selectedFile = null;
 
         int returnValue = fileChooser.showOpenDialog(null);
