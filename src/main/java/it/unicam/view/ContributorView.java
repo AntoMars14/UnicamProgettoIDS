@@ -34,4 +34,16 @@ public class ContributorView extends ContributeView {
             System.out.println("Annullamento inserimento Poi in pending sulla piattaforma");
         }
     }
+
+    @Override
+    public void confirmCreationItinerary() {
+
+        System.out.println("confermi l'inserimento dell'itinerario? y/n");
+        if (in.nextLine().equals("y")){
+            controller.confirmCreationPendingItinerary();
+            System.out.println("itinerario inserito in pending nella piattaforma");
+        }else{
+            System.out.println("creazione itinerario annullata");
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package it.unicam.controller;
 
 import it.unicam.model.Comune;
+import it.unicam.model.ItineraryController;
 import it.unicam.model.POIController;
 import it.unicam.model.POIFactory;
 import it.unicam.model.util.ContentFD;
@@ -19,9 +20,12 @@ public class Controller {
     private Comune comune;
     private POIController poiController;
 
+    private ItineraryController itineraryController;
+
     public Controller(Comune comune) {
         this.comune = comune;
         this.poiController = new POIController(comune);
+        this.itineraryController = new ItineraryController(comune);
     }
 
     public List<POIGI> getAllPOI(){
@@ -72,4 +76,24 @@ public class Controller {
         poiController.confirmPoiPending();
     }
 
+    public void insertItineraryInfo(String name, String description) {
+        itineraryController.insertItineraryInfo(name, description);
+        
+    }
+
+    public void addPOI(int i) {
+        itineraryController.addPOI(i);
+    }
+
+    public void insertItineraryValidity(LocalDateTime open, LocalDateTime close) {
+        itineraryController.insertItineraryValidity(open, close);
+    }
+
+    public void confirmCreationPendingItinerary() {
+        itineraryController.confirmCreationPendingItinerary();
+    }
+
+    public void confirmCreationItinerary() {
+        itineraryController.confirmCreationItinerary();
+    }
 }

@@ -34,4 +34,16 @@ public class AuthorizedContributorView extends ContributeView {
             System.out.println("Annullamento inserimento Poi sulla piattaforma");
         }
     }
+
+    @Override
+    public void confirmCreationItinerary() {
+
+        System.out.println("confermi l'inserimento dell'itinerario? y/n");
+        if (in.nextLine().equals("y")){
+            controller.confirmCreationItinerary();
+            System.out.println("itinerario inserito nella piattaforma");
+        }else{
+            System.out.println("creazione itinerario annullata");
+        }
+    }
 }

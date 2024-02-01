@@ -121,4 +121,47 @@ public abstract class ContributeView extends ViewerView implements IContributors
     }
 
     public abstract void confirmPOI();
+
+    @Override
+    public void createItinerary() {
+        this.insertItineraryInfo();
+        controller.getAllPOI().stream().forEach(poigi -> System.out.println(poigi.toString()));
+        this.addPOI();
+        System.out.println("L'itinerario ha una validità? y/n");
+        if (in.nextLine().equals("y")){
+            this.insertItineraryValidity();
+        }
+        this.confirmCreationItinerary();
+    }
+    public void insertItineraryInfo(){
+        System.out.println("Inserire nome dell'itinerario");
+        String name = in.nextLine();
+        System.out.println("Inserire la descrizione dell'itinerario");
+        String description = in.nextLine();
+        controller.insertItineraryInfo(name, description);
+    }
+
+    public void addPOI(){
+        int c = 0;
+        String input = "";
+        do {
+            System.out.println("Inserisci id del POI che vuoi aggiungere all'itinerario");
+            controller.addPOI(in.nextInt());
+            in.nextLine();
+            c++;
+            if (c >= 2){
+                System.out.println("Inserire un altro POI all'itinerario? y/n");
+                input = in.nextLine();
+            }
+        }while (!input.equals("n"));
+    }
+
+    public void insertItineraryValidity(){
+        System.out.println("Inserisci la data di inizio dell'itinerario nel formato dd-mm-yyyy  hh:mm");
+        LocalDateTime open = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        System.out.println("Inserisci la data di fine dell'itinerario nel formato dd-mm-yyyy  hh:mm");
+        LocalDateTime close = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        controller.insertItineraryValidity(open, close);
+    }
+    public abstract void confirmCreationItinerary();
 }

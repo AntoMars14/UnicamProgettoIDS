@@ -16,5 +16,7 @@ public class Main {
         acw.insertPOI();
         cw.insertPOI();
         acw.viewPoi();
+        cw.createItinerary();
+        acw.createItinerary();
     }
 }

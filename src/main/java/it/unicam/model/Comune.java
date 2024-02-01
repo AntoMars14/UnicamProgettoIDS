@@ -110,4 +110,16 @@ public class Comune {
         }
         return null;
     }
+
+    public POI getPOI(int i) {
+        return this.POIValidate.get(i-1);
+    }
+
+    public void insertPendingItinerary(Itinerary itinerary) {
+        this.itinerariesPending.add(itinerary);
+    }
+
+    public void insertItinerary(Itinerary itinerary) {
+        this.itineraries.add(itinerary);
+    }
 }
