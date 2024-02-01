@@ -1,7 +1,5 @@
 package it.unicam.model;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.POIFD;
-import it.unicam.model.util.POIGI;
+import it.unicam.model.util.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -36,7 +34,7 @@ public class Comune {
 
     public void insertPOIPending(POI p) {
         this.POIPending.add(p);
-        p.setPOIId(this.POIValidate.indexOf(p) + 1);
+        p.setPOIId(this.POIPending.indexOf(p) + 1);
     }
 
     public List<POI> getPOIValidate() {
@@ -122,4 +120,39 @@ public class Comune {
     public void insertItinerary(Itinerary itinerary) {
         this.itineraries.add(itinerary);
     }
+
+    public ContentFD viewContentPending(int contentID){
+        if (this.lastViewedPOI != null) {
+            return this.POIPending.get(this.lastViewedPOI.getId() - 1).getContents().get(contentID - 1).getFullDetailedContent();
+        }
+        return null;
+    }
+
+    public List<ItineraryGI> getAllItinerary() {
+       return this.itineraries.stream().map(itinerary -> itinerary.getGeneralInfoItinerary()).toList();
+    }
+
+    public ItineraryFD selectedItinerary(int i) {
+        return this.itineraries.get(i-1).getFullDetailedItinerary();
+    }
+
+    public List<POIGI> getAllPendingPOI() {
+        return this.POIPending.stream().map(poi -> poi.getPOIGeneralInfo()).toList();
+    }
+
+    public POIFD selectedPendingPOI(int i) {
+        this.lastViewedPOI = this.POIPending.get(i-1).getFullDetailedPOI();
+        return this.lastViewedPOI;
+    }
+
+    public void validateSelectedPOI() {
+        this.insertPOI(this.POIPending.get(this.lastViewedPOI.getId()-1));
+        this.deletePendingPOI();
+    }
+
+    public void deletePendingPOI() {
+        this.POIPending.remove(this.lastViewedPOI.getId()-1);
+        this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
+    }
+
 }

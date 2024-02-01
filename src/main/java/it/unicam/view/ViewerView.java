@@ -33,7 +33,7 @@ public abstract class ViewerView {
         System.out.println(controller.viewSelectedPOI(poiId).toString());
     }
 
-    private void selectedContent() throws IOException {
+    protected void selectedContent() throws IOException {
         int input = -1;
         while (input != 0){
             System.out.println("Per visualizzare un contenuto inserire il suo id, per terminare di visualizzare contenuti inserire 0");
@@ -45,8 +45,16 @@ public abstract class ViewerView {
     }
 
     public void viewItinerary() {
-
+        controller.getAllItinerary().stream().forEach(i -> System.out.println(i.toString()));
+        this.selectedItinerary();
     }
+
+    private void selectedItinerary(){
+        System.out.println("Selezionare l'itinerario da visualizzare inserendo l'ID");
+        System.out.println(controller.selectedItinerary(in.nextInt()).toString());
+    }
+
+
 
 
 }

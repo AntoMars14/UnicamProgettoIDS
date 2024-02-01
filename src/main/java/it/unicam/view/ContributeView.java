@@ -110,7 +110,7 @@ public abstract class ContributeView extends ViewerView implements IContributors
         LocalDateTime closed = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         controller.insertDate(opend, closed);
     }
-    private void insertContent(){
+    private void insertContent() {
         System.out.println("Inserisci il nome del contenuto");
         String n = in.nextLine();
         System.out.println("Inserisci la descrizione del contenuto");
@@ -119,7 +119,6 @@ public abstract class ContributeView extends ViewerView implements IContributors
         File f = fChooser.showFileChooser();
         controller.insertContent(n, d, f);
     }
-
     public abstract void confirmPOI();
 
     @Override
