@@ -42,6 +42,7 @@ public class CuratorView extends AuthorizedContributorView{
         System.out.println("Vuoi validare il POI? y/n");
         if (in.nextLine().equals("y")){
             this.validateSelectedPOI();
+            System.out.println("Poi validato");
         }else {
             this.deletePendingPOI();
             System.out.println("POI eliminato");
@@ -50,7 +51,7 @@ public class CuratorView extends AuthorizedContributorView{
     }
 
     private void selectedPendingPOI(){
-        System.out.println("Selezionare un poi da validare insierendo l'ID");
+        System.out.println("Selezionare un poi da validare inserendo l'ID");
         System.out.println(controller.selectedPendingPOI(in.nextInt()).toString());
     }
 
@@ -71,5 +72,25 @@ public class CuratorView extends AuthorizedContributorView{
                 desktop.open(controller.viewContentPending(input).getFile());
             }
         }
+    }
+
+    @Override
+    public void createItinerary() {
+        super.createItinerary();
+    }
+
+    @Override
+    public void confirmCreationItinerary() {
+        super.confirmCreationItinerary();
+    }
+
+    @Override
+    public void addContent() {
+        super.addContent();
+    }
+
+    @Override
+    public void confirmAddContent() {
+        super.confirmAddContent();
     }
 }

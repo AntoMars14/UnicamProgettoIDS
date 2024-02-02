@@ -37,15 +37,6 @@ public class Comune {
         p.setPOIId(this.POIPending.indexOf(p) + 1);
     }
 
-    public List<POI> getPOIValidate() {
-        return POIValidate;
-    }
-
-    public List<POI> getPOIPending() {
-        return POIPending;
-
-    }
-
     public List<POIGI> getAllPOI() {
         List<POIGI> pois = new ArrayList<>();
         for (POI p :
@@ -115,10 +106,12 @@ public class Comune {
 
     public void insertPendingItinerary(Itinerary itinerary) {
         this.itinerariesPending.add(itinerary);
+        itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1);
     }
 
     public void insertItinerary(Itinerary itinerary) {
         this.itineraries.add(itinerary);
+        itinerary.setId(this.itineraries.indexOf(itinerary)+1);
     }
 
     public ContentFD viewContentPending(int contentID){
@@ -154,5 +147,4 @@ public class Comune {
         this.POIPending.remove(this.lastViewedPOI.getId()-1);
         this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
     }
-
 }

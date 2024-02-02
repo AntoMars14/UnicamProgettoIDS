@@ -15,11 +15,13 @@ public abstract class POI {
     private final Coordinates coord;
 
     private List<Content> contents;
+    private List<Content> contentsPending;
 
     public POI(Coordinates coord) {
         if(coord == null) throw new NullPointerException("Coordinate null");
         this.coord = coord;
         this.contents = new ArrayList<>();
+        this.contentsPending = new ArrayList<>();
     }
 
     public String getName() {
@@ -41,9 +43,18 @@ public abstract class POI {
         return this.contents;
     };
 
+    public List<Content> getContentsPending() {
+        return contentsPending;
+    }
+
     public void addContent(Content c){
         if(c == null) throw new NullPointerException("Contenuto null");
         this.contents.add(c);
+    }
+
+    public void addContentPending(Content c){
+        if(c == null) throw new NullPointerException("Contenuto null");
+        this.contentsPending.add(c);
     }
     public void setName(String name) {
         this.name = name;

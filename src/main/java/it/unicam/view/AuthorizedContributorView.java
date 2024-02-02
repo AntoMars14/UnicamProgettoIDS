@@ -36,6 +36,11 @@ public class AuthorizedContributorView extends ContributeView {
     }
 
     @Override
+    public void createItinerary() {
+        super.createItinerary();
+    }
+
+    @Override
     public void confirmCreationItinerary() {
 
         System.out.println("confermi l'inserimento dell'itinerario? y/n");
@@ -45,5 +50,22 @@ public class AuthorizedContributorView extends ContributeView {
         }else{
             System.out.println("creazione itinerario annullata");
         }
+    }
+
+    @Override
+    public void addContent() {
+        super.addContent();
+    }
+
+    @Override
+    public void confirmAddContent() {
+        System.out.println("Confermi l'inserimento del contenuto? y/n");
+        if(in.nextLine().equals("y")){
+            controller.confirmAddContent();
+            System.out.println("Contenuto aggiunto");
+        }else{
+            System.out.println("Aggiunta contenuto annullata");
+        }
+
     }
 }

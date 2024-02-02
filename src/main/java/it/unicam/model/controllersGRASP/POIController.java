@@ -1,5 +1,6 @@
-package it.unicam.model;
+package it.unicam.model.controllersGRASP;
 
+import it.unicam.model.*;
 import it.unicam.model.util.POIGI;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -12,11 +13,10 @@ import java.util.List;
 public class POIController {
     private Comune c;
 
-    private MapHandler map;
-
     private Coordinates lastCoords;
 
     private POI lastPOI;
+
 
     public POIController(Comune c) {
         this.c = c;
@@ -25,7 +25,7 @@ public class POIController {
     }
 
     public List<POIGI> getAllPoi(){
-        return c.getPOIValidate().stream().map(p -> p.getPOIGeneralInfo()).toList();
+        return c.getAllPOI();
     }
 
     public MapHandler Map(){
@@ -72,4 +72,5 @@ public class POIController {
     public void confirmPoiPending(){
         c.insertPOIPending(this.lastPOI);
     }
+
 }

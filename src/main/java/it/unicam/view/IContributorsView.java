@@ -9,4 +9,6 @@ public interface IContributorsView {
     public void confirmPOI();
     public void createItinerary();
     public void confirmCreationItinerary();
+    public void addContent();
+    public void confirmAddContent();
 }

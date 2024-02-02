@@ -3,6 +3,7 @@ package it.unicam;
 import it.unicam.controller.Controller;
 import it.unicam.model.Comune;
 import it.unicam.model.Coordinates;
+import it.unicam.view.AuthenticatedTouristView;
 import it.unicam.view.AuthorizedContributorView;
 import it.unicam.view.ContributorView;
 import it.unicam.view.CuratorView;
@@ -16,6 +17,7 @@ public class Main {
         CuratorView cur = new CuratorView(appController);
         ContributorView cw = new ContributorView(appController);
         AuthorizedContributorView acw = new AuthorizedContributorView(appController);
+        AuthenticatedTouristView atw = new AuthenticatedTouristView(appController);
         cw.viewPoi();
         acw.insertPOI();
         cw.insertPOI();
@@ -25,5 +27,12 @@ public class Main {
         acw.viewPoi();
         cw.createItinerary();
         acw.createItinerary();
+        acw.viewItinerary();
+        cw.addContent();
+        acw.addContent();
+        acw.addContent();
+        atw.addPhoto();
+        atw.addPhoto();
+        acw.viewPoi();
     }
 }

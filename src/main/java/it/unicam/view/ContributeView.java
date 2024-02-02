@@ -132,7 +132,7 @@ public abstract class ContributeView extends ViewerView implements IContributors
         }
         this.confirmCreationItinerary();
     }
-    public void insertItineraryInfo(){
+    private void insertItineraryInfo(){
         System.out.println("Inserire nome dell'itinerario");
         String name = in.nextLine();
         System.out.println("Inserire la descrizione dell'itinerario");
@@ -140,7 +140,7 @@ public abstract class ContributeView extends ViewerView implements IContributors
         controller.insertItineraryInfo(name, description);
     }
 
-    public void addPOI(){
+    private void addPOI(){
         int c = 0;
         String input = "";
         do {
@@ -155,7 +155,7 @@ public abstract class ContributeView extends ViewerView implements IContributors
         }while (!input.equals("n"));
     }
 
-    public void insertItineraryValidity(){
+    private void insertItineraryValidity(){
         System.out.println("Inserisci la data di inizio dell'itinerario nel formato dd-mm-yyyy  hh:mm");
         LocalDateTime open = LocalDateTime.parse(in.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         System.out.println("Inserisci la data di fine dell'itinerario nel formato dd-mm-yyyy  hh:mm");
@@ -163,4 +163,26 @@ public abstract class ContributeView extends ViewerView implements IContributors
         controller.insertItineraryValidity(open, close);
     }
     public abstract void confirmCreationItinerary();
+
+    @Override
+    public void addContent() {
+        this.controller.getAllPOI().stream().forEach(p -> System.out.println(p.toString()));
+        this.addContentToPOI();
+        this.confirmAddContent();
+    }
+
+    private void addContentToPOI(){
+        System.out.println("Seleziona l'id del POI al quale vuoi aggiungere un contenuto");
+        int poiId = in.nextInt();
+        in.nextLine();
+        System.out.println("Inserisci il nome del contenuto");
+        String name = in.nextLine();
+        System.out.println("Inserisci la descrizione del contenuto");
+        String desc = in.nextLine();
+        System.out.println("Inserisci il file del contenuto");
+        File f = fChooser.showFileChooser();
+        controller.addContentToPOI(poiId, name, desc, f);
+    }
+
+    public abstract void confirmAddContent();
 }

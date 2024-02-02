@@ -1,9 +1,9 @@
 package it.unicam.controller;
 
-import it.unicam.model.Comune;
-import it.unicam.model.ItineraryController;
-import it.unicam.model.POIController;
-import it.unicam.model.POIFactory;
+import it.unicam.model.*;
+import it.unicam.model.controllersGRASP.ContentController;
+import it.unicam.model.controllersGRASP.ItineraryController;
+import it.unicam.model.controllersGRASP.POIController;
 import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -14,16 +14,18 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class Controller {
-
     private Comune comune;
     private POIController poiController;
 
     private ItineraryController itineraryController;
 
+    private ContentController contentController;
+
     public Controller(Comune comune) {
         this.comune = comune;
         this.poiController = new POIController(comune);
         this.itineraryController = new ItineraryController(comune);
+        this.contentController = new ContentController(comune);
     }
 
     public List<POIGI> getAllPOI(){
@@ -120,5 +122,17 @@ public class Controller {
 
     public ContentFD viewContentPending(int contentID){
         return comune.viewContentPending(contentID);
+    }
+
+    public void addContentToPOI(int poiId, String name, String desc, File f) {
+        contentController.addContentToPOI(poiId, name, desc, f);
+    }
+
+    public void confirmAddContent() {
+        contentController.confirmAddContent();
+    }
+
+    public void confirmAddContentPending() {
+        contentController.confirmAddContentPending();
     }
 }

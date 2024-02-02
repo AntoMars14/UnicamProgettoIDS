@@ -1,4 +1,7 @@
-package it.unicam.model;
+package it.unicam.model.controllersGRASP;
+
+import it.unicam.model.Comune;
+import it.unicam.model.Itinerary;
 
 import java.time.LocalDateTime;
 

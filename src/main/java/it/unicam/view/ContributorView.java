@@ -36,6 +36,11 @@ public class ContributorView extends ContributeView {
     }
 
     @Override
+    public void createItinerary() {
+        super.createItinerary();
+    }
+
+    @Override
     public void confirmCreationItinerary() {
 
         System.out.println("confermi l'inserimento dell'itinerario? y/n");
@@ -44,6 +49,22 @@ public class ContributorView extends ContributeView {
             System.out.println("itinerario inserito in pending nella piattaforma");
         }else{
             System.out.println("creazione itinerario annullata");
+        }
+    }
+
+    @Override
+    public void addContent() {
+        super.addContent();
+    }
+
+    @Override
+    public void confirmAddContent() {
+        System.out.println("Confermi l'inserimento del contenuto? y/n");
+        if(in.nextLine().equals("y")){
+            controller.confirmAddContentPending();
+            System.out.println("Contenuto  in pending");
+        }else{
+            System.out.println("Aggiunta contenuto annullata");
         }
     }
 }
