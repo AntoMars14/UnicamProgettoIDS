@@ -90,10 +90,8 @@ public class POILuogoConOra extends POI{
 
     @Override
     public POIFD getFullDetailedPOI() {
-        List<ContentGI> contentsGI = new ArrayList<>();
-        for (Content c: this.getContents()) {
-            contentsGI.add(c.getContentGeneralInfo());
-        }
-        return new POIFD(this.getPOIId(), this.getName(), this.getDescription(), this.getCoord(), this.getType(), this.openingTime, this.closingTime, contentsGI);
+        List<ContentGI> contentsGI = this.getContents().stream().map(c -> c.getContentGeneralInfo()).toList();
+        List<ContentGI> pendingContentsGI = this.getContentsPending().stream().map(pc -> pc.getContentGeneralInfo()).toList();
+        return new POIFD(this.getPOIId(), this.getName(), this.getDescription(), this.getCoord(), this.getType(), this.openingTime, this.closingTime, contentsGI, pendingContentsGI);
     }
 }

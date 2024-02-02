@@ -101,7 +101,7 @@ public class Comune {
         itinerary.setId(this.itineraries.indexOf(itinerary)+1);
     }
 
-    public ContentFD viewContentPending(int POIId, int contentID){
+    public ContentFD viewContentPOIPending(int POIId, int contentID){
         if (POIId > 0) {
             return this.POIPending.get(POIId - 1).getContents().get(contentID - 1).getFullDetailedContent();
         }
@@ -146,5 +146,24 @@ public class Comune {
 
     public void deleteContent(int POIId, int ContentId) {
         this.POIValidate.get(POIId -1).deleteContent(ContentId);
+    }
+
+    public List<POIGI> getAllPendingContentPOI() {
+        return this.POIValidate.stream().filter(p -> p.getContentsPending().size() != 0).map(p->p.getPOIGeneralInfo()).toList();
+    }
+
+    public ContentFD selectedPendingContent(int POIId, int contentId) {
+        if (POIId > 0) {
+            return this.POIValidate.get(POIId-1).getContentsPending().get(contentId-1).getFullDetailedContent();
+        }
+        return null;
+    }
+
+    public void deletePendingContent(int POIId, int contentId) {
+        this.POIValidate.get(POIId-1).deletePendingContent(contentId);
+    }
+
+    public void validateSelectedContent(int POIId, int contentId) {
+        this.POIValidate.get(POIId-1).validateContent(contentId);
     }
 }

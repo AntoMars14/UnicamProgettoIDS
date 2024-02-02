@@ -125,7 +125,7 @@ public class Controller {
     }
 
     public ContentFD viewContentPending(int contentID){
-        return viewController.viewContentPending(contentID);
+        return viewController.viewContentPOIPending(contentID);
     }
 
     public void addContentToPOI(int poiId, String name, String desc, File f) {
@@ -150,5 +150,21 @@ public class Controller {
 
     public void deleteContent() {
         this.comune.deleteContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+    }
+
+    public List<POIGI> getAllPendingContentPOI() {
+        return comune.getAllPendingContentPOI();
+    }
+
+    public ContentFD selectedPendingContent(int i) {
+        return viewController.selectedPendingContent(i);
+    }
+
+    public void deletePendingContent() {
+        comune.deletePendingContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+    }
+
+    public void validateSelectedContent() {
+        comune.validateSelectedContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
 }

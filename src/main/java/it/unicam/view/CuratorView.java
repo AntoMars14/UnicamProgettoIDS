@@ -1,8 +1,11 @@
 package it.unicam.view;
 
 import it.unicam.controller.Controller;
+import it.unicam.model.util.ContentFD;
+import it.unicam.model.util.POIFD;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class CuratorView extends AuthorizedContributorView{
 
@@ -102,6 +105,7 @@ public class CuratorView extends AuthorizedContributorView{
         switch(input){
             case 1 -> {
                 this.viewPoi();
+                in.nextLine();
                 System.out.println("Vuoi eliminare il POI? y/n");
                 if (in.nextLine().equals("y")){
                     this.deletePOI();
@@ -122,6 +126,7 @@ public class CuratorView extends AuthorizedContributorView{
             }
             case 3 ->{ 
                 this.viewItinerary();
+                in.nextLine();
                 System.out.println("Vuoi eliminare l'Itinerario? y/n");
                 if (in.nextLine().equals("y")){
                     this.deleteItinerary();
@@ -132,6 +137,8 @@ public class CuratorView extends AuthorizedContributorView{
             }
             default -> System.out.println("Errore nell'input");
         }
+
+
     }
 
     private void deleteItinerary() {
@@ -156,6 +163,49 @@ public class CuratorView extends AuthorizedContributorView{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void validateContent(){
+        controller.getAllPendingContentPOI().stream().forEach(p -> System.out.println(p.toString()));
+        this.selectPendingContentPOI();
+        this.selectedPendingContent();
+        System.out.println("Vuoi validare il contenuto? y/n");
+        if(in.nextLine().equals("y")){
+            this.validateSelectedContent();
+        }else{
+            this.deletePendingContent();
+        }
+    }
+
+    private void selectPendingContentPOI() {
+        System.out.println("Seleziona il POI per il quale vuoi validare il contenuto in pending associato");
+        POIFD p = controller.viewSelectedPOI(in.nextInt());
+        in.nextLine();
+        System.out.println(p.toString());
+        System.out.println("Contenuti in pending:");
+        System.out.println(p.getPendingContentsGI().stream().map(pc -> pc.toString()).collect(Collectors.joining("\n")));
+    }
+
+    private void selectedPendingContent() {
+        System.out.println("Seleziona l'id del contenuto in pending che vuoi validare");
+        ContentFD c = controller.selectedPendingContent(in.nextInt());
+        in.nextLine();
+        System.out.println(c.toString());
+        try {
+            desktop.open(c.getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deletePendingContent() {
+        controller.deletePendingContent();
+        System.out.println("Contenuto eliminato dalla piattaforma");
+    }
+
+    private void validateSelectedContent() {
+        controller.validateSelectedContent();
+        System.out.println("Contenuto validato");
     }
 
 

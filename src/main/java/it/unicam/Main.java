@@ -34,6 +34,8 @@ public class Main {
         atw.addPhoto();
         atw.addPhoto();
         acw.viewPoi();
+        cur.validateContent();
+        cur.validateContent();
         cur.deleteObject();
         cur.deleteObject();
     }

@@ -1,9 +1,6 @@
 package it.unicam.model.controllersGRASP;
 
 import it.unicam.model.Comune;
-import it.unicam.model.Content;
-import it.unicam.model.Itinerary;
-import it.unicam.model.POI;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ItineraryFD;
 import it.unicam.model.util.POIFD;
@@ -42,8 +39,9 @@ public class ViewController {
         return this.lastViewedContent;
     }
 
-    public ContentFD viewContentPending(int contentID){
-        return this.comune.viewContentPending(this.lastViewedPOI.getId(), contentID);
+    public ContentFD viewContentPOIPending(int contentID){
+        this.lastViewedContent = this.comune.viewContentPOIPending(this.lastViewedPOI.getId(), contentID);
+        return lastViewedContent;
     }
 
     public ItineraryFD selectedItinerary(int i) {
@@ -56,4 +54,8 @@ public class ViewController {
         return this.lastViewedPOI;
     }
 
+    public ContentFD selectedPendingContent(int contentId) {
+        this.lastViewedContent = comune.selectedPendingContent(this.lastViewedPOI.getId(), contentId);
+        return this.lastViewedContent;
+    }
 }

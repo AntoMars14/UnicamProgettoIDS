@@ -87,4 +87,15 @@ public abstract class POI {
         this.contents.remove(contentId - 1);
         this.contents.stream().forEach(content -> content.setContentId(this.contents.indexOf(content)+1));
     }
+
+    public void validateContent(int id){
+        this.contents.add(this.contentsPending.get(id-1));
+        this.contentsPending.get(id-1).setContentId(this.contents.size());
+        this.deletePendingContent(id);
+    }
+
+    public void deletePendingContent(int id) {
+        this.contentsPending.remove(id-1);
+        this.contentsPending.stream().forEach(c -> c.setContentId(this.contentsPending.indexOf(c)+1));
+    }
 }
