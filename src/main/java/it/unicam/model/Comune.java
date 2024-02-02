@@ -16,7 +16,6 @@ public class Comune {
     private List<POI> POIPending = new ArrayList<>();
     private List<Itinerary> itineraries = new ArrayList<>();
     private List<Itinerary> itinerariesPending = new ArrayList<>();
-    private POIFD lastViewedPOI;
 
     public Comune(String name, Coordinates coord) {
         this.name = name;
@@ -24,7 +23,6 @@ public class Comune {
         POILuogo comune = new POILuogo(coord);
         comune.insertPOIInfo(name, "Questo è il comune di Camerino");
         this.insertPOI(comune);
-        this.lastViewedPOI = null;
     }
 
     public void insertPOI(POI p) {
@@ -79,27 +77,16 @@ public class Comune {
         return false;
     }
 
-    public List<POIGI> viewPOI(Type type) {
-        List<POIGI> pois = new ArrayList<>();
-        for (POI p :
-                this.POIValidate) {
-            if (p.getType().equals(type)) pois.add(p.getPOIGeneralInfo());
-        }
-        return pois;
-    }
-
     public POIFD viewSelectedPOI(int POIId) {
-        lastViewedPOI = this.POIValidate.get(POIId - 1).getFullDetailedPOI();
-        return lastViewedPOI;
+        return this.POIValidate.get(POIId - 1).getFullDetailedPOI();
     }
 
-    public ContentFD viewContent(int contentID) {
-        if (this.lastViewedPOI != null) {
-            return this.POIValidate.get(this.lastViewedPOI.getId() - 1).getContents().get(contentID - 1).getFullDetailedContent();
+    public ContentFD viewContent(int POIId, int contentID) {
+        if (POIId > 0) {
+            return this.POIValidate.get(POIId - 1).getContents().get(contentID - 1).getFullDetailedContent();
         }
         return null;
     }
-
     public POI getPOI(int i) {
         return this.POIValidate.get(i-1);
     }
@@ -114,9 +101,9 @@ public class Comune {
         itinerary.setId(this.itineraries.indexOf(itinerary)+1);
     }
 
-    public ContentFD viewContentPending(int contentID){
-        if (this.lastViewedPOI != null) {
-            return this.POIPending.get(this.lastViewedPOI.getId() - 1).getContents().get(contentID - 1).getFullDetailedContent();
+    public ContentFD viewContentPending(int POIId, int contentID){
+        if (POIId > 0) {
+            return this.POIPending.get(POIId - 1).getContents().get(contentID - 1).getFullDetailedContent();
         }
         return null;
     }
@@ -134,17 +121,30 @@ public class Comune {
     }
 
     public POIFD selectedPendingPOI(int i) {
-        this.lastViewedPOI = this.POIPending.get(i-1).getFullDetailedPOI();
-        return this.lastViewedPOI;
+        return this.POIPending.get(i-1).getFullDetailedPOI();
     }
 
-    public void validateSelectedPOI() {
-        this.insertPOI(this.POIPending.get(this.lastViewedPOI.getId()-1));
-        this.deletePendingPOI();
+    public void validateSelectedPOI(int POIId) {
+        this.insertPOI(this.POIPending.get(POIId - 1));
+        this.deletePendingPOI(POIId);
     }
 
-    public void deletePendingPOI() {
-        this.POIPending.remove(this.lastViewedPOI.getId()-1);
+    public void deletePendingPOI(int POIId) {
+        this.POIPending.remove(POIId - 1);
         this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
+    }
+
+    public void deletePOI(int id) {
+        this.POIValidate.remove(id - 1);
+        this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
+    }
+
+    public void deleteItinerary(int id) {
+        this.itineraries.remove(id - 1);
+        this.itineraries.stream().forEach(itinerary -> itinerary.setId(this.itineraries.indexOf(itinerary)+1));
+    }
+
+    public void deleteContent(int POIId, int ContentId) {
+        this.POIValidate.get(POIId -1).deleteContent(ContentId);
     }
 }

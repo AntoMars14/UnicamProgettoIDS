@@ -4,6 +4,7 @@ import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.ContentController;
 import it.unicam.model.controllersGRASP.ItineraryController;
 import it.unicam.model.controllersGRASP.POIController;
+import it.unicam.model.controllersGRASP.ViewController;
 import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -21,11 +22,14 @@ public class Controller {
 
     private ContentController contentController;
 
+    private ViewController viewController;
+
     public Controller(Comune comune) {
         this.comune = comune;
         this.poiController = new POIController(comune);
         this.itineraryController = new ItineraryController(comune);
         this.contentController = new ContentController(comune);
+        this.viewController = new ViewController(comune);
     }
 
     public List<POIGI> getAllPOI(){
@@ -33,11 +37,11 @@ public class Controller {
     }
 
     public POIFD viewSelectedPOI(int poiID){
-        return comune.viewSelectedPOI(poiID);
+        return viewController.viewSelectedPOI(poiID);
     }
 
     public ContentFD viewContent(int idContent){
-       return comune.viewContent(idContent);
+       return viewController.viewContent(idContent);
     }
 
     public MapHandler map(){
@@ -101,7 +105,7 @@ public class Controller {
     }
 
     public ItineraryFD selectedItinerary(int i) {
-        return comune.selectedItinerary(i);
+        return viewController.selectedItinerary(i);
     }
 
     public List<POIGI> getAllPendingPOI() {
@@ -109,19 +113,19 @@ public class Controller {
     }
 
     public POIFD selectedPendingPOI(int i) {
-        return comune.selectedPendingPOI(i);
+        return viewController.selectedPendingPOI(i);
     }
 
     public void validateSelectedPOI() {
-        comune.validateSelectedPOI();
+        comune.validateSelectedPOI(viewController.getLastViewedPoi().getId());
     }
 
     public void deletePendingPOI() {
-        comune.deletePendingPOI();
+        comune.deletePendingPOI(viewController.getLastViewedPoi().getId());
     }
 
     public ContentFD viewContentPending(int contentID){
-        return comune.viewContentPending(contentID);
+        return viewController.viewContentPending(contentID);
     }
 
     public void addContentToPOI(int poiId, String name, String desc, File f) {
@@ -134,5 +138,17 @@ public class Controller {
 
     public void confirmAddContentPending() {
         contentController.confirmAddContentPending();
+    }
+
+    public void deletePOI() {
+        this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
+    }
+
+    public void deleteItinerary() {
+        this.comune.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
+    }
+
+    public void deleteContent() {
+        this.comune.deleteContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
 }

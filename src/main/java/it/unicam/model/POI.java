@@ -83,4 +83,8 @@ public abstract class POI {
 
     public abstract POIFD getFullDetailedPOI();
 
+    public void deleteContent(int contentId) {
+        this.contents.remove(contentId - 1);
+        this.contents.stream().forEach(content -> content.setContentId(this.contents.indexOf(content)+1));
+    }
 }

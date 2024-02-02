@@ -34,5 +34,7 @@ public class Main {
         atw.addPhoto();
         atw.addPhoto();
         acw.viewPoi();
+        cur.deleteObject();
+        cur.deleteObject();
     }
 }
