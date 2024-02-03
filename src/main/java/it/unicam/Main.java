@@ -26,7 +26,10 @@ public class Main {
         cur.validatePOI();
         acw.viewPoi();
         cw.createItinerary();
+        cw.createItinerary();
         acw.createItinerary();
+        cur.validateItinerary();
+        cur.validateItinerary();
         acw.viewItinerary();
         cw.addContent();
         acw.addContent();
@@ -38,5 +41,6 @@ public class Main {
         cur.validateContent();
         cur.deleteObject();
         cur.deleteObject();
+
     }
 }

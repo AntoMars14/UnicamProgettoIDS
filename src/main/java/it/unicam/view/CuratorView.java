@@ -208,5 +208,32 @@ public class CuratorView extends AuthorizedContributorView{
         System.out.println("Contenuto validato");
     }
 
+    public void validateItinerary(){
+        controller.getAllPendingItinerary().stream().forEach(i-> System.out.println(i.toString()));
+        this.selectedPendingItinerary();
+        System.out.println("Vuoi validare l'itineario? y/n");
+        if (in.nextLine().equals("y")){
+            this.validateSelectedItinerary();
+            System.out.println("Itinerario validato");
+        }else{
+            this.deletePendingItinerary();
+            System.out.println("Itinerario eliminato");
+        }
+
+    }
+
+    private void deletePendingItinerary() {
+        controller.deletePendingItinerary();
+    }
+
+    private void validateSelectedItinerary() {
+        controller.validateSelectedItinerary();
+    }
+
+    private void selectedPendingItinerary() {
+        System.out.println("Inserisci id del POI che vuoi validare");
+        System.out.println(controller.selectedPendingItinerary(in.nextInt()).toString());
+        in.nextLine();
+    }
 
 }
