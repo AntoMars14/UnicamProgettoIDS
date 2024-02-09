@@ -167,4 +167,20 @@ public class Controller {
     public void validateSelectedContent() {
         comune.validateSelectedContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
+
+    public List<ItineraryGI> getAllPendingItinerary() {
+        return comune.getAllPendingItinerary();
+    }
+
+    public ItineraryFD selectedPendingItinerary(int i) {
+        return viewController.selectedPendingItinerary(i);
+    }
+
+    public void validateSelectedItinerary() {
+        comune.validateSelectedItinerary(this.viewController.getLastViewedItinerary().getId());
+    }
+
+    public void deletePendingItinerary() {
+        comune.deletePendingItinerary(this.viewController.getLastViewedItinerary().getId());
+    }
 }

@@ -169,4 +169,27 @@ public class Comune {
     public void validateSelectedContent(int POIId, int contentId) {
         this.POIValidate.get(POIId-1).validateContent(contentId);
     }
+
+    public List<ItineraryGI> getAllPendingItinerary() {
+        List<ItineraryGI> is = new ArrayList<>();
+       for(Itinerary i:this.itinerariesPending){
+           is.add(i.getGeneralInfoItinerary());
+       }
+       return is;
+    }
+
+    public ItineraryFD selectedPendingItinerary(int i) {
+        return this.itinerariesPending.get(i-1).getFullDetailedItinerary();
+    }
+
+    public void validateSelectedItinerary(int itineraryId) {
+        this.itineraries.add(this.itinerariesPending.get(itineraryId-1));
+        this.itinerariesPending.get(itineraryId-1).setId(this.itineraries.size());
+        this.deletePendingItinerary(itineraryId);
+    }
+
+    public void deletePendingItinerary(int id) {
+        this.itinerariesPending.remove(id-1);
+        this.itinerariesPending.stream().forEach(itinerary -> itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1));
+    }
 }

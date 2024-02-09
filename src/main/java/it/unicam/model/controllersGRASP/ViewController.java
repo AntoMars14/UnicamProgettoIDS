@@ -58,4 +58,9 @@ public class ViewController {
         this.lastViewedContent = comune.selectedPendingContent(this.lastViewedPOI.getId(), contentId);
         return this.lastViewedContent;
     }
+
+    public ItineraryFD selectedPendingItinerary(int i) {
+        lastViewedItinerary = comune.selectedPendingItinerary(i);
+        return lastViewedItinerary;
+    }
 }
