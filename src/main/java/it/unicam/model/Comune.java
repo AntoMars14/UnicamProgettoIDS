@@ -135,6 +135,9 @@ public class Comune {
     }
 
     public void deletePOI(int id) {
+        this.itineraries.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
+                .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
+      this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
         this.POIValidate.remove(id - 1);
         this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
     }

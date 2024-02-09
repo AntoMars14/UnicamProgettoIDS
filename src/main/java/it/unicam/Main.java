@@ -37,6 +37,7 @@ public class Main {
         cur.validateContent();
         cur.validateContent();
         cur.deleteObject();
+        acw.viewItinerary();
         cur.deleteObject();
     }
 }
