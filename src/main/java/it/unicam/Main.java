@@ -4,9 +4,10 @@ import it.unicam.controller.Controller;
 import it.unicam.model.Comune;
 import it.unicam.model.ContestManager;
 import it.unicam.model.Coordinates;
+import it.unicam.model.controllersGRASP.TimeController;
+import it.unicam.model.util.tasks.DeleteExpiredItineraries;
+import it.unicam.model.util.tasks.DeleteExpiredPOIs;
 import it.unicam.view.*;
-
-import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,8 +19,18 @@ public class Main {
         AuthorizedContributorView acw = new AuthorizedContributorView(appController);
         AuthenticatedTouristView atw = new AuthenticatedTouristView(appController);
         AnimatorView anw = new AnimatorView(appController);
+        Runnable deleteExpiredPOIs = new DeleteExpiredPOIs(comune);
+        Runnable deleteExpiredItineraries = new DeleteExpiredItineraries(comune);
+        TimeController timeController = new TimeController();
+        timeController.scheduleMidnightTask(deleteExpiredPOIs);
+        timeController.scheduleMidnightTask(deleteExpiredItineraries);
         cw.viewPoi();
         acw.insertPOI();
+        acw.insertPOI();
+        acw.createItinerary();
+        acw.viewPoi();
+        acw.viewPoi();
+        acw.viewPoi();
         cw.insertPOI();
         cw.insertPOI();
         cur.validatePOI();
@@ -43,6 +54,5 @@ public class Main {
         acw.viewItinerary();
         cur.deleteObject();
         anw.createContest();
-
     }
 }

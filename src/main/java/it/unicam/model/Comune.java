@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class Comune {
 
@@ -138,6 +140,9 @@ public class Comune {
         this.itineraries.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
                 .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
       this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
+        this.itinerariesPending.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
+                .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
+        this.itinerariesPending.removeIf(i -> i.getPOIs().size() < 2);
         this.POIValidate.remove(id - 1);
         this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
     }
@@ -191,5 +196,13 @@ public class Comune {
     public void deletePendingItinerary(int id) {
         this.itinerariesPending.remove(id-1);
         this.itinerariesPending.stream().forEach(itinerary -> itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1));
+    }
+
+    public List<POIEvento> getAllPOIEvento() {
+        return this.POIValidate.stream().filter(p -> p instanceof POIEvento).map(p -> (POIEvento) p).toList();
+    }
+
+    public List<Itinerary> getAllItinerariesWithValidity() {
+        return this.itineraries.stream().filter(i -> i.getClosetDate()!=null).toList();
     }
 }
