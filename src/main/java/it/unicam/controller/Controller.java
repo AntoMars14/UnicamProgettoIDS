@@ -1,10 +1,7 @@
 package it.unicam.controller;
 
 import it.unicam.model.*;
-import it.unicam.model.controllersGRASP.ContentController;
-import it.unicam.model.controllersGRASP.ItineraryController;
-import it.unicam.model.controllersGRASP.POIController;
-import it.unicam.model.controllersGRASP.ViewController;
+import it.unicam.model.controllersGRASP.*;
 import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -16,20 +13,21 @@ import java.util.List;
 
 public class Controller {
     private Comune comune;
+    private ContestManager contestManager;
     private POIController poiController;
-
     private ItineraryController itineraryController;
-
     private ContentController contentController;
-
     private ViewController viewController;
+    private ContestController contestController;
 
-    public Controller(Comune comune) {
+    public Controller(Comune comune, ContestManager contestManager) {
         this.comune = comune;
+        this.contestManager = contestManager;
         this.poiController = new POIController(comune);
         this.itineraryController = new ItineraryController(comune);
         this.contentController = new ContentController(comune);
         this.viewController = new ViewController(comune);
+        this.contestController = new ContestController(contestManager);
     }
 
     public List<POIGI> getAllPOI(){
@@ -182,5 +180,13 @@ public class Controller {
 
     public void deletePendingItinerary() {
         comune.deletePendingItinerary(this.viewController.getLastViewedItinerary().getId());
+    }
+
+    public void insertContestInfo(String name, String objective) {
+        this.contestController.insertContestInfo(name, objective);
+    }
+
+    public void onInvite(boolean flag) {
+        this.contestController.onInvite(flag);
     }
 }
