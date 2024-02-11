@@ -1,5 +1,12 @@
 package it.unicam.model;
 
+import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.model.util.ContestGI;
+import it.unicam.model.util.UtenteAutenticatoGI;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Contest {
 
     private int id;
@@ -7,11 +14,13 @@ public class Contest {
     private String objective;
     private boolean onInvite;
     private boolean isClosed;
+    private List<UtenteAutenticato> invitedUsers;
 
     public Contest(String name, String objective) {
         this.name = name;
         this.objective = objective;
         this.isClosed = false;
+        this.invitedUsers = new ArrayList<>();
     }
 
     public int getId() {
@@ -54,13 +63,15 @@ public class Contest {
         isClosed = closed;
     }
 
-    @Override
-    public String toString() {
-        return "Contest " +
-                "id = " + id +
-                " - name = " + name +
-                "\nobjective = " + objective +
-                "\nonInvite = " + onInvite +
-                " - isClosed = " + isClosed;
+    public int numUtentiInvitati() {
+        return this.invitedUsers.size();
+    }
+
+    public ContestGI getGeneralInfoContest() {
+        return new ContestGI(this.id, this.name, this.objective, this.isClosed);
+    }
+
+    public void inviteContributor(UtenteAutenticato user) {
+        this.invitedUsers.add(user);
     }
 }

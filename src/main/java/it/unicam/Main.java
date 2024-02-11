@@ -4,7 +4,10 @@ import it.unicam.controller.Controller;
 import it.unicam.model.Comune;
 import it.unicam.model.ContestManager;
 import it.unicam.model.Coordinates;
+import it.unicam.model.UtentiUtenticatiManager;
 import it.unicam.model.controllersGRASP.TimeController;
+import it.unicam.model.utenti.Role;
+import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.tasks.DeleteExpiredItineraries;
 import it.unicam.model.util.tasks.DeleteExpiredPOIs;
 import it.unicam.view.*;
@@ -13,7 +16,8 @@ public class Main {
     public static void main(String[] args) {
         Comune comune = new Comune("Camerino", new Coordinates(43.14255874, 13.078767));
         ContestManager cm = new ContestManager();
-        Controller appController = new Controller(comune, cm);
+        UtentiUtenticatiManager utenteAutenticatoManager = new UtentiUtenticatiManager();
+        Controller appController = new Controller(comune, cm, utenteAutenticatoManager);
         CuratorView cur = new CuratorView(appController);
         ContributorView cw = new ContributorView(appController);
         AuthorizedContributorView acw = new AuthorizedContributorView(appController);
@@ -53,6 +57,15 @@ public class Main {
         cur.deleteObject();
         acw.viewItinerary();
         cur.deleteObject();
+        UtenteAutenticato u1 = new UtenteAutenticato("Mario", "wef", "prova@gmail.com", Role.CONTRIBUTOR);
+        UtenteAutenticato u3 = new UtenteAutenticato("Maria", "weffe", "prova3@gmail.com", Role.CONTRIBUTOR);
+        UtenteAutenticato u2 = new UtenteAutenticato("Daniele", "kfejs", "prova2@gmail.com", Role.CONTRIBUTORAUTORIZZATO);
+        utenteAutenticatoManager.addUtente(u1);
+        utenteAutenticatoManager.addUtente(u2);
+        utenteAutenticatoManager.addUtente(u3);
         anw.createContest();
+        anw.createContest();
+        anw.inviteContributors();
+        anw.inviteContributors();
     }
 }

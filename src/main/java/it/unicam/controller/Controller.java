@@ -20,14 +20,14 @@ public class Controller {
     private ViewController viewController;
     private ContestController contestController;
 
-    public Controller(Comune comune, ContestManager contestManager) {
+    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
         this.itineraryController = new ItineraryController(comune);
         this.contentController = new ContentController(comune);
         this.viewController = new ViewController(comune);
-        this.contestController = new ContestController(contestManager);
+        this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
     }
 
     public List<POIGI> getAllPOI(){
@@ -188,5 +188,17 @@ public class Controller {
 
     public void onInvite(boolean flag) {
         this.contestController.onInvite(flag);
+    }
+
+    public List<ContestGI> getAllOpenedContestOnInvite() {
+        return this.contestManager.getAllOpenedContestOnInvite();
+    }
+
+    public List<UtenteAutenticatoGI> selectedContestContibutors(int i) {
+        return this.contestController.selectedContestContibutors(i);
+    }
+
+    public void inviteContributor(int i) {
+        this.contestController.inviteContributor(i);
     }
 }

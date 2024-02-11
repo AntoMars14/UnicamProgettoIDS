@@ -35,4 +35,32 @@ public class AnimatorView {
             this.controller.onInvite(true);
         }
     }
+
+    public void inviteContributors(){
+        this.controller.getAllOpenedContestOnInvite().stream().forEach(contest -> System.out.println(contest.toString()));
+        this.selectedContestContributors();
+        String input = "y";
+        while(input.equals("y")){
+            System.out.println("Vuoi invitare un utente? y/n");
+            input = in.nextLine();
+            if(input.equals("y")){
+                this.inviteContributor();
+            }
+        }
+
+    }
+
+    private void selectedContestContributors() {
+        System.out.println("Inserisci l'id del contest a cui vuoi invitare gli utenti");
+        this.controller.selectedContestContibutors(in.nextInt()).stream().forEach(utente -> System.out.println(utente.toString()));
+        in.nextLine();
+    }
+
+    private void inviteContributor() {
+        System.out.println("Inserisci l'id dell'utente che vuoi invitare");
+        this.controller.inviteContributor(in.nextInt());
+        in.nextLine();
+        System.out.println("Utente invitato");
+    }
+
 }
