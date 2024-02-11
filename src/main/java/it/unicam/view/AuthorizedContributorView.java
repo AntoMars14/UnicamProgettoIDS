@@ -68,4 +68,9 @@ public class AuthorizedContributorView extends ContributeView {
         }
 
     }
+
+    @Override
+    public void partecipateToContest(){
+        super.partecipateToContest();
+    }
 }

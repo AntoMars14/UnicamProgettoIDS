@@ -4,8 +4,7 @@ import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.ContestGI;
 import it.unicam.model.util.UtenteAutenticatoGI;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Contest {
 
@@ -15,12 +14,14 @@ public class Contest {
     private boolean onInvite;
     private boolean isClosed;
     private List<UtenteAutenticato> invitedUsers;
+    private Map<UtenteAutenticato, Content> partecipations;
 
     public Contest(String name, String objective) {
         this.name = name;
         this.objective = objective;
         this.isClosed = false;
         this.invitedUsers = new ArrayList<>();
+        this.partecipations = new HashMap<>();
     }
 
     public int getId() {
@@ -73,5 +74,27 @@ public class Contest {
 
     public void inviteContributor(UtenteAutenticato user) {
         this.invitedUsers.add(user);
+    }
+
+    public boolean contributorInvited(int contributorId) {
+        if (isOnInvite()){
+            for (UtenteAutenticato u : this.invitedUsers) {
+                if (u.getId() == contributorId) {
+                    return !this.partecipations.containsKey(u);
+                }
+            }
+            return false;
+        }else {
+            for(UtenteAutenticato u : this.partecipations.keySet()){
+                if (u.getId() == contributorId) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public void addContent(Content lastContent, UtenteAutenticato lastContributor) {
+        this.partecipations.put(lastContributor, lastContent);
     }
 }

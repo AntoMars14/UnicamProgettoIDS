@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 public abstract class ContributeView extends ViewerView implements IContributorsView{
 
     protected FileChooser fChooser;
+    protected int contributorId = 1;
 
     public ContributeView(Controller controller) {
         super(controller);
@@ -186,4 +187,38 @@ public abstract class ContributeView extends ViewerView implements IContributors
     }
 
     public abstract void confirmAddContent();
+
+    public void partecipateToContest(){
+        this.controller.getAllContest(contributorId).stream().forEach(contest -> System.out.println(contest.toString()));
+        this.partecipateContest();
+        this.insertContestContentInfo();
+        System.out.println("Confermi l'inserimento del contenuto e la partecipazione al contest? y/n");
+        if (in.nextLine().equals("y")){
+            this.confirmPartecipation();
+        }else{
+            System.out.println("Inserimento del contenuto e partecipazione al contest annullati");
+        }
+    }
+
+    private void confirmPartecipation() {
+        this.controller.confirmPartecipation();
+    }
+
+    private void insertContestContentInfo() {
+        System.out.println("Inserisci il nome del contenuto");
+        String name = in.nextLine();
+        System.out.println("Inserisci la descrizione del contenuto");
+        String desc = in.nextLine();
+        System.out.println("Inserisci il file del contenuto");
+        File f = fChooser.showFileChooser();
+        controller.insertContestContentInfo(name, desc, f);
+        System.out.println("Contenuto inserito correttamente");
+    }
+
+    private void partecipateContest() {
+        System.out.println("Inserisci l'id del contest a cui vuoi partecipare");
+        int id = in.nextInt();
+        in.nextLine();
+        this.controller.partecipateContest(id, contributorId);
+    }
 }

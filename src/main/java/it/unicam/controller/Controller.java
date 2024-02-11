@@ -201,4 +201,20 @@ public class Controller {
     public void inviteContributor(int i) {
         this.contestController.inviteContributor(i);
     }
+
+    public List<ContestGI> getAllContest(int contributeId) {
+        return this.contestManager.getAllContest(contributeId);
+    }
+
+    public void partecipateContest(int id, int contributorId) {
+        this.contestController.partecipateContest(id, contributorId);
+    }
+
+    public void insertContestContentInfo(String name, String desc, File f) {
+        this.contestController.insertContestContentInfo(name, desc, f);
+    }
+
+    public void confirmPartecipation() {
+        this.contestController.confirmPartecipation();
+    }
 }

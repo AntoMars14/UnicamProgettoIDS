@@ -67,5 +67,7 @@ public class Main {
         anw.createContest();
         anw.inviteContributors();
         anw.inviteContributors();
+        acw.partecipateToContest();
+        cw.partecipateToContest();
     }
 }

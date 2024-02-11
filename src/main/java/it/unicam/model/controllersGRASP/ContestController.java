@@ -1,10 +1,13 @@
 package it.unicam.model.controllersGRASP;
 
+import it.unicam.model.Content;
 import it.unicam.model.Contest;
 import it.unicam.model.ContestManager;
 import it.unicam.model.UtentiUtenticatiManager;
+import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
 
+import java.io.File;
 import java.util.List;
 
 public class ContestController {
@@ -12,6 +15,8 @@ public class ContestController {
     private ContestManager contestManager;
     private UtentiUtenticatiManager utentiUtenticatiManager;
     private Contest lastContest;
+    private UtenteAutenticato lastContributor;
+    private Content lastContent;
 
     public ContestController(ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager) {
         this.contestManager = contestManager;
@@ -35,5 +40,18 @@ public class ContestController {
     public void inviteContributor(int i) {
         this.lastContest.inviteContributor(this.utentiUtenticatiManager.getUser(i));
 
+    }
+
+    public void partecipateContest(int id, int contributorId) {
+        this.lastContest = this.contestManager.getContest(id);
+        this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
+    }
+
+    public void insertContestContentInfo(String name, String desc, File f) {
+        this.lastContent = new Content(name, desc, f,0);
+    }
+
+    public void confirmPartecipation() {
+        this.lastContest.addContent(this.lastContent, this.lastContributor);
     }
 }

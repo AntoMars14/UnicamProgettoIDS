@@ -67,4 +67,9 @@ public class ContributorView extends ContributeView {
             System.out.println("Aggiunta contenuto annullata");
         }
     }
+
+    @Override
+    public void partecipateToContest(){
+        super.partecipateToContest();
+    }
 }
