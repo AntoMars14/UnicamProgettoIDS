@@ -217,4 +217,24 @@ public class Controller {
     public void confirmPartecipation() {
         this.contestController.confirmPartecipation();
     }
+
+    public List<ContestGI> getAllOpenedContest() {
+        return this.contestManager.getAllOpenedContest();
+    }
+
+    public List<ContentGI> viewPendingContentContest(int i) {
+        return this.contestController.viewPendingContentContest(i);
+    }
+
+    public ContentFD selectedContestContent(int i) {
+        return this.contestController.selectedContestContent(i);
+    }
+
+    public void deleteContestContent() {
+        this.contestController.deleteContestContent();
+    }
+
+    public void validateContestC() {
+        this.contestController.validateContestC();
+    }
 }

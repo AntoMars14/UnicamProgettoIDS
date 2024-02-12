@@ -24,4 +24,8 @@ public class ContestManager {
     public List<ContestGI> getAllContest(int contributorId) {
        return this.contests.stream().filter(contest -> !contest.isClosed() && contest.contributorInvited(contributorId)).map(contest -> contest.getGeneralInfoContest()).toList();
     }
+
+    public List<ContestGI> getAllOpenedContest() {
+        return this.contests.stream().filter(contest -> !contest.isClosed()).map(contest -> contest.getGeneralInfoContest()).toList();
+    }
 }

@@ -1,8 +1,8 @@
 package it.unicam.model;
 
 import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.ContestGI;
-import it.unicam.model.util.UtenteAutenticatoGI;
 
 import java.util.*;
 
@@ -14,7 +14,8 @@ public class Contest {
     private boolean onInvite;
     private boolean isClosed;
     private List<UtenteAutenticato> invitedUsers;
-    private Map<UtenteAutenticato, Content> partecipations;
+    private Map<Content, UtenteAutenticato> partecipations;
+    private Map<Content, UtenteAutenticato> validatedPartecipations;
 
     public Contest(String name, String objective) {
         this.name = name;
@@ -22,6 +23,7 @@ public class Contest {
         this.isClosed = false;
         this.invitedUsers = new ArrayList<>();
         this.partecipations = new HashMap<>();
+        this.validatedPartecipations = new HashMap<>();
     }
 
     public int getId() {
@@ -85,7 +87,7 @@ public class Contest {
             }
             return false;
         }else {
-            for(UtenteAutenticato u : this.partecipations.keySet()){
+            for(UtenteAutenticato u : this.partecipations.values()){
                 if (u.getId() == contributorId) {
                     return false;
                 }
@@ -94,7 +96,25 @@ public class Contest {
         }
     }
 
-    public void addContent(Content lastContent, UtenteAutenticato lastContributor) {
-        this.partecipations.put(lastContributor, lastContent);
+    public void addContent(Content content, UtenteAutenticato contributor) {
+        content.setContentId(this.partecipations.size() + 1);
+        this.partecipations.put(content, contributor);
+    }
+
+    public List<ContentGI> getContestContentPending() {
+        return this.partecipations.entrySet().stream().map(entry -> entry.getKey().getContentGeneralInfo()).toList();
+    }
+
+    public Content selectedContestContent(int i) {
+        return this.partecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getKey()).findFirst().orElse(null);
+    }
+
+    public void deleteContestContent(Content content) {
+        this.partecipations.remove(content);
+    }
+
+    public void validateContestC(Content content) {
+        this.validatedPartecipations.put(content, this.partecipations.get(content));
+        this.deleteContestContent(content);
     }
 }

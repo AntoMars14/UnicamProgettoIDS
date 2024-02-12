@@ -5,6 +5,8 @@ import it.unicam.model.Contest;
 import it.unicam.model.ContestManager;
 import it.unicam.model.UtentiUtenticatiManager;
 import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.model.util.ContentFD;
+import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.UtenteAutenticatoGI;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public class ContestController {
     private Contest lastContest;
     private UtenteAutenticato lastContributor;
     private Content lastContent;
+    private ContentFD lastContentViewed;
 
     public ContestController(ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager) {
         this.contestManager = contestManager;
@@ -53,5 +56,23 @@ public class ContestController {
 
     public void confirmPartecipation() {
         this.lastContest.addContent(this.lastContent, this.lastContributor);
+    }
+
+    public List<ContentGI> viewPendingContentContest(int i) {
+        this.lastContest = this.contestManager.getContest(i);
+        return this.lastContest.getContestContentPending();
+    }
+
+    public ContentFD selectedContestContent(int i) {
+        this.lastContent = this.lastContest.selectedContestContent(i);
+        return this.lastContent.getFullDetailedContent();
+    }
+
+    public void deleteContestContent() {
+        this.lastContest.deleteContestContent(this.lastContent);
+    }
+
+    public void validateContestC() {
+        this.lastContest.validateContestC(this.lastContent);
     }
 }
