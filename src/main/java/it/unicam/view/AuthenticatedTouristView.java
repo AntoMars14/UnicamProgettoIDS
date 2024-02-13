@@ -8,9 +8,12 @@ import java.util.Optional;
 
 public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
 
-    FileChooser fChooser = new FileChooser();
-    public AuthenticatedTouristView(Controller controller) {
+    private FileChooser fChooser = new FileChooser();
+    private int id;
+
+    public AuthenticatedTouristView(Controller controller, int id) {
         super(controller);
+        this.id = id;
     }
 
     @Override
@@ -60,6 +63,57 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
         }
     }
 
+    public void addToFavorites(){
+        System.out.println("Seleziona l'oggetto da aggiungere ai preferiti");
+        System.out.println("1 - POI");
+        System.out.println("2 - Itinerario");
+        int choice = in.nextInt();
+        in.nextLine();
+        switch(choice){
+            case 1 -> {
+                this.viewPOIs();
+                this.addPOIToFavorites();
+
+            }
+            case 2 -> {
+                this.viewItineraries();
+                this.addToFavoritesItinerary();
+            }
+            default -> System.out.println("Errore nell'inserimento");
+        }
+
+    }
+
+    private void viewItineraries() {
+        this.controller.getAllItinerary().stream().forEach(i -> System.out.println(i.toString()));
+    }
+
+    private void addToFavoritesItinerary() {
+        System.out.println("Inserisci l'id dell'itinerario da aggiungere ai preferiti");
+        int itineraryId = in.nextInt();
+        in.nextLine();
+        if (!controller.addItineraryToFavorites(this.id, itineraryId)){
+            System.out.println("Itinerario già presente nei preferiti");
+        }else{
+            System.out.println("Itinerario aggiunto ai preferiti");
+        }
+    }
+
+    private void addPOIToFavorites() {
+        System.out.println("Inserisci l'id del POI da aggiungere ai preferiti");
+        int POIid = in.nextInt();
+        in.nextLine();
+        if (!controller.addPOIToFavorites(this.id, POIid)){
+            System.out.println("POI già presente nei preferiti");
+        }else{
+            System.out.println("POI aggiunto ai preferiti");
+        }
+    }
+
+    private void viewPOIs() {
+        this.controller.getAllPOI().stream().forEach(p -> System.out.println(p.toString()));
+    }
+
     @Override
     public void getView() {
         boolean exit = false;
@@ -69,6 +123,7 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
             System.out.println("1 - Visualizza POI");
             System.out.println("2 - Visualizza Itinerario");
             System.out.println("3 - Aggiungi foto");
+            System.out.println("4 - Aggiungi ai preferiti");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -77,6 +132,7 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
                 case 1 -> this.viewPoi();
                 case 2 -> this.viewItinerary();
                 case 3 -> this.addPhoto();
+                case 4 -> this.addToFavorites();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

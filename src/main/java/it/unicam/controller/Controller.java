@@ -20,13 +20,16 @@ public class Controller {
     private ViewController viewController;
     private ContestController contestController;
 
-    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager) {
+    private FavouritesManager favouritesManager;
+
+    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
         this.itineraryController = new ItineraryController(comune);
         this.contentController = new ContentController(comune);
         this.viewController = new ViewController(comune);
+        this.favouritesManager = favouritesManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
     }
 
@@ -244,5 +247,13 @@ public class Controller {
 
     public void selectedWinnerContent(int i) {
         this.contestController.selectedWinnerContent(i);
+    }
+
+    public boolean addPOIToFavorites(int id, int POIid) {
+        return this.favouritesManager.addPOIToFavorites(id, POIid, this.comune);
+    }
+
+    public boolean addItineraryToFavorites(int id, int itineraryId) {
+       return this.favouritesManager.addItineraryToFavorites(id, itineraryId, this.comune);
     }
 }

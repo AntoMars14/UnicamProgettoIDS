@@ -53,7 +53,7 @@ public class UtenteAutenticato implements Utente{
             case CURATORE -> new CuratorView(controller, this.id);
             case CONTRIBUTOR -> new ContributorView(controller, this.id);
             case CONTRIBUTORAUTORIZZATO -> new AuthorizedContributorView(controller,this.id);
-            case TURISTAUTENTICATO -> new AuthenticatedTouristView(controller);
+            case TURISTAUTENTICATO -> new AuthenticatedTouristView(controller, this.id);
             case GESTORE -> new PlatformManagerView(controller);
         };
         this.view.getView();

@@ -205,4 +205,8 @@ public class Comune {
     public List<Itinerary> getAllItinerariesWithValidity() {
         return this.itineraries.stream().filter(i -> i.getClosetDate()!=null).toList();
     }
+
+    public Itinerary getItinerary(int itineraryId) {
+        return this.itineraries.get(itineraryId-1);
+    }
 }

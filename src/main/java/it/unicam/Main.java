@@ -1,10 +1,7 @@
 package it.unicam;
 
 import it.unicam.controller.Controller;
-import it.unicam.model.Comune;
-import it.unicam.model.ContestManager;
-import it.unicam.model.Coordinates;
-import it.unicam.model.UtentiUtenticatiManager;
+import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.TimeController;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
@@ -20,7 +17,8 @@ public class Main {
         Comune comune = new Comune("Camerino", new Coordinates(43.14255874, 13.078767));
         ContestManager cm = new ContestManager();
         UtentiUtenticatiManager utenteAutenticatoManager = new UtentiUtenticatiManager();
-        Controller appController = new Controller(comune, cm, utenteAutenticatoManager);
+        FavouritesManager favouritesManager = new FavouritesManager();
+        Controller appController = new Controller(comune, cm, utenteAutenticatoManager, favouritesManager);
         Runnable deleteExpiredPOIs = new DeleteExpiredPOIs(comune);
         Runnable deleteExpiredItineraries = new DeleteExpiredItineraries(comune);
         TimeController timeController = new TimeController();
