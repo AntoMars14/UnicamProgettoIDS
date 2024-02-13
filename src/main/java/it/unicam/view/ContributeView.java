@@ -17,11 +17,12 @@ import java.time.format.DateTimeFormatter;
 public abstract class ContributeView extends ViewerView implements IContributorsView{
 
     protected FileChooser fChooser;
-    protected int contributorId = 1;
+    protected int contributorId;
 
-    public ContributeView(Controller controller) {
+    public ContributeView(Controller controller, int contributorId) {
         super(controller);
         this.fChooser = new FileChooser();
+        this.contributorId = contributorId;
     }
 
     @Override

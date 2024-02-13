@@ -2,7 +2,7 @@ package it.unicam.view;
 
 import it.unicam.controller.Controller;
 
-public class TouristView extends ViewerView{
+public class TouristView extends ViewerView implements UtenteView{
 
     public TouristView(Controller controller) {
         super(controller);
@@ -18,4 +18,23 @@ public class TouristView extends ViewerView{
         super.viewItinerary();
     }
 
+    @Override
+    public void getView() {
+        boolean exit = false;
+        while(!exit){
+            System.out.println("Benvenuto turista");
+            System.out.println("Cosa vuoi fare?");
+            System.out.println("1 - Visualizza POI");
+            System.out.println("2 - Visualizza Itinerario");
+            System.out.println("0 - Esci");
+            int choice = in.nextInt();
+            in.nextLine();
+            switch (choice) {
+                case 0 -> exit = true;
+                case 1 -> this.viewPoi();
+                case 2 -> this.viewItinerary();
+                default -> System.out.println("Errore nell'inserimento");
+            }
+        }
+    }
 }

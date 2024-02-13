@@ -82,7 +82,7 @@ public class Contest {
         if (isOnInvite()){
             for (UtenteAutenticato u : this.invitedUsers) {
                 if (u.getId() == contributorId) {
-                    return !this.partecipations.containsKey(u);
+                    return !this.partecipations.containsValue(u);
                 }
             }
             return false;
@@ -116,5 +116,17 @@ public class Contest {
     public void validateContestC(Content content) {
         this.validatedPartecipations.put(content, this.partecipations.get(content));
         this.deleteContestContent(content);
+    }
+
+    public List<ContentGI> getContestContentValidate() {
+        return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
+    }
+
+    public String getAutoreContentEmail(int i) {
+        return this.validatedPartecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getValue().getEmail()).findFirst().orElse(null);
+    }
+
+    public void closeContest() {
+        this.isClosed = true;
     }
 }

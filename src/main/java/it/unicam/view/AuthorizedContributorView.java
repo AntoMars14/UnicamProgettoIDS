@@ -2,10 +2,10 @@ package it.unicam.view;
 
 import it.unicam.controller.Controller;
 
-public class AuthorizedContributorView extends ContributeView {
+public class AuthorizedContributorView extends ContributeView implements UtenteView{
 
-    public AuthorizedContributorView(Controller controller) {
-        super(controller);
+    public AuthorizedContributorView(Controller controller, int id) {
+        super(controller, id);
     }
 
     @Override
@@ -72,5 +72,33 @@ public class AuthorizedContributorView extends ContributeView {
     @Override
     public void partecipateToContest(){
         super.partecipateToContest();
+    }
+
+    @Override
+    public void getView() {
+        boolean exit = false;
+        while(!exit){
+            System.out.println("Benvenuto contributore autorizzato");
+            System.out.println("Cosa vuoi fare?");
+            System.out.println("1 - Visualizza POI");
+            System.out.println("2 - Visualizza Itinerario");
+            System.out.println("3 - Inserisci POI");
+            System.out.println("4 - Crea Itinerario");
+            System.out.println("5 - Aggiungi Contenuto");
+            System.out.println("6 - Partecipa a Contest");
+            System.out.println("0 - Esci");
+            int choice = in.nextInt();
+            in.nextLine();
+            switch (choice) {
+                case 0 -> exit = true;
+                case 1 -> this.viewPoi();
+                case 2 -> this.viewItinerary();
+                case 3 -> this.insertPOI();
+                case 4 -> this.createItinerary();
+                case 5 -> this.addContent();
+                case 6 -> this.partecipateToContest();
+                default -> System.out.println("Errore nell'inserimento");
+            }
+        }
     }
 }

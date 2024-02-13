@@ -7,10 +7,10 @@ import it.unicam.model.util.POIFD;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-public class CuratorView extends AuthorizedContributorView{
+public class CuratorView extends AuthorizedContributorView implements UtenteView{
 
-    public CuratorView(Controller controller) {
-        super(controller);
+    public CuratorView(Controller controller, int id) {
+        super(controller, id);
     }
 
     @Override
@@ -236,4 +236,44 @@ public class CuratorView extends AuthorizedContributorView{
         in.nextLine();
     }
 
+    @Override
+    public void partecipateToContest(){
+        super.partecipateToContest();
+    }
+
+    @Override
+    public void getView() {
+        boolean exit = false;
+        while(!exit){
+            System.out.println("Benvenuto curatore");
+            System.out.println("Cosa vuoi fare?");
+            System.out.println("1 - Visualizza POI");
+            System.out.println("2 - Visualizza Itinerario");
+            System.out.println("3 - Inserisci POI");
+            System.out.println("4 - Crea Itinerario");
+            System.out.println("5 - Aggiungi Contenuto");
+            System.out.println("6 - Elimina oggetto");
+            System.out.println("7 - Validare POI");
+            System.out.println("8 - Validare Contenuto");
+            System.out.println("9 - Validare Itinerario");
+            System.out.println("10 - Partecipa a Contest");
+            System.out.println("0 - Esci");
+            int choice = in.nextInt();
+            in.nextLine();
+            switch (choice) {
+                case 0 -> exit = true;
+                case 1 -> this.viewPoi();
+                case 2 -> this.viewItinerary();
+                case 3 -> this.insertPOI();
+                case 4 -> this.createItinerary();
+                case 5 -> this.addContent();
+                case 6 -> this.deleteObject();
+                case 7 -> this.validatePOI();
+                case 8 -> this.validateContent();
+                case 9 -> this.validateItinerary();
+                case 10 -> this.partecipateToContest();
+                default -> System.out.println("Errore nell'inserimento");
+            }
+        }
+    }
 }

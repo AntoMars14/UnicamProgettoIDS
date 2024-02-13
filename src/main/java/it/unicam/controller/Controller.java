@@ -237,4 +237,12 @@ public class Controller {
     public void validateContestC() {
         this.contestController.validateContestC();
     }
+
+    public List<ContentGI> selectedContestValidatedContent(int i) {
+        return this.contestController.selectedContestValidatedContent(i);
+    }
+
+    public void selectedWinnerContent(int i) {
+        this.contestController.selectedWinnerContent(i);
+    }
 }

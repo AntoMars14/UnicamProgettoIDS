@@ -7,6 +7,7 @@ import it.unicam.model.UtentiUtenticatiManager;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContentGI;
+import it.unicam.model.util.SMTPUtil;
 import it.unicam.model.util.UtenteAutenticatoGI;
 
 import java.io.File;
@@ -19,7 +20,6 @@ public class ContestController {
     private Contest lastContest;
     private UtenteAutenticato lastContributor;
     private Content lastContent;
-    private ContentFD lastContentViewed;
 
     public ContestController(ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager) {
         this.contestManager = contestManager;
@@ -74,5 +74,17 @@ public class ContestController {
 
     public void validateContestC() {
         this.lastContest.validateContestC(this.lastContent);
+    }
+
+    public List<ContentGI> selectedContestValidatedContent(int i) {
+        this.lastContest = this.contestManager.getContest(i);
+        return this.lastContest.getContestContentValidate();
+    }
+
+    public void selectedWinnerContent(int i) {
+        //codice per inviare email necessita di impostare le credenziali, provato con gmail attivando l'opzione app meno sicure
+        //SMTPUtil.sendEmail(SMTPUtil.createSession(), this.lastContest.getAutoreContentEmail(i), "Vincitore contest di contribuzione", "Congratulazioni, sei il vincitore del contest di contribuzione, mostra questa mail per ritirare il premio");
+        this.lastContest.closeContest();
+
     }
 }
