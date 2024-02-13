@@ -143,10 +143,12 @@ public class Controller {
 
     public void deletePOI() {
         this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
+        this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
     }
 
     public void deleteItinerary() {
         this.comune.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
+        this.favouritesManager.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
     }
 
     public void deleteContent() {
@@ -255,5 +257,13 @@ public class Controller {
 
     public boolean addItineraryToFavorites(int id, int itineraryId) {
        return this.favouritesManager.addItineraryToFavorites(id, itineraryId, this.comune);
+    }
+
+    public List<POIGI> viewFavoritesPOIs(int id) {
+        return this.favouritesManager.getAllFavouritesPOI(id);
+    }
+
+    public List<ItineraryGI> viewFavoritesItineraries(int id) {
+        return this.favouritesManager.getAllFavouritesItinerary(id);
     }
 }

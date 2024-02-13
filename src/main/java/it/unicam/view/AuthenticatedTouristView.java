@@ -124,6 +124,7 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
             System.out.println("2 - Visualizza Itinerario");
             System.out.println("3 - Aggiungi foto");
             System.out.println("4 - Aggiungi ai preferiti");
+            System.out.println("5 - Visualizza preferiti");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -133,8 +134,30 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
                 case 2 -> this.viewItinerary();
                 case 3 -> this.addPhoto();
                 case 4 -> this.addToFavorites();
+                case 5 -> this.viewFavorites();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }
+    }
+
+    public void viewFavorites(){
+        System.out.println("Cosa vuoi visualizzare?");
+        System.out.println("1 - POI preferiti");
+        System.out.println("2 - Itinerari preferiti");
+        int choice = in.nextInt();
+        in.nextLine();
+        switch(choice){
+            case 1 -> this.viewFavoritesPOIs();
+            case 2 -> this.viewFavoritesItineraries();
+            default -> System.out.println("Errore nell'inserimento");
+        }
+    }
+
+    private void viewFavoritesPOIs() {
+        this.controller.viewFavoritesPOIs(this.id).stream().forEach(p -> System.out.println(p.toString()));
+    }
+
+    private void viewFavoritesItineraries() {
+        this.controller.viewFavoritesItineraries(this.id).stream().forEach(i -> System.out.println(i.toString()));
     }
 }
