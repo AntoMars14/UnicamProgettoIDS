@@ -242,6 +242,11 @@ public class CuratorView extends AuthorizedContributorView implements UtenteView
     }
 
     @Override
+    public void viewContentContest() {
+        super.viewContentContest();
+    }
+
+    @Override
     public void getView() {
         boolean exit = false;
         while(!exit){
@@ -257,6 +262,7 @@ public class CuratorView extends AuthorizedContributorView implements UtenteView
             System.out.println("8 - Validare Contenuto");
             System.out.println("9 - Validare Itinerario");
             System.out.println("10 - Partecipa a Contest");
+            System.out.println("11 - Visualizza Contenuto Contest");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -272,6 +278,7 @@ public class CuratorView extends AuthorizedContributorView implements UtenteView
                 case 8 -> this.validateContent();
                 case 9 -> this.validateItinerary();
                 case 10 -> this.partecipateToContest();
+                case 11 -> this.viewContentContest();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

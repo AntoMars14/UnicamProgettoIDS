@@ -266,4 +266,16 @@ public class Controller {
     public List<ItineraryGI> viewFavoritesItineraries(int id) {
         return this.favouritesManager.getAllFavouritesItinerary(id);
     }
+
+    public List<ContestGI> getAllContests(){
+        return this.contestManager.getAllContests();
+    }
+
+    public List<ContentGI> viewSelectedContestContents(int contestId) {
+        return this.contestController.viewSelectedContestContents(contestId);
+    }
+
+    public ContentFD viewSelectedContestContent(int contentId) {
+        return this.contestController.viewSelectedContestContent(contentId);
+    }
 }

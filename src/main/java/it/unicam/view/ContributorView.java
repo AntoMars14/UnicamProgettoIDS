@@ -74,6 +74,11 @@ public class ContributorView extends ContributeView implements UtenteView{
     }
 
     @Override
+    public void viewContentContest() {
+        super.viewContentContest();
+    }
+
+    @Override
     public void getView() {
         boolean exit = false;
         while(!exit){
@@ -85,6 +90,7 @@ public class ContributorView extends ContributeView implements UtenteView{
             System.out.println("4 - Crea Itinerario");
             System.out.println("5 - Aggiungi Contenuto");
             System.out.println("6 - Partecipa a Contest");
+            System.out.println("7 - Visualizza Contenuto Contest");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -96,6 +102,7 @@ public class ContributorView extends ContributeView implements UtenteView{
                 case 4 -> this.createItinerary();
                 case 5 -> this.addContent();
                 case 6 -> this.partecipateToContest();
+                case 7 -> this.viewContentContest();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

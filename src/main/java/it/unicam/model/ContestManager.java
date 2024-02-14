@@ -1,5 +1,6 @@
 package it.unicam.model;
 
+import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.ContestGI;
 
 import java.util.ArrayList;
@@ -27,5 +28,13 @@ public class ContestManager {
 
     public List<ContestGI> getAllOpenedContest() {
         return this.contests.stream().filter(contest -> !contest.isClosed()).map(contest -> contest.getGeneralInfoContest()).toList();
+    }
+
+    public List<ContestGI> getAllContests() {
+        return this.contests.stream().map(contest -> contest.getGeneralInfoContest()).toList();
+    }
+
+    public List<ContentGI> viewSelectedContestContents(int contestId) {
+        return this.contests.get(contestId-1).getContents();
     }
 }

@@ -6,6 +6,7 @@ import it.unicam.model.util.ContentFD;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AnimatorView implements UtenteView{
 
@@ -126,6 +127,32 @@ public class AnimatorView implements UtenteView{
         System.out.println("Vincitore selezionato e contest chiuso");
     }
 
+    public void viewContentContest(){
+        this.controller.getAllContests().stream().forEach(c -> System.out.println(c.toString()));
+        this.viewSelectedContestContents();
+        this.viewSelectedContestContent();
+    }
+
+    private void viewSelectedContestContents() {
+        System.out.println("Selezionare il contest di cui vuoi visualizzare i contenuti inserendo l'ID");
+        int contestId = in.nextInt();
+        in.nextLine();
+        System.out.println(controller.viewSelectedContestContents(contestId).stream().map(c -> c.toString()).collect(Collectors.joining("\n")));
+    }
+
+    private void viewSelectedContestContent() {
+        System.out.println("Selezionare il contenuto da visualizzare inserendo l'ID");
+        int contentId = in.nextInt();
+        in.nextLine();
+        ContentFD c = controller.viewSelectedContestContent(contentId);
+        System.out.println(c.toString());
+        try {
+            desktop.open(c.getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void getView() {
         boolean exit = false;
@@ -136,6 +163,7 @@ public class AnimatorView implements UtenteView{
             System.out.println("2 - Invita contributori");
             System.out.println("3 - Valida contenuto contest");
             System.out.println("4 - Seleziona vincitore contest");
+            System.out.println("5 - Visualizza Contenuto Contest");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -145,6 +173,7 @@ public class AnimatorView implements UtenteView{
                 case 2 -> this.inviteContributors();
                 case 3 -> this.validateContestContent();
                 case 4 -> this.selectContestWinner();
+                case 5 -> this.viewContentContest();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

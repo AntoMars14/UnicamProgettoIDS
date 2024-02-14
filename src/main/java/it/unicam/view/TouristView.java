@@ -19,6 +19,11 @@ public class TouristView extends ViewerView implements UtenteView{
     }
 
     @Override
+    public void viewContentContest() {
+        super.viewContentContest();
+    }
+
+    @Override
     public void getView() {
         boolean exit = false;
         while(!exit){
@@ -26,6 +31,7 @@ public class TouristView extends ViewerView implements UtenteView{
             System.out.println("Cosa vuoi fare?");
             System.out.println("1 - Visualizza POI");
             System.out.println("2 - Visualizza Itinerario");
+            System.out.println("3 - Visualizza Contenuto Contest");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -33,6 +39,7 @@ public class TouristView extends ViewerView implements UtenteView{
                 case 0 -> exit = true;
                 case 1 -> this.viewPoi();
                 case 2 -> this.viewItinerary();
+                case 3 -> this.viewContentContest();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }
