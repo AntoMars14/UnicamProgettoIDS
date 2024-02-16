@@ -60,6 +60,10 @@ public class UtenteAutenticato implements Utente{
     }
 
     public UtenteAutenticatoGI getGeneralInfoUtenteAutenticato() {
-        return new UtenteAutenticatoGI(this.id, this.username, this.email, this.password);
+        return new UtenteAutenticatoGI(this.id, this.username, this.email, this.password, this.role);
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

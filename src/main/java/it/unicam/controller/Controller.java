@@ -19,10 +19,10 @@ public class Controller {
     private ContentController contentController;
     private ViewController viewController;
     private ContestController contestController;
-
     private FavouritesManager favouritesManager;
+    private RoleManager roleManager;
 
-    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager) {
+    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
@@ -30,6 +30,7 @@ public class Controller {
         this.contentController = new ContentController(comune);
         this.viewController = new ViewController(comune);
         this.favouritesManager = favouritesManager;
+        this.roleManager = roleManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
     }
 
@@ -265,5 +266,21 @@ public class Controller {
 
     public List<ItineraryGI> viewFavoritesItineraries(int id) {
         return this.favouritesManager.getAllFavouritesItinerary(id);
+    }
+
+    public void requestChangeRole(int id) {
+        this.roleManager.requestChangeRole(id);
+    }
+
+    public List<UtenteAutenticatoGI> viewChangeRoleRequests() {
+        return this.roleManager.viewChangeRoleRequests();
+    }
+
+    public void disapproveRequest(int id) {
+        this.roleManager.disapproveRequest(id);
+    }
+
+    public void approveRequest(int id) {
+        this.roleManager.approveRequest(id);
     }
 }

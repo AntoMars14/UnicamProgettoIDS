@@ -1,5 +1,7 @@
 package it.unicam.model.util;
 
+import it.unicam.model.utenti.Role;
+
 public class UtenteAutenticatoGI {
 
     private final int id;
@@ -7,16 +9,19 @@ public class UtenteAutenticatoGI {
     private final String email;
     private final String password;
 
-    public UtenteAutenticatoGI(int id, String username, String email, String password) {
+    private final Role role;
+
+    public UtenteAutenticatoGI(int id, String username, String email, String password, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     @Override
     public String toString() {
-        return "UtenteAutenticato id = " + id +
+        return "UtenteAutenticato id = " + id + " - Ruolo = "+this.role +
                 "\nusername = " + username +
                 " - email = " + email;
     }

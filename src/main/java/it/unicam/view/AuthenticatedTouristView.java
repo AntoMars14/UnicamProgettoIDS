@@ -125,6 +125,7 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
             System.out.println("3 - Aggiungi foto");
             System.out.println("4 - Aggiungi ai preferiti");
             System.out.println("5 - Visualizza preferiti");
+            System.out.println("6 - Richiedi cambio ruolo a Contributor");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -135,6 +136,7 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
                 case 3 -> this.addPhoto();
                 case 4 -> this.addToFavorites();
                 case 5 -> this.viewFavorites();
+                case 6 -> this.requestChangeRole();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }
@@ -159,5 +161,9 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
 
     private void viewFavoritesItineraries() {
         this.controller.viewFavoritesItineraries(this.id).stream().forEach(i -> System.out.println(i.toString()));
+    }
+    public void requestChangeRole(){
+        this.controller.requestChangeRole(this.id);
+        System.out.println("Richiesta inviata");
     }
 }

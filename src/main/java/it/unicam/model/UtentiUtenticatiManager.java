@@ -24,4 +24,8 @@ public class UtentiUtenticatiManager {
                 .filter(u -> u.getRole().equals(Role.CONTRIBUTOR) || u.getRole().equals(Role.CONTRIBUTORAUTORIZZATO) || u.getRole().equals(Role.CURATORE))
                 .map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
     }
+
+    public UtenteAutenticatoGI getUserGI(int id) {
+        return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
+    }
 }
