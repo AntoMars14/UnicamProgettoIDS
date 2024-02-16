@@ -10,6 +10,7 @@ import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,12 +22,12 @@ public class Controller {
     private ContentController contentController;
     private ViewController viewController;
     private ContestController contestController;
-
     private FavouritesManager favouritesManager;
     private RoleManager roleManager;
     private UtentiUtenticatiManager utentiUtenticatiManager;
+    private RegistrationController registrationController;
 
-    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
+    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager, RegistrationController registrationController) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
@@ -37,6 +38,7 @@ public class Controller {
         this.roleManager = roleManager;
         this.utentiUtenticatiManager = utentiUtenticatiManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
+        this.registrationController = registrationController;
     }
 
     public List<POIGI> getAllPOI(){
@@ -307,5 +309,29 @@ public class Controller {
 
     public void changeRole(int id, Role role) {
         this.utentiUtenticatiManager.changeRole(id, role);
+    }
+
+    public boolean registrationUser(String email, String username, String password, Role role) {
+        return this.registrationController.registrationUser(email, username, password, role);
+    }
+
+    public void confirmRegistration() {
+        this.registrationController.confirmRegistration();
+    }
+
+    public List<UtenteAutenticatoGI> viewRegistrationUsers() {
+        return this.utentiUtenticatiManager.viewRegistrationUsers();
+    }
+
+    public void selectedRegistrationUser(int i) {
+        this.registrationController.selectedRegistrationUser(i);
+    }
+
+    public void refuseRegistration() {
+        this.registrationController.refuseRegistration();
+    }
+
+    public void approveRegistration() {
+        this.registrationController.approveRegistration();
     }
 }

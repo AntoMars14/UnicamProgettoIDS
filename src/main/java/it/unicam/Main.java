@@ -2,8 +2,10 @@ package it.unicam;
 
 import it.unicam.controller.Controller;
 import it.unicam.model.*;
+import it.unicam.model.controllersGRASP.RegistrationController;
 import it.unicam.model.controllersGRASP.TimeController;
 import it.unicam.model.utenti.Role;
+import it.unicam.model.utenti.Turista;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.SMTPUtil;
 import it.unicam.model.util.tasks.DeleteExpiredItineraries;
@@ -19,7 +21,8 @@ public class Main {
         UtentiUtenticatiManager utenteAutenticatoManager = new UtentiUtenticatiManager();
         FavouritesManager favouritesManager = new FavouritesManager();
         RoleManager roleManager = new RoleManager(utenteAutenticatoManager);
-        Controller appController = new Controller(comune, cm, utenteAutenticatoManager, favouritesManager, roleManager);
+        RegistrationController registrationController = new RegistrationController(utenteAutenticatoManager);
+        Controller appController = new Controller(comune, cm, utenteAutenticatoManager, favouritesManager, roleManager, registrationController);
         Runnable deleteExpiredPOIs = new DeleteExpiredPOIs(comune);
         Runnable deleteExpiredItineraries = new DeleteExpiredItineraries(comune);
         TimeController timeController = new TimeController();
@@ -31,12 +34,14 @@ public class Main {
         UtenteAutenticato u4 = new UtenteAutenticato("Domenico", "kfejsf", "prova4@gmail.com", Role.ANIMATORE);
         UtenteAutenticato u5 = new UtenteAutenticato("Vincenzo", "feads", "prova5@gmail.com", Role.TURISTAUTENTICATO);
         UtenteAutenticato u6 = new UtenteAutenticato("Franco", "cmklasmck", "prova6@gmail.com ", Role.GESTORE);
+        Turista t1 = new Turista();
         utenteAutenticatoManager.addUtente(u1);
         utenteAutenticatoManager.addUtente(u2);
         utenteAutenticatoManager.addUtente(u3);
         utenteAutenticatoManager.addUtente(u4);
         utenteAutenticatoManager.addUtente(u5);
         utenteAutenticatoManager.addUtente(u6);
+        t1.utenteView(appController);
         u4.utenteView(appController);
         u3.utenteView(appController);
         u2.utenteView(appController);

@@ -97,7 +97,7 @@ public class AnimatorView implements UtenteView{
     }
 
     private void selectedContestContent() {
-        System.out.println("Inserisci l'id del contest che vuoi validare");
+        System.out.println("Inserisci l'id del contenuto che vuoi validare");
         ContentFD content = this.controller.selectedContestContent(in.nextInt());
         in.nextLine();
         System.out.println(content.toString());

@@ -69,6 +69,33 @@ public class PlatformManagerView implements UtenteView{
         }
     }
 
+    public void approveRegistration(){
+        this.controller.viewRegistrationUsers().stream().forEach(r -> System.out.println(r.toString()));
+        this.selectedRegistrationUser();
+        System.out.println("Vuoi approvare la registrazione? y/n");
+        if (in.nextLine().equals("y")) {
+            this.approveRegistrationR();
+        }else {
+            this.refuseRegistrationR();
+        }
+    }
+
+    private void selectedRegistrationUser() {
+        System.out.println("Seleziona l'id dell'utente a cui vuoi esaminare la registrazione");
+        this.controller.selectedRegistrationUser(in.nextInt());
+        in.nextLine();
+    }
+
+    private void refuseRegistrationR() {
+        this.controller.refuseRegistration();
+        System.out.println("Registrazione rifiutata");
+    }
+
+    private void approveRegistrationR() {
+        this.controller.approveRegistration();
+        System.out.println("Registrazione approvata");
+    }
+
     @Override
     public void getView() {
         boolean exit = false;
@@ -77,6 +104,7 @@ public class PlatformManagerView implements UtenteView{
             System.out.println("Cosa vuoi fare?");
             System.out.println("1 - Gestisci richieste di cambio ruolo");
             System.out.println("2 - Gestisci privilegi");
+            System.out.println("3 - Approva registrazione");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -84,6 +112,7 @@ public class PlatformManagerView implements UtenteView{
                 case 0 -> exit = true;
                 case 1 -> this.manageChangeRole();
                 case 2 -> this.managePrivileges();
+                case 3 -> this.approveRegistration();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }
