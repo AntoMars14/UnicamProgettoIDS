@@ -28,4 +28,12 @@ public class UtentiUtenticatiManager {
     public UtenteAutenticatoGI getUserGI(int id) {
         return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
     }
+
+    public List<UtenteAutenticatoGI> viewAllUsers() {
+        return this.utenti.stream().filter(u-> !u.getRole().equals(Role.GESTORE)).map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
+    }
+
+    public void changeRole(int id, Role role) {
+        this.utenti.get(id-1).setRole(role);
+    }
 }

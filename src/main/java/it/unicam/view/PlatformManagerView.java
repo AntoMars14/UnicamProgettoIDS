@@ -1,6 +1,7 @@
 package it.unicam.view;
 
 import it.unicam.controller.Controller;
+import it.unicam.model.utenti.Role;
 
 import java.util.Scanner;
 
@@ -40,6 +41,33 @@ public class PlatformManagerView implements UtenteView{
         System.out.println("Richiesta di cambio ruolo approvata");
     }
 
+    public void managePrivileges(){
+        this.controller.viewAllUsers().stream().forEach(u -> System.out.println(u.toString()));
+        this.changeRole();
+
+    }
+
+    private void changeRole() {
+        System.out.println("Seleziona l'id dell'utente a cui vuoi cambiare il ruolo");
+        int id = in.nextInt();
+        in.nextLine();
+        System.out.println("Seleziona il ruolo che vuoi assegnare all'utente");
+        System.out.println("1 - TuristaAutenticato");
+        System.out.println("2 - Contributor");
+        System.out.println("3 - ContributorAutorizzato");
+        System.out.println("4 - Curatore");
+        System.out.println("5 - Animatore");
+        int choice = in.nextInt();
+        in.nextLine();
+        switch (choice) {
+            case 1 -> this.controller.changeRole(id, Role.TURISTAUTENTICATO);
+            case 2 -> this.controller.changeRole(id,Role.CONTRIBUTOR);
+            case 3 -> this.controller.changeRole(id, Role.CONTRIBUTORAUTORIZZATO);
+            case 4 -> this.controller.changeRole(id, Role.CURATORE);
+            case 5 -> this.controller.changeRole(id, Role.ANIMATORE);
+            default -> System.out.println("Errore nell'inserimento");
+        }
+    }
 
     @Override
     public void getView() {
@@ -48,12 +76,14 @@ public class PlatformManagerView implements UtenteView{
             System.out.println("Benvenuto Gestore della piattaforma");
             System.out.println("Cosa vuoi fare?");
             System.out.println("1 - Gestisci richieste di cambio ruolo");
+            System.out.println("2 - Gestisci privilegi");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
             switch (choice) {
                 case 0 -> exit = true;
                 case 1 -> this.manageChangeRole();
+                case 2 -> this.managePrivileges();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

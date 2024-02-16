@@ -2,6 +2,7 @@ package it.unicam.controller;
 
 import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
+import it.unicam.model.utenti.Role;
 import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Controller {
     private Comune comune;
@@ -22,6 +24,7 @@ public class Controller {
 
     private FavouritesManager favouritesManager;
     private RoleManager roleManager;
+    private UtentiUtenticatiManager utentiUtenticatiManager;
 
     public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
         this.comune = comune;
@@ -32,6 +35,7 @@ public class Controller {
         this.viewController = new ViewController(comune);
         this.favouritesManager = favouritesManager;
         this.roleManager = roleManager;
+        this.utentiUtenticatiManager = utentiUtenticatiManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
     }
 
@@ -295,5 +299,13 @@ public class Controller {
 
     public void approveRequest(int id) {
         this.roleManager.approveRequest(id);
+    }
+
+    public List<UtenteAutenticatoGI> viewAllUsers() {
+        return this.utentiUtenticatiManager.viewAllUsers();
+    }
+
+    public void changeRole(int id, Role role) {
+        this.utentiUtenticatiManager.changeRole(id, role);
     }
 }
