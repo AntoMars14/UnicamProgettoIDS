@@ -114,33 +114,6 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
         this.controller.getAllPOI().stream().forEach(p -> System.out.println(p.toString()));
     }
 
-    @Override
-    public void getView() {
-        boolean exit = false;
-        while(!exit){
-            System.out.println("Benvenuto nella vista turista autenticato");
-            System.out.println("Cosa vuoi fare?");
-            System.out.println("1 - Visualizza POI");
-            System.out.println("2 - Visualizza Itinerario");
-            System.out.println("3 - Aggiungi foto");
-            System.out.println("4 - Aggiungi ai preferiti");
-            System.out.println("5 - Visualizza preferiti");
-            System.out.println("6 - Richiedi cambio ruolo a Contributor");
-            System.out.println("0 - Esci");
-            int choice = in.nextInt();
-            in.nextLine();
-            switch(choice){
-                case 0 -> exit = true;
-                case 1 -> this.viewPoi();
-                case 2 -> this.viewItinerary();
-                case 3 -> this.addPhoto();
-                case 4 -> this.addToFavorites();
-                case 5 -> this.viewFavorites();
-                case 6 -> this.requestChangeRole();
-                default -> System.out.println("Errore nell'inserimento");
-            }
-        }
-    }
 
     public void viewFavorites(){
         System.out.println("Cosa vuoi visualizzare?");
@@ -162,6 +135,43 @@ public class AuthenticatedTouristView  extends ViewerView implements UtenteView{
     private void viewFavoritesItineraries() {
         this.controller.viewFavoritesItineraries(this.id).stream().forEach(i -> System.out.println(i.toString()));
     }
+
+
+    @Override
+    public void viewContentContest() {
+        super.viewContentContest();
+    }
+
+    @Override
+    public void getView() {
+        boolean exit = false;
+        while(!exit){
+            System.out.println("Benvenuto turista autenticato");
+            System.out.println("Cosa vuoi fare?");
+            System.out.println("1 - Visualizza POI");
+            System.out.println("2 - Visualizza Itinerario");
+            System.out.println("3 - Aggiungi foto");
+            System.out.println("4 - Aggiungi ai preferiti");
+            System.out.println("5 - Visualizza preferiti");
+            System.out.println("6 - Richiedi cambio ruolo a Contributor");
+            System.out.println("7 - Visualizza Contenuto Contest");
+            System.out.println("0 - Esci");
+            int choice = in.nextInt();
+            in.nextLine();
+            switch(choice){
+                case 0 -> exit = true;
+                case 1 -> this.viewPoi();
+                case 2 -> this.viewItinerary();
+                case 3 -> this.addPhoto();
+                case 4 -> this.addToFavorites();
+                case 5 -> this.viewFavorites();
+                case 6 -> this.requestChangeRole();
+                case 7 -> this.viewContentContest();
+                default -> System.out.println("Errore nell'inserimento");
+            }
+        }
+    }
+
     public void requestChangeRole(){
         this.controller.requestChangeRole(this.id);
         System.out.println("Richiesta inviata");

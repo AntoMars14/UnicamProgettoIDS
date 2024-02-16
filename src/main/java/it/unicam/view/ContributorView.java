@@ -73,6 +73,11 @@ public class ContributorView extends ContributeView implements UtenteView{
         super.partecipateToContest();
     }
 
+    @Override
+    public void viewContentContest() {
+        super.viewContentContest();
+    }
+
     public void requestChangeRole() {
         this.controller.requestChangeRole(this.contributorId);
         System.out.println("Richiesta inviata");
@@ -91,6 +96,7 @@ public class ContributorView extends ContributeView implements UtenteView{
             System.out.println("5 - Aggiungi Contenuto");
             System.out.println("6 - Partecipa a Contest");
             System.out.println("7 - Richiedi cambio ruolo a Contributor Autorizzato");
+            System.out.println("8 - Visualizza Contenuto Contest");
             System.out.println("0 - Esci");
             int choice = in.nextInt();
             in.nextLine();
@@ -103,6 +109,7 @@ public class ContributorView extends ContributeView implements UtenteView{
                 case 5 -> this.addContent();
                 case 6 -> this.partecipateToContest();
                 case 7 -> this.requestChangeRole();
+                case 8 -> this.viewContentContest();
                 default -> System.out.println("Errore nell'inserimento");
             }
         }

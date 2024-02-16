@@ -1,6 +1,7 @@
 package it.unicam.model;
 
 import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.ContestGI;
 
@@ -110,10 +111,12 @@ public class Contest {
     }
 
     public void deleteContestContent(Content content) {
+        this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
         this.partecipations.remove(content);
     }
 
     public void validateContestC(Content content) {
+        content.setContentId(this.validatedPartecipations.size() + 1);
         this.validatedPartecipations.put(content, this.partecipations.get(content));
         this.deleteContestContent(content);
     }
@@ -128,5 +131,13 @@ public class Contest {
 
     public void closeContest() {
         this.isClosed = true;
+    }
+
+    public List<ContentGI> getContents() {
+        return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
+    }
+
+    public ContentFD viewSelectedContestContent(int contentId) {
+        return this.validatedPartecipations.keySet().stream().filter(c -> c.getContentId() == contentId).map(c -> c.getFullDetailedContent()).findFirst().orElse(null);
     }
 }

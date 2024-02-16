@@ -1,10 +1,12 @@
 package it.unicam.view;
 
 import it.unicam.controller.Controller;
+import it.unicam.model.util.ContentFD;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public abstract class ViewerView {
 
@@ -58,7 +60,31 @@ public abstract class ViewerView {
         System.out.println(controller.selectedItinerary(in.nextInt()).toString());
     }
 
+    public void viewContentContest(){
+        this.controller.getAllContests().stream().forEach(c -> System.out.println(c.toString()));
+        this.viewSelectedContestContents();
+        this.viewSelectedContestContent();
+    }
 
+    private void viewSelectedContestContents() {
+        System.out.println("Selezionare il contest di cui vuoi visualizzare i contenuti inserendo l'ID");
+        int contestId = in.nextInt();
+        in.nextLine();
+        System.out.println(controller.viewSelectedContestContents(contestId).stream().map(c -> c.toString()).collect(Collectors.joining("\n")));
+    }
+
+    private void viewSelectedContestContent() {
+        System.out.println("Selezionare il contenuto da visualizzare inserendo l'ID");
+        int contentId = in.nextInt();
+        in.nextLine();
+        ContentFD c = controller.viewSelectedContestContent(contentId);
+        System.out.println(c.toString());
+        try {
+            desktop.open(c.getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

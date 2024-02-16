@@ -87,4 +87,13 @@ public class ContestController {
         this.lastContest.closeContest();
 
     }
+
+    public List<ContentGI> viewSelectedContestContents(int contestId) {
+        this.lastContest = this.contestManager.getContest(contestId);
+        return this.contestManager.viewSelectedContestContents(contestId);
+    }
+
+    public ContentFD viewSelectedContestContent(int contentId) {
+        return this.lastContest.viewSelectedContestContent(contentId);
+    }
 }
