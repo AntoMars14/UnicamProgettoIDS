@@ -27,7 +27,7 @@ public class Controller {
     private UtentiUtenticatiManager utentiUtenticatiManager;
     private RegistrationController registrationController;
 
-    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager, RegistrationController registrationController) {
+    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
@@ -38,7 +38,7 @@ public class Controller {
         this.roleManager = roleManager;
         this.utentiUtenticatiManager = utentiUtenticatiManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
-        this.registrationController = registrationController;
+        this.registrationController = new RegistrationController(utentiUtenticatiManager);
     }
 
     public List<POIGI> getAllPOI(){

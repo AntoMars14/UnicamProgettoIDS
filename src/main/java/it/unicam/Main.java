@@ -11,18 +11,21 @@ import it.unicam.model.util.SMTPUtil;
 import it.unicam.model.util.tasks.DeleteExpiredItineraries;
 import it.unicam.model.util.tasks.DeleteExpiredPOIs;
 import it.unicam.view.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.mail.Session;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        Comune comune = new Comune("Camerino", new Coordinates(43.14255874, 13.078767));
+        SpringApplication.run(Main.class, args);
+        /*Comune comune = new Comune("Camerino", new Coordinates(43.14255874, 13.078767));
         ContestManager cm = new ContestManager();
         UtentiUtenticatiManager utenteAutenticatoManager = new UtentiUtenticatiManager();
         FavouritesManager favouritesManager = new FavouritesManager();
         RoleManager roleManager = new RoleManager(utenteAutenticatoManager);
-        RegistrationController registrationController = new RegistrationController(utenteAutenticatoManager);
-        Controller appController = new Controller(comune, cm, utenteAutenticatoManager, favouritesManager, roleManager, registrationController);
+        Controller appController = new Controller(comune, cm, utenteAutenticatoManager, favouritesManager, roleManager);
         Runnable deleteExpiredPOIs = new DeleteExpiredPOIs(comune);
         Runnable deleteExpiredItineraries = new DeleteExpiredItineraries(comune);
         TimeController timeController = new TimeController();
@@ -51,6 +54,6 @@ public class Main {
         u1.utenteView(appController);
         u5.utenteView(appController);
         u4.utenteView(appController);
-        u3.utenteView(appController);
+        u3.utenteView(appController);*/
     }
 }
