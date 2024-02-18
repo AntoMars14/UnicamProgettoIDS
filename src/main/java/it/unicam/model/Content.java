@@ -2,14 +2,20 @@ package it.unicam.model;
 
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContentGI;
+import jakarta.persistence.*;
 
 import java.io.File;
 
+@Entity
 public class Content {
-    private int contentId;
-    private final String nome;
-    private final String descrizione;
-    private final File file;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "content_generator")
+    private Long contentId;
+    private String nome;
+    private String descrizione;
+    @Lob
+    private File file;
 
     public Content(String Nome, String Descrizione, File file, int contentId){
         if (Nome == null || Descrizione == null || file == null){
@@ -18,7 +24,10 @@ public class Content {
         this.nome = Nome;
         this.descrizione = Descrizione;
         this.file = file;
-        this.contentId = contentId;
+    }
+
+    public Content() {
+
     }
 
 
@@ -34,12 +43,12 @@ public class Content {
         return file;
     }
 
-    public int getContentId() {
-        return contentId;
+    public Long getContentId() {
+        return this.contentId;
     }
 
     public void setContentId(int contentId) {
-        this.contentId = contentId;
+
     }
 
     public ContentGI getContentGeneralInfo(){

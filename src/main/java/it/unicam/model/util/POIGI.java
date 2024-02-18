@@ -4,13 +4,13 @@ import it.unicam.model.Coordinates;
 import it.unicam.model.Type;
 
 public class POIGI {
-    private final int id;
+    private final Long id;
     private final String name;
     private final String description;
     private final Coordinates coordinates;
     private final Type type;
 
-    public POIGI(int id, String name, String description, Coordinates coord, Type type) {
+    public POIGI(Long id, String name, String description, Coordinates coord, Type type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -18,7 +18,7 @@ public class POIGI {
         this.type = type;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

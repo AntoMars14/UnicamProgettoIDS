@@ -111,7 +111,7 @@ public class Contest {
     }
 
     public void deleteContestContent(Content content) {
-        this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
+        //this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
         this.partecipations.remove(content);
     }
 

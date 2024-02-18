@@ -6,6 +6,13 @@ import it.unicam.model.utenti.Role;
 import it.unicam.model.util.*;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -14,9 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@RestController
 public class Controller {
+    @Autowired
     private Comune comune;
     private ContestManager contestManager;
+
+    @Autowired
     private POIController poiController;
     private ItineraryController itineraryController;
     private ContentController contentController;
@@ -27,7 +38,7 @@ public class Controller {
     private UtentiUtenticatiManager utentiUtenticatiManager;
     private RegistrationController registrationController;
 
-    public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
+    /*public Controller(Comune comune, ContestManager contestManager, UtentiUtenticatiManager utentiUtenticatiManager, FavouritesManager favouritesManager, RoleManager roleManager) {
         this.comune = comune;
         this.contestManager = contestManager;
         this.poiController = new POIController(comune);
@@ -39,7 +50,7 @@ public class Controller {
         this.utentiUtenticatiManager = utentiUtenticatiManager;
         this.contestController = new ContestController(contestManager, utentiUtenticatiManager);
         this.registrationController = new RegistrationController(utentiUtenticatiManager);
-    }
+    }*/
 
     public List<POIGI> getAllPOI(){
         return comune.getAllPOI();
@@ -63,6 +74,21 @@ public class Controller {
 
     public void insertPoiInfo(String name, String desc){
         poiController.InsertPoiInfo(name, desc);
+    }
+
+    @PostMapping("/insertPOI")
+    public ResponseEntity<Object> insertPOI(@RequestBody POIFD p) {
+        POIFactory pf;
+        switch (p.getType()){
+            case Type.LUOGO -> pf = new POILuogoFactory();
+            case Type.EVENTO -> pf = new POIEventoFactory();
+            case Type.LUOGOCONORA -> pf = new POILuogoConOraFactory();
+            default -> {
+                return new ResponseEntity<>("Errore: Tipo errato", HttpStatus.BAD_REQUEST);
+            }
+        }
+        poiController.insertPOI(pf, p);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     public void selectType(POIFactory p){
@@ -126,11 +152,11 @@ public class Controller {
     }
 
     public void validateSelectedPOI() {
-        comune.validateSelectedPOI(viewController.getLastViewedPoi().getId());
+        //comune.validateSelectedPOI(viewController.getLastViewedPoi().getId());
     }
 
     public void deletePendingPOI() {
-        comune.deletePendingPOI(viewController.getLastViewedPoi().getId());
+        //comune.deletePendingPOI(viewController.getLastViewedPoi().getId());
     }
 
     public ContentFD viewContentPending(int contentID){
@@ -150,8 +176,8 @@ public class Controller {
     }
 
     public void deletePOI() {
-        this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
-        this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
+        //this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
+        //this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
     }
 
     public void deleteItinerary() {
@@ -160,7 +186,7 @@ public class Controller {
     }
 
     public void deleteContent() {
-        this.comune.deleteContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+        //this.comune.deleteContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
 
     public List<POIGI> getAllPendingContentPOI() {
@@ -172,11 +198,11 @@ public class Controller {
     }
 
     public void deletePendingContent() {
-        comune.deletePendingContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+        //comune.deletePendingContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
 
     public void validateSelectedContent() {
-        comune.validateSelectedContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+        //comune.validateSelectedContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
     }
 
     public List<ItineraryGI> getAllPendingItinerary() {

@@ -3,19 +3,19 @@ package it.unicam.model.util;
 import java.io.File;
 
 public class ContentFD {
-    private final int id;
+    private final Long id;
     private final String nome;
     private final String descrizione;
     private final File file;
 
-    public ContentFD(int id, String nome, String descrizione, File file){
+    public ContentFD(Long id, String nome, String descrizione, File file){
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.file = file;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

@@ -2,27 +2,51 @@ package it.unicam.model;
 
 import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 public abstract class POI {
 
-    private int POIId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "poi_generator")
+    private Long POIId;
     private String name;
     private String description;
+    @Column(name = "type", insertable = false, updatable = false)
     private Type type;
-    private final Coordinates coord;
+    @Embedded
+    private Coordinates coord;
 
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Content> contents;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Content> contentsPending;
 
+    public POI() {
+        this.contents = new ArrayList<>();
+        this.contentsPending = new ArrayList<>();
+    }
+    public POI(String name, String description) {
+        if(name == null || description == null) throw new NullPointerException("Parametri null");
+        this.name = name;
+        this.description = description;
+        this.type = null;
+        this.coord = null;
+        this.contents = new ArrayList<>();
+        this.contentsPending = new ArrayList<>();
+    }
     public POI(Coordinates coord) {
         if(coord == null) throw new NullPointerException("Coordinate null");
         this.coord = coord;
         this.contents = new ArrayList<>();
         this.contentsPending = new ArrayList<>();
     }
+
 
     public String getName() {
         return name;
@@ -39,6 +63,7 @@ public abstract class POI {
     public Coordinates getCoord() {
         return coord;
     }
+
     public  List<Content> getContents(){
         return this.contents;
     };
@@ -69,12 +94,13 @@ public abstract class POI {
         this.type = type;
     }
 
-    public int getPOIId() {
+
+    public Long getPOIId() {
         return POIId;
     }
 
-    public void setPOIId(int POIId) {
-        this.POIId = POIId;
+    public Long setPOIId(Long POIId) {
+        return this.POIId = POIId;
     }
 
     public abstract void insertPOIInfo(String name, String description);

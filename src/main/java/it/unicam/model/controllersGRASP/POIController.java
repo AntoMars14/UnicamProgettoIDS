@@ -1,15 +1,20 @@
 package it.unicam.model.controllersGRASP;
 
 import it.unicam.model.*;
+import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
+import it.unicam.repositories.POIRepository;
 import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+@Service
 public class POIController {
     private Comune c;
 
@@ -17,6 +22,8 @@ public class POIController {
 
     private POI lastPOI;
 
+    @Autowired
+    private POIRepository poiRepository;
 
     public POIController(Comune c) {
         this.c = c;
@@ -73,4 +80,16 @@ public class POIController {
         c.insertPOIPending(this.lastPOI);
     }
 
+    public void insertPOI(POIFactory pf, POIFD p) {
+        POI poi = pf.createPOI(p.getCoordinates());
+        poi.insertPOIInfo(p.getName(), p.getDescription());
+        if (poi instanceof POILuogoConOra plo) {
+            plo.insertTime(p.getOpeningTime(), p.getClosingTime());
+        }
+        if (poi instanceof POIEvento pe) {
+            pe.insertDate(p.getOpeningDate(), p.getClosingDate());
+        }
+        this.poiRepository.save(poi);
+        this.c.insertPOI(poi);
+    }
 }

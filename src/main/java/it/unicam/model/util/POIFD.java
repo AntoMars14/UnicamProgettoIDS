@@ -3,6 +3,7 @@ package it.unicam.model.util;
 import it.unicam.model.Coordinates;
 import it.unicam.model.Type;
 
+import java.net.Proxy;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,19 +12,36 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class POIFD {
-    private final int id;
-    private final String name;
-    private final String description;
-    private final Type type;
-    private final Coordinates coordinates;
-    private final LocalTime[] openingTime;
-    private final LocalTime[] closingTime;
-    private final LocalDateTime openingDate;
-    private final LocalDateTime closingDate;
-    private final List<ContentGI> contentsGI;
-    private final List<ContentGI> pendingContentsGI;
+    private Long id;
+    private String name;
+    private String description;
+    private Type type;
+    private Coordinates coordinates;
+    private LocalTime[] openingTime;
+    private LocalTime[] closingTime;
+    private LocalDateTime openingDate;
+    private LocalDateTime closingDate;
+    private List<ContentGI> contentsGI;
+    private List<ContentGI> pendingContentsGI;
 
-    public POIFD(int id, String name, String description, Coordinates coord, Type type, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
+    public POIFD(){
+    }
+
+    public POIFD(String name, String description, Coordinates coord) {
+        this.name = name;
+        this.description = description;
+        this.coordinates = coord;
+        this.type = Type.LUOGO;
+        this.openingDate = null;
+        this.closingDate = null;
+        this.openingTime = null;
+        this.closingTime = null;
+        this.contentsGI = null;
+        this.pendingContentsGI = null;
+        this.id = null;
+    }
+
+    public POIFD(Long id, String name, String description, Coordinates coord, Type type, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,7 +55,7 @@ public class POIFD {
         this.closingDate = null;
     }
 
-    public POIFD(int id, String name, String description, Coordinates coord, Type type, LocalTime[] ot, LocalTime[] ct, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
+    public POIFD(Long id, String name, String description, Coordinates coord, Type type, LocalTime[] ot, LocalTime[] ct, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,7 +69,7 @@ public class POIFD {
         this.closingDate = null;
     }
 
-    public POIFD(int id, String name, String description, Coordinates coord, Type type, LocalDateTime od, LocalDateTime cd, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
+    public POIFD(Long id, String name, String description, Coordinates coord, Type type, LocalDateTime od, LocalDateTime cd, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,7 +83,7 @@ public class POIFD {
         this.closingDate = cd;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

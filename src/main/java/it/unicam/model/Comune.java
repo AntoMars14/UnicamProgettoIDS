@@ -1,5 +1,9 @@
 package it.unicam.model;
 import it.unicam.model.util.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -10,15 +14,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@Component
 public class Comune {
 
     private Coordinates coordinates;
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<POI> POIValidate = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
     private List<POI> POIPending = new ArrayList<>();
     private List<Itinerary> itineraries = new ArrayList<>();
     private List<Itinerary> itinerariesPending = new ArrayList<>();
 
+    public Comune() {
+    }
     public Comune(String name, Coordinates coord) {
         this.name = name;
         this.coordinates = coord;
@@ -29,12 +39,12 @@ public class Comune {
 
     public void insertPOI(POI p) {
         this.POIValidate.add(p);
-        p.setPOIId(this.POIValidate.indexOf(p) + 1);
+        //p.setPOIId(this.POIValidate.indexOf(p) + 1);
     }
 
     public void insertPOIPending(POI p) {
         this.POIPending.add(p);
-        p.setPOIId(this.POIPending.indexOf(p) + 1);
+        //p.setPOIId(this.POIPending.indexOf(p) + 1);
     }
 
     public List<POIGI> getAllPOI() {
@@ -133,7 +143,7 @@ public class Comune {
 
     public void deletePendingPOI(int POIId) {
         this.POIPending.remove(POIId - 1);
-        this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
+        //this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
     }
 
     public void deletePOI(int id) {
@@ -144,7 +154,7 @@ public class Comune {
                 .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
         this.itinerariesPending.removeIf(i -> i.getPOIs().size() < 2);
         this.POIValidate.remove(id - 1);
-        this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
+        //this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
     }
 
     public void deleteItinerary(int id) {

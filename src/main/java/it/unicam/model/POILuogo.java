@@ -3,10 +3,12 @@ package it.unicam.model;
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
+import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class POILuogo extends  POI{
 
     public POILuogo(Coordinates coord) {
@@ -14,8 +16,12 @@ public class POILuogo extends  POI{
         this.setType(Type.LUOGO);
     }
 
+    public POILuogo() {
+        super();
+    }
+
     @Override
-    public int getPOIId() {
+    public Long getPOIId() {
         return super.getPOIId();
     }
 
@@ -55,10 +61,10 @@ public class POILuogo extends  POI{
         super.addContent(c);
     }
 
-    @Override
+    /*@Override
     public void setPOIId(int POIId) {
         super.setPOIId(POIId);
-    }
+    }*/
 
     @Override
     public void insertPOIInfo(String name, String description){

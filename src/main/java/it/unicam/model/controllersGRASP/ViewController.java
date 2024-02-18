@@ -35,12 +35,12 @@ public class ViewController {
     }
 
     public ContentFD viewContent(int contentID) {
-        this.lastViewedContent = comune.viewContent(this.lastViewedPOI.getId(), contentID);
+        //this.lastViewedContent = comune.viewContent(this.lastViewedPOI.getId(), contentID);
         return this.lastViewedContent;
     }
 
     public ContentFD viewContentPOIPending(int contentID){
-        this.lastViewedContent = this.comune.viewContentPOIPending(this.lastViewedPOI.getId(), contentID);
+        //this.lastViewedContent = this.comune.viewContentPOIPending(this.lastViewedPOI.getId(), contentID);
         return lastViewedContent;
     }
 
@@ -55,7 +55,7 @@ public class ViewController {
     }
 
     public ContentFD selectedPendingContent(int contentId) {
-        this.lastViewedContent = comune.selectedPendingContent(this.lastViewedPOI.getId(), contentId);
+        //this.lastViewedContent = comune.selectedPendingContent(this.lastViewedPOI.getId(), contentId);
         return this.lastViewedContent;
     }
 

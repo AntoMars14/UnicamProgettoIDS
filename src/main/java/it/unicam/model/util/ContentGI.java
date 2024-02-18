@@ -1,17 +1,17 @@
 package it.unicam.model.util;
 
 public class ContentGI {
-    private final int id;
+    private final Long id;
     private final String nome;
     private final String descrizione;
 
-    public ContentGI(int id, String Nome, String Descrizione){
+    public ContentGI(Long id, String Nome, String Descrizione){
         this.id = id;
         this.nome = Nome;
         this.descrizione = Descrizione;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

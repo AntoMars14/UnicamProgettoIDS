@@ -3,11 +3,13 @@ package it.unicam.model;
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
+import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class POIEvento extends POI{
 
     private LocalDateTime openingDate;
@@ -18,8 +20,12 @@ public class POIEvento extends POI{
         this.setType(Type.EVENTO);
     }
 
+    public POIEvento() {
+        super();
+    }
+
     @Override
-    public int getPOIId() {
+    public Long getPOIId() {
         return super.getPOIId();
     }
 
@@ -56,10 +62,10 @@ public class POIEvento extends POI{
         this.closingDate = closingDate;
     }
 
-    @Override
+    /*@Override
     public void setPOIId(int POIId) {
         super.setPOIId(POIId);
-    }
+    }*/
 
     @Override
     public void setType(Type type) {
