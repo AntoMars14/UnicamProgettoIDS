@@ -35,6 +35,7 @@ public class Controller {
 
     @Autowired
     private ContentController contentController;
+    @Autowired
     private ViewController viewController;
     private ContestController contestController;
     private FavouritesManager favouritesManager;
@@ -66,9 +67,15 @@ public class Controller {
         return viewController.viewSelectedPOI(poiID);
     }
 
-    public ContentFD viewContent(int idContent){
+   /* public ContentFD viewContent(int idContent){
        return viewController.viewContent(idContent);
+
+     }*/
+   @GetMapping("/viewContent")
+    public ResponseEntity<Object> viewContent(@RequestParam("idContent") Long idContent){
+         return new ResponseEntity<>(viewController.viewContent(idContent), HttpStatus.OK);
     }
+
 
     /*
     public MapHandler map(){
@@ -209,9 +216,18 @@ public class Controller {
     }
 
 
+    /*
     public void deletePOI() {
-        //this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
-        //this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
+        this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
+        this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
+    }
+
+     */
+    @DeleteMapping("/deletePOI")
+    public ResponseEntity<Object> deletePOI(@RequestParam("id") Long id) {
+        this.comune.deletePOI(id);
+        //this.favouritesManager.deletePOI(id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     public void deleteItinerary() {

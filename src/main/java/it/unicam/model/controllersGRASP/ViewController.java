@@ -4,12 +4,18 @@ import it.unicam.model.Comune;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ItineraryFD;
 import it.unicam.model.util.POIFD;
+import it.unicam.repositories.ContentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ViewController {
     private POIFD lastViewedPOI;
     private ContentFD lastViewedContent;
     private ItineraryFD lastViewedItinerary;
     private Comune comune;
+    @Autowired
+    private ContentRepository contentRepository;
 
 
     public ViewController(Comune comune) {
@@ -62,5 +68,9 @@ public class ViewController {
     public ItineraryFD selectedPendingItinerary(int i) {
         lastViewedItinerary = comune.selectedPendingItinerary(i);
         return lastViewedItinerary;
+    }
+
+    public ContentFD viewContent(Long idContent) {
+        return contentRepository.findById(idContent).orElse(null).getFullDetailedContent();
     }
 }

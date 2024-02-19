@@ -1,7 +1,9 @@
 package it.unicam.model;
 import it.unicam.model.util.*;
+import it.unicam.repositories.POIRepository;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,9 @@ public class Comune {
     private List<POI> POIPending = new ArrayList<>();
     private List<Itinerary> itineraries = new ArrayList<>();
     private List<Itinerary> itinerariesPending = new ArrayList<>();
+    @Autowired
+    private POIRepository poiRepository;
+
 
     public Comune() {
     }
@@ -146,7 +151,8 @@ public class Comune {
         //this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
     }
 
-    public void deletePOI(int id) {
+    public void deletePOI(Long id) {
+        /*
         this.itineraries.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
                 .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
       this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
@@ -154,7 +160,8 @@ public class Comune {
                 .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
         this.itinerariesPending.removeIf(i -> i.getPOIs().size() < 2);
         this.POIValidate.remove(id - 1);
-        //this.POIValidate.stream().forEach(poi -> poi.setPOIId(this.POIValidate.indexOf(poi)+1));
+         */
+        this.poiRepository.deleteById(id);
     }
 
     public void deleteItinerary(int id) {
