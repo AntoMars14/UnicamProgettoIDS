@@ -92,4 +92,17 @@ public class POIController {
         this.poiRepository.save(poi);
         this.c.insertPOI(poi);
     }
+
+    public void insertPOIPending(POIFactory pf, POIFD p) {
+        POI poi = pf.createPOI(p.getCoordinates());
+        poi.insertPOIInfo(p.getName(), p.getDescription());
+        if (poi instanceof POILuogoConOra plo) {
+            plo.insertTime(p.getOpeningTime(), p.getClosingTime());
+        }
+        if (poi instanceof POIEvento pe) {
+            pe.insertDate(p.getOpeningDate(), p.getClosingDate());
+        }
+        this.poiRepository.save(poi);
+        this.c.insertPOIPending(poi);
+    }
 }

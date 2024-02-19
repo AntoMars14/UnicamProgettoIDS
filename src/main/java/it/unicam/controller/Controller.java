@@ -91,6 +91,20 @@ public class Controller {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+    @PostMapping("/insertPOIPending")
+    public ResponseEntity<Object> insertPOIPending(@RequestBody POIFD p) {
+        POIFactory pf;
+        switch (p.getType()){
+            case Type.LUOGO -> pf = new POILuogoFactory();
+            case Type.EVENTO -> pf = new POIEventoFactory();
+            case Type.LUOGOCONORA -> pf = new POILuogoConOraFactory();
+            default -> {
+                return new ResponseEntity<>("Errore: Tipo errato", HttpStatus.BAD_REQUEST);
+            }
+        }
+        poiController.insertPOIPending(pf, p);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
     public void selectType(POIFactory p){
         poiController.selectType(p);
     }
