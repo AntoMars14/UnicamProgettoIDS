@@ -18,6 +18,7 @@ public class Content {
     @Lob
     private byte[] file;
 
+
     public Content(String Nome, String Descrizione, byte[] file){
         if (Nome == null || Descrizione == null || file == null){
             throw new NullPointerException();

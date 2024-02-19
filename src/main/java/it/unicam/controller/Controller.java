@@ -197,17 +197,17 @@ public class Controller {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-//    public void addContentToPOI(int poiId, String name, String desc, File f) {
-//        contentController.addContentToPOI(poiId, name, desc, f);
-//    }
-
-    public void confirmAddContent() {
-        contentController.confirmAddContent();
+    @PostMapping("/insertPendingContentToPOI")
+    public ResponseEntity<Object> insertPendingContentToPOI(@RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+        try {
+            c.addFile(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        contentController.insertPendingContentToPOI(id, c);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    public void confirmAddContentPending() {
-        contentController.confirmAddContentPending();
-    }
 
     public void deletePOI() {
         //this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());

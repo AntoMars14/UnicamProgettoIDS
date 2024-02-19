@@ -43,16 +43,6 @@ public class Main {
         utenteAutenticatoManager.addUtente(u4);
         utenteAutenticatoManager.addUtente(u5);
         utenteAutenticatoManager.addUtente(u6);
-        t1.utenteView(appController);
-        u4.utenteView(appController);
-        u3.utenteView(appController);
-        u2.utenteView(appController);
-        u1.utenteView(appController);
-        u5.utenteView(appController);
-        u6.utenteView(appController);
-        u1.utenteView(appController);
-        u5.utenteView(appController);
-        u4.utenteView(appController);
-        u3.utenteView(appController);*/
+       */
     }
 }

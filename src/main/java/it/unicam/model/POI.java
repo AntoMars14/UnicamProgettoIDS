@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")
 public abstract class POI {
 
     @Id
@@ -17,7 +16,6 @@ public abstract class POI {
     private Long POIId;
     private String name;
     private String description;
-    @Column(name = "type", insertable = false, updatable = false)
     private Type type;
     @Embedded
     private Coordinates coord;
