@@ -1,14 +1,19 @@
 package it.unicam.model.util;
 
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
+
 
 public class ContentFD {
-    private final Long id;
-    private final String nome;
-    private final String descrizione;
-    private final File file;
+    private Long id;
+    private String nome;
+    private String descrizione;
+    private byte[] file;
 
-    public ContentFD(Long id, String nome, String descrizione, File file){
+
+    public ContentFD(){
+
+    }
+    public ContentFD(Long id, String nome, String descrizione, byte[] file){
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -27,13 +32,17 @@ public class ContentFD {
         return nome;
     }
 
-    public File getFile() {
-        return file;
+    public byte[] getFile() {
+        return this.file;
     }
 
     @Override
     public String toString() {
         return "Id = " + this.id + " Nome= " + nome +
                 "\nDescrizione= " + descrizione;
+    }
+
+    public void addFile(byte[] file) {
+        this.file = file;
     }
 }

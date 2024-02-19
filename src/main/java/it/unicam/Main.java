@@ -10,7 +10,6 @@ import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.SMTPUtil;
 import it.unicam.model.util.tasks.DeleteExpiredItineraries;
 import it.unicam.model.util.tasks.DeleteExpiredPOIs;
-import it.unicam.view.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -50,9 +50,9 @@ public class ContestController {
         this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
     }
 
-    public void insertContestContentInfo(String name, String desc, File f) {
-        this.lastContent = new Content(name, desc, f,0);
-    }
+//    public void insertContestContentInfo(String name, String desc, File f) {
+//        this.lastContent = new Content(name, desc, f,0);
+//    }
 
     public void confirmPartecipation() {
         this.lastContest.addContent(this.lastContent, this.lastContributor);

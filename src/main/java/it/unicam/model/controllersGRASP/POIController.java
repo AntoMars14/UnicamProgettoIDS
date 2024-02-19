@@ -4,7 +4,6 @@ import it.unicam.model.*;
 import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
 import it.unicam.repositories.POIRepository;
-import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +34,12 @@ public class POIController {
         return c.getAllPOI();
     }
 
-    public MapHandler Map(){
-        List<POIGI> pois = this.getAllPoi();
-        System.out.println(pois.size());
-        List<Coordinates> coords = this.getAllPoi().stream().map(p -> p.getCoordinates()).toList();
-        return new MapHandler(coords);
-    }
+//    public MapHandler Map(){
+//        List<POIGI> pois = this.getAllPoi();
+//        System.out.println(pois.size());
+//        List<Coordinates> coords = this.getAllPoi().stream().map(p -> p.getCoordinates()).toList();
+//        return new MapHandler(coords);
+//    }
 
     public boolean selectPoint(ICoordinate i){
         this.lastCoords = new Coordinates(i.getLat(), i.getLon());
@@ -68,9 +67,9 @@ public class POIController {
         }
     }
 
-    public void insertContent(String name, String description, File file){
-        this.lastPOI.addContent(new Content(name, description, file,this.lastPOI.getContents().size()+1));
-    }
+//    public void insertContent(String name, String description, File file){
+//        this.lastPOI.addContent(new Content(name, description, file,this.lastPOI.getContents().size()+1));
+//    }
 
     public void confirmPoi(){
         c.insertPOI(this.lastPOI);

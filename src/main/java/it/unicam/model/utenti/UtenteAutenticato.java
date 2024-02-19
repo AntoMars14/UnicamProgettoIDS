@@ -2,7 +2,6 @@ package it.unicam.model.utenti;
 
 import it.unicam.controller.Controller;
 import it.unicam.model.util.UtenteAutenticatoGI;
-import it.unicam.view.*;
 
 public class UtenteAutenticato implements Utente{
 
@@ -11,7 +10,7 @@ public class UtenteAutenticato implements Utente{
     private String password;
     private String email;
     private Role role;
-    private UtenteView view;
+
 
     public UtenteAutenticato(String username, String password, String email, Role role) {
         this.username = username;
@@ -48,15 +47,15 @@ public class UtenteAutenticato implements Utente{
 
     @Override
     public void utenteView(Controller controller) {
-        this.view =  switch (this.role) {
-            case ANIMATORE -> new AnimatorView(controller);
-            case CURATORE -> new CuratorView(controller, this.id);
-            case CONTRIBUTOR -> new ContributorView(controller, this.id);
-            case CONTRIBUTORAUTORIZZATO -> new AuthorizedContributorView(controller,this.id);
-            case TURISTAUTENTICATO -> new AuthenticatedTouristView(controller, this.id);
-            case GESTORE -> new PlatformManagerView(controller);
-        };
-        this.view.getView();
+//        this.view =  switch (this.role) {
+//            case ANIMATORE -> new AnimatorView(controller);
+//            case CURATORE -> new CuratorView(controller, this.id);
+//            case CONTRIBUTOR -> new ContributorView(controller, this.id);
+//            case CONTRIBUTORAUTORIZZATO -> new AuthorizedContributorView(controller,this.id);
+//            case TURISTAUTENTICATO -> new AuthenticatedTouristView(controller, this.id);
+//            case GESTORE -> new PlatformManagerView(controller);
+//        };
+//        this.view.getView();
     }
 
     public UtenteAutenticatoGI getGeneralInfoUtenteAutenticato() {

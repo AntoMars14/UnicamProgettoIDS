@@ -3,6 +3,7 @@ package it.unicam.model;
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.POIFD;
 import it.unicam.model.util.POIGI;
+import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
@@ -77,7 +78,6 @@ public class POILuogo extends  POI{
     public POIGI getPOIGeneralInfo(){
         return new POIGI(this.getPOIId(), this.getName(), this.getDescription(), this.getCoord(), this.getType());
     }
-
     @Override
     public POIFD getFullDetailedPOI(){
         List<ContentGI> contentsGI = this.getContents().stream().map(c -> c.getContentGeneralInfo()).toList();

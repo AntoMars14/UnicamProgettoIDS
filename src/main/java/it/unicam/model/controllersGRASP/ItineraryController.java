@@ -18,7 +18,7 @@ public class ItineraryController {
     }
 
     public void addPOI(int i) {
-        this.lastItinerary.addPOI(this.comune.getPOI(i));
+        this.lastItinerary.addPOI(this.comune.getPOI((long) i));
     }
 
     public void insertItineraryValidity(LocalDateTime open, LocalDateTime close) {

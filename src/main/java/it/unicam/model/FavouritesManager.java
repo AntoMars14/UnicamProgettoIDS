@@ -21,10 +21,10 @@ public class FavouritesManager {
         if (!this.favouritesPOI.containsKey(id)) {
             this.favouritesPOI.put(id, new ArrayList<>());
         }
-        if (this.favouritesPOI.get(id).contains(comune.getPOI(POIid))) {
+        if (this.favouritesPOI.get(id).contains(comune.getPOI((long) POIid))) {
             return false;
         }
-        this.favouritesPOI.get(id).add(comune.getPOI(POIid));
+        this.favouritesPOI.get(id).add(comune.getPOI((long) POIid));
         return true;
     }
 

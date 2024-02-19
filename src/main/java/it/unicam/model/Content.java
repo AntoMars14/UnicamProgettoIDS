@@ -3,8 +3,9 @@ package it.unicam.model;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContentGI;
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.IOException;
 
 @Entity
 public class Content {
@@ -15,9 +16,9 @@ public class Content {
     private String nome;
     private String descrizione;
     @Lob
-    private File file;
+    private byte[] file;
 
-    public Content(String Nome, String Descrizione, File file, int contentId){
+    public Content(String Nome, String Descrizione, byte[] file){
         if (Nome == null || Descrizione == null || file == null){
             throw new NullPointerException();
         }
@@ -39,7 +40,7 @@ public class Content {
         return descrizione;
     }
 
-    public File getFile() {
+    public byte[] getFile() {
         return file;
     }
 

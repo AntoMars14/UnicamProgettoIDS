@@ -99,8 +99,8 @@ public class Comune {
         }
         return null;
     }
-    public POI getPOI(int i) {
-        return this.POIValidate.get(i-1);
+    public POI getPOI(Long i) {
+        return this.POIValidate.stream().filter(p -> p.getPOIId().equals(i)).findFirst().get();
     }
 
     public void insertPendingItinerary(Itinerary itinerary) {

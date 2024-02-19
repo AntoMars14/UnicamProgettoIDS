@@ -1,24 +1,26 @@
 package it.unicam.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.util.*;
-import it.unicam.view.io.MapHandler;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +32,8 @@ public class Controller {
     @Autowired
     private POIController poiController;
     private ItineraryController itineraryController;
+
+    @Autowired
     private ContentController contentController;
     private ViewController viewController;
     private ContestController contestController;
@@ -52,8 +56,10 @@ public class Controller {
         this.registrationController = new RegistrationController(utentiUtenticatiManager);
     }*/
 
-    public List<POIGI> getAllPOI(){
-        return comune.getAllPOI();
+    @GetMapping("/getAllPOI")
+    public ResponseEntity<Object> getAllPOI(){
+        return new ResponseEntity<>(comune.getAllPOI(), HttpStatus.OK);
+        //return comune.getAllPOI();
     }
 
     public POIFD viewSelectedPOI(int poiID){
@@ -64,9 +70,11 @@ public class Controller {
        return viewController.viewContent(idContent);
     }
 
+    /*
     public MapHandler map(){
         return poiController.Map();
     }
+     */
 
     public boolean selectPoint(ICoordinate c) {
         return poiController.selectPoint(c);
@@ -117,9 +125,9 @@ public class Controller {
         poiController.insertDate(opend, closed);
     }
 
-    public void insertContent(String n, String d, File f){
-        poiController.insertContent(n, d, f);
-    }
+//    public void insertContent(String n, String d, File f){
+//        poiController.insertContent(n, d, f);
+//    }
 
     public void confirmPoi(){
         poiController.confirmPoi();
@@ -177,9 +185,21 @@ public class Controller {
         return viewController.viewContentPOIPending(contentID);
     }
 
-    public void addContentToPOI(int poiId, String name, String desc, File f) {
-        contentController.addContentToPOI(poiId, name, desc, f);
+
+    @PostMapping("/insertContentToPOI")
+    public ResponseEntity<Object> insertContentToPOI(@RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+        try {
+            c.addFile(file.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        contentController.insertContentToPOI(id, c);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+
+//    public void addContentToPOI(int poiId, String name, String desc, File f) {
+//        contentController.addContentToPOI(poiId, name, desc, f);
+//    }
 
     public void confirmAddContent() {
         contentController.confirmAddContent();
@@ -263,9 +283,9 @@ public class Controller {
         this.contestController.partecipateContest(id, contributorId);
     }
 
-    public void insertContestContentInfo(String name, String desc, File f) {
-        this.contestController.insertContestContentInfo(name, desc, f);
-    }
+//    public void insertContestContentInfo(String name, String desc, File f) {
+//        this.contestController.insertContestContentInfo(name, desc, f);
+//    }
 
     public void confirmPartecipation() {
         this.contestController.confirmPartecipation();
