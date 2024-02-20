@@ -2,22 +2,30 @@ package it.unicam.model;
 
 import it.unicam.model.util.ItineraryFD;
 import it.unicam.model.util.ItineraryGI;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Itinerary {
-    private int id;
-    private final String nome;
-    private final String descrizione;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "itinerary_id_seq")
+    private Long id;
+    private String nome;
+    private String descrizione;
     private LocalDateTime startDate = null;
     private LocalDateTime closetDate = null;
+    @OneToMany
     private List<POI> POIs = new ArrayList();
 
     public Itinerary(String nome, String descrizione) {
         this.nome = nome;
         this.descrizione = descrizione;
+    }
+
+    public Itinerary() {
     }
 
     public String getNome() {
@@ -52,13 +60,13 @@ public class Itinerary {
         this.POIs = POIs;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
 
     public ItineraryGI getGeneralInfoItinerary(){

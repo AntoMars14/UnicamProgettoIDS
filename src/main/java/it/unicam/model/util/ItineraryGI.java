@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ItineraryGI {
-    private final int id;
+    private final Long id;
     private final String nome;
     private final String descrizione;
     private final LocalDateTime startDate;
     private final LocalDateTime closetDate;
 
-    public ItineraryGI(int id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate) {
+    public ItineraryGI(Long id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -26,7 +26,7 @@ public class ItineraryGI {
         return descrizione;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

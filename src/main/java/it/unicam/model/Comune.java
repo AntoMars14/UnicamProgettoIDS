@@ -26,7 +26,9 @@ public class Comune {
     private List<POI> POIValidate = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<POI> POIPending = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Itinerary> itineraries = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Itinerary> itinerariesPending = new ArrayList<>();
     @Autowired
     private POIRepository poiRepository;
@@ -110,12 +112,11 @@ public class Comune {
 
     public void insertPendingItinerary(Itinerary itinerary) {
         this.itinerariesPending.add(itinerary);
-        itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1);
+//        itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1);
     }
 
     public void insertItinerary(Itinerary itinerary) {
         this.itineraries.add(itinerary);
-        itinerary.setId(this.itineraries.indexOf(itinerary)+1);
     }
 
     public ContentFD viewContentPOIPending(int POIId, int contentID){
@@ -166,7 +167,7 @@ public class Comune {
 
     public void deleteItinerary(int id) {
         this.itineraries.remove(id - 1);
-        this.itineraries.stream().forEach(itinerary -> itinerary.setId(this.itineraries.indexOf(itinerary)+1));
+//        this.itineraries.stream().forEach(itinerary -> itinerary.setId(this.itineraries.indexOf(itinerary)+1));
     }
 
     public void deleteContent(int POIId, int ContentId) {
@@ -206,13 +207,13 @@ public class Comune {
 
     public void validateSelectedItinerary(int itineraryId) {
         this.itineraries.add(this.itinerariesPending.get(itineraryId-1));
-        this.itinerariesPending.get(itineraryId-1).setId(this.itineraries.size());
+//        this.itinerariesPending.get(itineraryId-1).setId(this.itineraries.size());
         this.deletePendingItinerary(itineraryId);
     }
 
     public void deletePendingItinerary(int id) {
         this.itinerariesPending.remove(id-1);
-        this.itinerariesPending.stream().forEach(itinerary -> itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1));
+//        this.itinerariesPending.stream().forEach(itinerary -> itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1));
     }
 
     public List<POIEvento> getAllPOIEvento() {

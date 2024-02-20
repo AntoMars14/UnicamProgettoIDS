@@ -10,6 +10,6 @@ public class DeleteExpiredItineraries implements Runnable{
 
     @Override
     public void run() {
-        comune.getAllItinerariesWithValidity().stream().filter(i -> i.getClosetDate().isBefore(LocalDateTime.now())).forEach(i -> comune.deleteItinerary(i.getId()));
+//        comune.getAllItinerariesWithValidity().stream().filter(i -> i.getClosetDate().isBefore(LocalDateTime.now())).forEach(i -> comune.deleteItinerary(i.getId()));
     }
 }

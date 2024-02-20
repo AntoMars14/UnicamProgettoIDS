@@ -31,6 +31,7 @@ public class Controller {
 
     @Autowired
     private POIController poiController;
+    @Autowired
     private ItineraryController itineraryController;
 
     @Autowired
@@ -63,8 +64,9 @@ public class Controller {
         //return comune.getAllPOI();
     }
 
-    public POIFD viewSelectedPOI(int poiID){
-        return viewController.viewSelectedPOI(poiID);
+    @GetMapping("/viewSelectedPOI")
+    public ResponseEntity<Object> viewSelectedPOI(@RequestParam("idPOI") Long poiID){
+        return new ResponseEntity<>(viewController.viewSelectedPOI(poiID), HttpStatus.OK);
     }
 
    /* public ContentFD viewContent(int idContent){
@@ -143,6 +145,13 @@ public class Controller {
     public void confirmPoiPending(){
         poiController.confirmPoiPending();
     }
+
+    @PostMapping("/createItinerary")
+    public ResponseEntity<Object> createItinerary(@RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
+        itineraryController.createItinerary(i, pois);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
 
     public void insertItineraryInfo(String name, String description) {
         itineraryController.insertItineraryInfo(name, description);
@@ -231,8 +240,8 @@ public class Controller {
     }
 
     public void deleteItinerary() {
-        this.comune.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
-        this.favouritesManager.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
+//        this.comune.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
+//        this.favouritesManager.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
     }
 
     public void deleteContent() {
@@ -264,11 +273,11 @@ public class Controller {
     }
 
     public void validateSelectedItinerary() {
-        comune.validateSelectedItinerary(this.viewController.getLastViewedItinerary().getId());
+//        comune.validateSelectedItinerary(this.viewController.getLastViewedItinerary().getId());
     }
 
     public void deletePendingItinerary() {
-        comune.deletePendingItinerary(this.viewController.getLastViewedItinerary().getId());
+//        comune.deletePendingItinerary(this.viewController.getLastViewedItinerary().getId());
     }
 
     public void insertContestInfo(String name, String objective) {

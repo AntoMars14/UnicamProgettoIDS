@@ -54,6 +54,6 @@ public class FavouritesManager {
 
     public void deleteItinerary(int id) {
         this.favouritesItinerary.values().stream().forEach(i -> i.removeIf(itinerary -> itinerary.getId() == id));
-        this.favouritesItinerary.values().stream().forEach(i -> i.stream().filter(it -> it.getId() > id).forEach(it -> it.setId(it.getId() - 1)));
+//        this.favouritesItinerary.values().stream().forEach(i -> i.stream().filter(it -> it.getId() > id).forEach(it -> it.setId(it.getId() - 1)));
     }
 }

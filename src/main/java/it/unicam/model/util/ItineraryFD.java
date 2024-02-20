@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ItineraryFD {
-    private final int id;
+    private final Long id;
     private final String nome;
     private final String descrizione;
     private final List<POIGI> POIGIs;
@@ -16,7 +16,7 @@ public class ItineraryFD {
     private final LocalDateTime closetDate;
 
 
-    public ItineraryFD(int id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate, List<POIGI> POIGIs) {
+    public ItineraryFD(Long id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate, List<POIGI> POIGIs) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -25,7 +25,7 @@ public class ItineraryFD {
         this.closetDate = closetDate;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

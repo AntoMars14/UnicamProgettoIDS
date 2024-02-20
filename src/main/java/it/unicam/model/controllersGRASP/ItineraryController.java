@@ -2,12 +2,22 @@ package it.unicam.model.controllersGRASP;
 
 import it.unicam.model.Comune;
 import it.unicam.model.Itinerary;
+import it.unicam.model.util.ItineraryFD;
+import it.unicam.repositories.ItineraryRepository;
+import it.unicam.repositories.POIRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class ItineraryController {
     private Comune comune;
     private Itinerary lastItinerary;
+    @Autowired
+    private ItineraryRepository itineraryRepository;
+    @Autowired
+    private POIRepository poiRepository;
 
     public ItineraryController(Comune comune) {
         this.comune = comune;
@@ -32,5 +42,15 @@ public class ItineraryController {
 
     public void confirmCreationItinerary() {
         comune.insertItinerary(this.lastItinerary);
+    }
+
+
+    public void createItinerary(ItineraryFD i, Long[] pois) {
+        Itinerary it = new Itinerary(i.getNome(), i.getDescrizione());
+        for (Long poi : pois) {
+            it.addPOI(this.poiRepository.findById(poi).orElse(null));
+        }
+        this.itineraryRepository.save(it);
+        this.comune.insertItinerary(it);
     }
 }
