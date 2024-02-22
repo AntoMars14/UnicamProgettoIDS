@@ -98,7 +98,7 @@ public class Contest {
     }
 
     public void addContent(Content content, UtenteAutenticato contributor) {
-        content.setContentId(this.partecipations.size() + 1);
+        //content.setContentId(this.partecipations.size() + 1);
         this.partecipations.put(content, contributor);
     }
 
@@ -116,7 +116,7 @@ public class Contest {
     }
 
     public void validateContestC(Content content) {
-        content.setContentId(this.validatedPartecipations.size() + 1);
+        //content.setContentId(this.validatedPartecipations.size() + 1);
         this.validatedPartecipations.put(content, this.partecipations.get(content));
         this.deleteContestContent(content);
     }

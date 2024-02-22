@@ -49,7 +49,7 @@ public class FavouritesManager {
 
     public void deletePOI(int id) {
         this.favouritesPOI.values().stream().forEach(p -> p.removeIf(poi -> poi.getPOIId() == id));
-        this.favouritesPOI.values().stream().forEach(p -> p.stream().filter(poi -> poi.getPOIId() > id).forEach(poi -> poi.setPOIId(poi.getPOIId() - 1)));
+        //this.favouritesPOI.values().stream().forEach(p -> p.stream().filter(poi -> poi.getPOIId() > id).forEach(poi -> poi.setPOIId(poi.getPOIId() - 1)));
     }
 
     public void deleteItinerary(int id) {

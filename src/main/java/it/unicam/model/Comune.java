@@ -1,8 +1,10 @@
 package it.unicam.model;
 import it.unicam.model.util.*;
+import it.unicam.repositories.ContentRepository;
+import it.unicam.repositories.ItineraryRepository;
 import it.unicam.repositories.POIRepository;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -16,42 +18,43 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-@Component
+@Entity
 public class Comune {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comune_generator")
+    private Long comuneId;
     private Coordinates coordinates;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<POI> POIValidate = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<POI> POIPending = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Itinerary> itineraries = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<Itinerary> itinerariesPending = new ArrayList<>();
-    @Autowired
-    private POIRepository poiRepository;
+
 
 
     public Comune() {
     }
+
     public Comune(String name, Coordinates coord) {
         this.name = name;
         this.coordinates = coord;
         POILuogo comune = new POILuogo(coord);
-        comune.insertPOIInfo(name, "Questo è il comune di Camerino");
+        comune.insertPOIInfo(name, "Questo è il comune");
         this.insertPOI(comune);
     }
 
     public void insertPOI(POI p) {
         this.POIValidate.add(p);
-        //p.setPOIId(this.POIValidate.indexOf(p) + 1);
     }
 
     public void insertPOIPending(POI p) {
         this.POIPending.add(p);
-        //p.setPOIId(this.POIPending.indexOf(p) + 1);
     }
 
     public List<POIGI> getAllPOI() {
@@ -75,7 +78,7 @@ public class Comune {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 String jsonResponse = new String(connection.getInputStream().readAllBytes());
-                return jsonResponse.contains("\"Camerino\"");
+                return jsonResponse.contains("\""+this.name+"\"");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,101 +99,107 @@ public class Comune {
         return false;
     }
 
-    public POIFD viewSelectedPOI(int POIId) {
-        return this.POIValidate.get(POIId - 1).getFullDetailedPOI();
+    public POIFD viewSelectedPOI(Long POIId) {
+        if(this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().isEmpty())
+            return null;
+        else
+            return this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get().getFullDetailedPOI();
     }
 
-    public ContentFD viewContent(int POIId, int contentID) {
-        if (POIId > 0) {
-            return this.POIValidate.get(POIId - 1).getContents().get(contentID - 1).getFullDetailedContent();
-        }
-        return null;
+    public ContentFD viewContent(Long POIId, Long contentID) {
+        if(this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().isEmpty())
+            return null;
+        else if(this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get().getContents().stream().filter(c -> c.getContentId().equals(contentID)).findFirst().isEmpty())
+            return null;
+        else
+            return this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get().getContents().stream().filter(c -> c.getContentId().equals(contentID)).findFirst().get().getFullDetailedContent();
     }
+
     public POI getPOI(Long i) {
         return this.POIValidate.stream().filter(p -> p.getPOIId().equals(i)).findFirst().get();
     }
 
     public void insertPendingItinerary(Itinerary itinerary) {
         this.itinerariesPending.add(itinerary);
-//        itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1);
     }
 
     public void insertItinerary(Itinerary itinerary) {
         this.itineraries.add(itinerary);
     }
 
-    public ContentFD viewContentPOIPending(int POIId, int contentID){
-        if (POIId > 0) {
-            return this.POIPending.get(POIId - 1).getContents().get(contentID - 1).getFullDetailedContent();
-        }
-        return null;
+    public ContentFD viewContentPOIPending(Long POIId, Long contentID){
+        if(this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().isEmpty())
+            return null;
+        else if(this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get().getContentsPending().stream().filter(c -> c.getContentId().equals(contentID)).findFirst().isEmpty())
+            return null;
+        else
+            return this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get().getContentsPending().stream().filter(c -> c.getContentId().equals(contentID)).findFirst().get().getFullDetailedContent();
     }
 
     public List<ItineraryGI> getAllItinerary() {
        return this.itineraries.stream().map(itinerary -> itinerary.getGeneralInfoItinerary()).toList();
     }
 
-    public ItineraryFD selectedItinerary(int i) {
-        return this.itineraries.get(i-1).getFullDetailedItinerary();
+    public ItineraryFD selectedItinerary(Long id) {
+        if(this.itineraries.stream().filter(itinerary -> itinerary.getId().equals(id)).findFirst().isEmpty())
+            return null;
+        else
+            return this.itineraries.stream().filter(itinerary -> itinerary.getId().equals(id)).findFirst().get().getFullDetailedItinerary();
     }
 
     public List<POIGI> getAllPendingPOI() {
         return this.POIPending.stream().map(poi -> poi.getPOIGeneralInfo()).toList();
     }
 
-    public POIFD selectedPendingPOI(int i) {
-        return this.POIPending.get(i-1).getFullDetailedPOI();
+    public POIFD selectedPendingPOI(Long i) {
+        if(this.POIPending.stream().filter(poi -> poi.getPOIId().equals(i)).findFirst().isEmpty())
+            return null;
+        else
+            return this.POIPending.stream().filter(poi -> poi.getPOIId().equals(i)).findFirst().get().getFullDetailedPOI();
     }
 
-    public void validateSelectedPOI(int POIId) {
-        this.insertPOI(this.POIPending.get(POIId - 1));
-        this.deletePendingPOI(POIId);
+    public void validateSelectedPOI(Long POIId) {
+       this.insertPOI(this.POIPending.stream().filter(poi -> poi.getPOIId().equals(POIId)).findFirst().get());
+       this.POIPending.removeIf(poi -> poi.getPOIId().equals(POIId));
     }
 
-    public void deletePendingPOI(int POIId) {
-        this.POIPending.remove(POIId - 1);
-        //this.POIPending.stream().forEach(poi -> poi.setPOIId(this.POIPending.indexOf(poi)+1));
+    public void deletePendingPOI(Long POIId) {
+        this.POIPending.removeIf(poi -> poi.getPOIId().equals(POIId));
     }
 
     public void deletePOI(Long id) {
-        /*
-        this.itineraries.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
-                .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
-      this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
-        this.itinerariesPending.stream().filter(itinerary -> itinerary.getPOIs().contains(this.POIValidate.get(id - 1)))
-                .forEach(itinerary -> itinerary.getPOIs().remove(this.POIValidate.get(id - 1)));
+        this.itineraries.stream().forEach(itinerary -> itinerary.getPOIs().removeIf(p -> p.getPOIId().equals(id)));
+        this.itinerariesPending.stream().forEach(itinerary -> itinerary.getPOIs().removeIf(p -> p.getPOIId().equals(id)));
+        this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
         this.itinerariesPending.removeIf(i -> i.getPOIs().size() < 2);
-        this.POIValidate.remove(id - 1);
-         */
-        this.poiRepository.deleteById(id);
+        this.POIValidate.removeIf(poi -> poi.getPOIId().equals(id));
     }
 
-    public void deleteItinerary(int id) {
-        this.itineraries.remove(id - 1);
-//        this.itineraries.stream().forEach(itinerary -> itinerary.setId(this.itineraries.indexOf(itinerary)+1));
+    public void deleteItinerary(Long id) {
+        this.itineraries.removeIf(itinerary -> itinerary.getId().equals(id));
     }
 
-    public void deleteContent(int POIId, int ContentId) {
-        this.POIValidate.get(POIId -1).deleteContent(ContentId);
+    public void deleteContent(Long POIId, Long ContentId) {
+        this.POIValidate.stream().filter(poi -> poi.getPOIId().equals(POIId)).findFirst().get().deleteContent(ContentId);
     }
 
     public List<POIGI> getAllPendingContentPOI() {
-        return this.POIValidate.stream().filter(p -> p.getContentsPending().size() != 0).map(p->p.getPOIGeneralInfo()).toList();
+        return this.POIValidate.stream().filter(p -> !p.getContentsPending().isEmpty()).map(p->p.getPOIGeneralInfo()).toList();
     }
 
-    public ContentFD selectedPendingContent(int POIId, int contentId) {
-        if (POIId > 0) {
-            return this.POIValidate.get(POIId-1).getContentsPending().get(contentId-1).getFullDetailedContent();
-        }
-        return null;
+    public ContentFD selectedPendingContent(Long POIId, Long contentId) {
+        return this.POIValidate.stream().filter(p -> p.getPOIId().equals(POIId)).findFirst().get()
+                .getContentsPending().stream().filter(c -> c.getContentId().equals(contentId)).findFirst().get().getFullDetailedContent();
     }
 
-    public void deletePendingContent(int POIId, int contentId) {
-        this.POIValidate.get(POIId-1).deletePendingContent(contentId);
+    public void deletePendingContent(Long POIId, Long contentId) {
+        POI p = this.POIValidate.stream().filter(poi -> poi.getPOIId().equals(POIId)).findFirst().get();
+        p.deletePendingContent(contentId);
     }
 
-    public void validateSelectedContent(int POIId, int contentId) {
-        this.POIValidate.get(POIId-1).validateContent(contentId);
+
+    public void validateSelectedContent(Long POIId, Long contentId) {
+        this.POIValidate.stream().filter(poi -> poi.getPOIId().equals(POIId)).findFirst().get().validateContent(contentId);
     }
 
     public List<ItineraryGI> getAllPendingItinerary() {
@@ -201,19 +210,20 @@ public class Comune {
        return is;
     }
 
-    public ItineraryFD selectedPendingItinerary(int i) {
-        return this.itinerariesPending.get(i-1).getFullDetailedItinerary();
+    public ItineraryFD selectedPendingItinerary(Long id) {
+        if(!this.itinerariesPending.stream().filter(itinerary -> itinerary.getId().equals(id)).findFirst().isEmpty())
+           return this.itinerariesPending.stream().filter(itinerary -> itinerary.getId().equals(id)).findFirst().get().getFullDetailedItinerary();
+        else
+            return null;
     }
 
-    public void validateSelectedItinerary(int itineraryId) {
-        this.itineraries.add(this.itinerariesPending.get(itineraryId-1));
-//        this.itinerariesPending.get(itineraryId-1).setId(this.itineraries.size());
-        this.deletePendingItinerary(itineraryId);
+    public void validateSelectedItinerary(Long itineraryId) {
+        this.itineraries.add(this.itinerariesPending.stream().filter(itinerary -> itinerary.getId().equals(itineraryId)).findFirst().get());
+        this.itinerariesPending.removeIf(itinerary -> itinerary.getId().equals(itineraryId));
     }
 
-    public void deletePendingItinerary(int id) {
-        this.itinerariesPending.remove(id-1);
-//        this.itinerariesPending.stream().forEach(itinerary -> itinerary.setId(this.itinerariesPending.indexOf(itinerary)+1));
+    public void deletePendingItinerary(Long id) {
+        this.itinerariesPending.removeIf(itinerary -> itinerary.getId().equals(id));
     }
 
     public List<POIEvento> getAllPOIEvento() {

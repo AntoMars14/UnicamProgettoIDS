@@ -1,80 +1,68 @@
 package it.unicam.model.controllersGRASP;
 
-import it.unicam.model.Comune;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ItineraryFD;
 import it.unicam.model.util.POIFD;
+import it.unicam.repositories.ComuneRepository;
 import it.unicam.repositories.ContentRepository;
+import it.unicam.repositories.ItineraryRepository;
 import it.unicam.repositories.POIRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ViewController {
-    private POIFD lastViewedPOI;
-    private ContentFD lastViewedContent;
-    private ItineraryFD lastViewedItinerary;
-    private Comune comune;
     @Autowired
-    private ContentRepository contentRepository;
+    private ComuneRepository comuneRepository;
 
-    @Autowired
-    private POIRepository poiRepository;
+    public POIFD viewSelectedPOI(Long idComune, Long POIId) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().viewSelectedPOI(POIId);
+    }
 
+    public ContentFD viewContent(Long idComune, Long idPOI, Long idContent) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().viewContent(idPOI, idContent);
+    }
 
-    public ViewController(Comune comune) {
-        this.comune = comune;
+    public ItineraryFD selectedItinerary(Long idComune, Long idItinerary) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().selectedItinerary(idItinerary);
     }
 
 
-    public POIFD getLastViewedPoi() {
-        return lastViewedPOI;
+    public ContentFD viewContentPOIPending(Long idComune, Long idPOI, Long contentID){
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().viewContentPOIPending(idPOI, contentID);
     }
 
-    public ContentFD getLastViewedContent() {
-        return lastViewedContent;
+
+    public POIFD selectedPendingPOI(Long idComune, Long id) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().selectedPendingPOI(id);
     }
 
-    public ItineraryFD getLastViewedItinerary() {
-        return lastViewedItinerary;
+    public ContentFD selectedPendingContent(Long idComune, Long idPOI, Long contentId) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().selectedPendingContent(idPOI, contentId);
     }
 
-    public POIFD viewSelectedPOI(Long POIId) {
-        //lastViewedPOI = comune.viewSelectedPOI(POIId);
-        return this.poiRepository.findById(POIId).orElse(null).getFullDetailedPOI();
-    }
-
-    public ContentFD viewContent(int contentID) {
-        //this.lastViewedContent = comune.viewContent(this.lastViewedPOI.getId(), contentID);
-        return this.lastViewedContent;
-    }
-
-    public ContentFD viewContentPOIPending(int contentID){
-        //this.lastViewedContent = this.comune.viewContentPOIPending(this.lastViewedPOI.getId(), contentID);
-        return lastViewedContent;
-    }
-
-    public ItineraryFD selectedItinerary(int i) {
-        this.lastViewedItinerary = this.comune.selectedItinerary(i);
-        return this.lastViewedItinerary;
-    }
-
-    public POIFD selectedPendingPOI(int i) {
-        this.lastViewedPOI = this.comune.selectedPendingPOI(i);
-        return this.lastViewedPOI;
-    }
-
-    public ContentFD selectedPendingContent(int contentId) {
-        //this.lastViewedContent = comune.selectedPendingContent(this.lastViewedPOI.getId(), contentId);
-        return this.lastViewedContent;
-    }
-
-    public ItineraryFD selectedPendingItinerary(int i) {
-        lastViewedItinerary = comune.selectedPendingItinerary(i);
-        return lastViewedItinerary;
-    }
-
-    public ContentFD viewContent(Long idContent) {
-        return contentRepository.findById(idContent).orElse(null).getFullDetailedContent();
+    public ItineraryFD selectedPendingItinerary(Long idComune, Long id) {
+        if (this.comuneRepository.findById(idComune).isEmpty())
+            return null;
+        else
+            return this.comuneRepository.findById(idComune).get().selectedPendingItinerary(id);
     }
 }

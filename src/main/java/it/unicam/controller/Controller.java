@@ -6,6 +6,10 @@ import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.util.*;
+import it.unicam.repositories.ComuneRepository;
+import it.unicam.repositories.ContentRepository;
+import it.unicam.repositories.ItineraryRepository;
+import it.unicam.repositories.POIRepository;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +30,14 @@ import java.util.Optional;
 @RestController
 public class Controller {
     @Autowired
-    private Comune comune;
+    private ComuneRepository comuneRepository;
+    @Autowired
+    private ContentRepository contentRepository;
+    @Autowired
+    private POIRepository poiRepository;
+    @Autowired
+    private ItineraryRepository itineraryRepository;
+
     private ContestManager contestManager;
 
     @Autowired
@@ -58,43 +69,39 @@ public class Controller {
         this.registrationController = new RegistrationController(utentiUtenticatiManager);
     }*/
 
+    @PostMapping("/addComune")
+    public ResponseEntity<Object> addComune(@RequestBody Comune c){
+        //c.insertPOI(new POILuogo());
+        comuneRepository.save(c);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
     @GetMapping("/getAllPOI")
-    public ResponseEntity<Object> getAllPOI(){
-        return new ResponseEntity<>(comune.getAllPOI(), HttpStatus.OK);
-        //return comune.getAllPOI();
+    public ResponseEntity<Object> getAllPOI(@RequestParam("comuneId") Long id){
+        if(this.comuneRepository.findById(id).isEmpty())
+            return new ResponseEntity<>("Errore: Comune non trovato", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(this.comuneRepository.findById(id).get().getAllPOI(), HttpStatus.OK);
     }
 
     @GetMapping("/viewSelectedPOI")
-    public ResponseEntity<Object> viewSelectedPOI(@RequestParam("idPOI") Long poiID){
-        return new ResponseEntity<>(viewController.viewSelectedPOI(poiID), HttpStatus.OK);
+    public ResponseEntity<Object> viewSelectedPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long poiID){
+        if(viewController.viewSelectedPOI(idComune, poiID) == null)
+            return new ResponseEntity<>("Errore: POI non trovato", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(viewController.viewSelectedPOI(idComune, poiID), HttpStatus.OK);
     }
 
-   /* public ContentFD viewContent(int idContent){
-       return viewController.viewContent(idContent);
-
-     }*/
-   @GetMapping("/viewContent")
-    public ResponseEntity<Object> viewContent(@RequestParam("idContent") Long idContent){
-         return new ResponseEntity<>(viewController.viewContent(idContent), HttpStatus.OK);
-    }
-
-
-    /*
-    public MapHandler map(){
-        return poiController.Map();
-    }
-     */
-
-    public boolean selectPoint(ICoordinate c) {
-        return poiController.selectPoint(c);
-    }
-
-    public void insertPoiInfo(String name, String desc){
-        poiController.InsertPoiInfo(name, desc);
+    @GetMapping("/viewContent")
+    public ResponseEntity<Object> viewContent(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long poiID, @RequestParam("idContent") Long idContent){
+        if (viewController.viewContent(idComune, poiID, idContent) == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato", HttpStatus.BAD_REQUEST);
+        else
+         return new ResponseEntity<>(viewController.viewContent(idComune, poiID, idContent), HttpStatus.OK);
     }
 
     @PostMapping("/insertPOI")
-    public ResponseEntity<Object> insertPOI(@RequestBody POIFD p) {
+    public ResponseEntity<Object> insertPOI(@RequestParam("idComune") Long idComune, @RequestPart("poi") POIFD p) {
         POIFactory pf;
         switch (p.getType()){
             case Type.LUOGO -> pf = new POILuogoFactory();
@@ -104,12 +111,14 @@ public class Controller {
                 return new ResponseEntity<>("Errore: Tipo errato", HttpStatus.BAD_REQUEST);
             }
         }
-        poiController.insertPOI(pf, p);
+        if(!poiController.selectPoint(idComune, p.getCoordinates()))
+            return new ResponseEntity<>("Errore: Punto già presente o esterno al comune", HttpStatus.BAD_REQUEST);
+        poiController.insertPOI(idComune, pf, p);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @PostMapping("/insertPOIPending")
-    public ResponseEntity<Object> insertPOIPending(@RequestBody POIFD p) {
+    public ResponseEntity<Object> insertPOIPending(@RequestParam("idComune") Long idComune, @RequestPart("poi") POIFD p) {
         POIFactory pf;
         switch (p.getType()){
             case Type.LUOGO -> pf = new POILuogoFactory();
@@ -119,165 +128,241 @@ public class Controller {
                 return new ResponseEntity<>("Errore: Tipo errato", HttpStatus.BAD_REQUEST);
             }
         }
-        poiController.insertPOIPending(pf, p);
+        if(!poiController.selectPoint(idComune, p.getCoordinates()))
+            return new ResponseEntity<>("Errore: Punto già presente o esterno al comune", HttpStatus.BAD_REQUEST);
+        poiController.insertPOIPending(idComune, pf, p);
         return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-    public void selectType(POIFactory p){
-        poiController.selectType(p);
-    }
-
-    public void insertTime(LocalTime[] opent, LocalTime[] closet){
-        poiController.insertTime(opent, closet);
-    }
-
-    public void insertDate(LocalDateTime opend, LocalDateTime closed){
-        poiController.insertDate(opend, closed);
-    }
-
-//    public void insertContent(String n, String d, File f){
-//        poiController.insertContent(n, d, f);
-//    }
-
-    public void confirmPoi(){
-        poiController.confirmPoi();
-    }
-
-    public void confirmPoiPending(){
-        poiController.confirmPoiPending();
     }
 
     @PostMapping("/createItinerary")
-    public ResponseEntity<Object> createItinerary(@RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
-        itineraryController.createItinerary(i, pois);
+    public ResponseEntity<Object> createItinerary(@RequestParam("idComune") Long idComune, @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
+        if(pois.length < 2)
+            return new ResponseEntity<>("Errore: Itinerario deve contenere almeno 2 POI", HttpStatus.BAD_REQUEST);
+        for (Long poi : pois) {
+            if (viewController.viewSelectedPOI(idComune, poi) == null)
+                return new ResponseEntity<>("Errore: POI inserito non trovato", HttpStatus.BAD_REQUEST);
+        }
+        itineraryController.createItinerary(idComune, i, pois);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+    @PostMapping("/createPendingItinerary")
+    public ResponseEntity<Object> createPendingItinerary(@RequestParam("idComune") Long idComune, @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
+        if(pois.length < 2)
+            return new ResponseEntity<>("Errore: Itinerario deve contenere almeno 2 POI", HttpStatus.BAD_REQUEST);
+        for (Long poi : pois) {
+            if (viewController.viewSelectedPOI(idComune, poi) == null)
+                return new ResponseEntity<>("Errore: POI inserito non trovato", HttpStatus.BAD_REQUEST);
+        }
+        itineraryController.createPendingItinerary(idComune, i, pois);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
 
-    public void insertItineraryInfo(String name, String description) {
-        itineraryController.insertItineraryInfo(name, description);
+    @GetMapping("/getAllItinerary")
+    public ResponseEntity<Object> getAllItinerary(@RequestParam("comuneId") Long id){
+        if (this.comuneRepository.findById(id).isEmpty())
+            return new ResponseEntity<>("Errore: Comune non trovato", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(this.comuneRepository.findById(id).get().getAllItinerary(), HttpStatus.OK);
+    }
+
+    @GetMapping("/viewItinerary")
+    public ResponseEntity<Object> viewItinerary(@RequestParam("idComune") Long idComune, @RequestParam("idItinerary") Long idItinerary){
+        if(viewController.selectedItinerary(idComune, idItinerary) == null)
+            return new ResponseEntity<>("Errore: Itinerario non trovato", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(viewController.selectedItinerary(idComune, idItinerary), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllPendingPOI")
+    public ResponseEntity<Object> getAllPendingPOI(@RequestParam("comuneId") Long id){
+        if (this.comuneRepository.findById(id).isEmpty())
+            return new ResponseEntity<>("Errore: Comune non trovato", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(this.comuneRepository.findById(id).get().getAllPendingPOI(), HttpStatus.OK);
+    }
+
+    @GetMapping("/viewPendingPOI")
+    public ResponseEntity<Object> viewPendingPOI(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id){
+        POIFD p = viewController.selectedPendingPOI(idComune, id);
+        if(p == null)
+            return new ResponseEntity<>("Errore: POI non trovato tra i POI in pending", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+
+    @PutMapping("/validateSelectedPOI")
+    public ResponseEntity<Object> validateSelectedPOI(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if(this.comuneRepository.findById(idComune).get().selectedPendingPOI(id) == null)
+            return new ResponseEntity<>("Errore: POI non trovato tra i POI in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.validateSelectedPOI(id);
+            this.comuneRepository.save(c);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/deletePendingPOI")
+    public ResponseEntity<Object> deletePendingPOI(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if(this.comuneRepository.findById(idComune).get().selectedPendingPOI(id) == null)
+            return new ResponseEntity<>("Errore: POI non trovato tra i POI in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.deletePendingPOI(id);
+            this.comuneRepository.save(c);
+            this.poiRepository.deleteById(id);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
 
     }
 
-    public void addPOI(int i) {
-        itineraryController.addPOI(i);
-    }
-
-    public void insertItineraryValidity(LocalDateTime open, LocalDateTime close) {
-        itineraryController.insertItineraryValidity(open, close);
-    }
-
-    public void confirmCreationPendingItinerary() {
-        itineraryController.confirmCreationPendingItinerary();
-    }
-
-    public void confirmCreationItinerary() {
-        itineraryController.confirmCreationItinerary();
-    }
-    public List<ItineraryGI> getAllItinerary() {
-       return comune.getAllItinerary();
-    }
-
-    public ItineraryFD selectedItinerary(int i) {
-        return viewController.selectedItinerary(i);
-    }
-
-    public List<POIGI> getAllPendingPOI() {
-        return comune.getAllPendingPOI();
-    }
-
-    public POIFD selectedPendingPOI(int i) {
-        return viewController.selectedPendingPOI(i);
-    }
-
-    public void validateSelectedPOI() {
-        //comune.validateSelectedPOI(viewController.getLastViewedPoi().getId());
-    }
-
-    public void deletePendingPOI() {
-        //comune.deletePendingPOI(viewController.getLastViewedPoi().getId());
-    }
-
-    public ContentFD viewContentPending(int contentID){
-        return viewController.viewContentPOIPending(contentID);
+    @GetMapping("/viewContentPending")
+    public ResponseEntity<Object> viewContentPending(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long idPOI, @RequestParam("contentID") Long contentID){
+        if(viewController.viewContentPOIPending(idComune, idPOI, contentID) == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato tra i contenuti in pending", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(viewController.viewContentPOIPending(idComune, idPOI, contentID), HttpStatus.OK);
     }
 
 
     @PostMapping("/insertContentToPOI")
-    public ResponseEntity<Object> insertContentToPOI(@RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Object> insertContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
         try {
             c.addFile(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        contentController.insertContentToPOI(id, c);
+        contentController.insertContentToPOI(idComune, id, c);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @PostMapping("/insertPendingContentToPOI")
-    public ResponseEntity<Object> insertPendingContentToPOI(@RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Object> insertPendingContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
         try {
             c.addFile(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        contentController.insertPendingContentToPOI(id, c);
+        contentController.insertPendingContentToPOI(idComune, id, c);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
 
-    /*
-    public void deletePOI() {
-        this.comune.deletePOI(this.viewController.getLastViewedPoi().getId());
-        this.favouritesManager.deletePOI(this.viewController.getLastViewedPoi().getId());
-    }
-
-     */
-    @DeleteMapping("/deletePOI")
-    public ResponseEntity<Object> deletePOI(@RequestParam("id") Long id) {
-        this.comune.deletePOI(id);
+   @DeleteMapping("/deletePOI")
+    public ResponseEntity<Object> deletePOI(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if (viewController.viewSelectedPOI(idComune, id) == null)
+           return new ResponseEntity<>("Errore: POI non trovato", HttpStatus.BAD_REQUEST);
+        Comune c = this.comuneRepository.findById(idComune).get();
+        c.deletePOI(id);
+       this.comuneRepository.save(c);
+        this.itineraryRepository.findAll().forEach(i -> {
+            if(i.getPOIs().size() < 2)
+                this.itineraryRepository.deleteById(i.getId());
+       });
         //this.favouritesManager.deletePOI(id);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    public void deleteItinerary() {
-//        this.comune.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
-//        this.favouritesManager.deleteItinerary(this.viewController.getLastViewedItinerary().getId());
+    @DeleteMapping("/deleteItinerary")
+    public ResponseEntity<Object> deleteItinerary(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if (viewController.selectedItinerary(idComune, id) == null)
+            return new ResponseEntity<>("Errore: Itinerario non trovato", HttpStatus.BAD_REQUEST);
+        Comune c = this.comuneRepository.findById(idComune).get();
+        c.deleteItinerary(id);
+        this.comuneRepository.save(c);
+        //this.favouritesManager.deleteItinerary(id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    public void deleteContent() {
-        //this.comune.deleteContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+    @DeleteMapping("/deleteContent")
+    public ResponseEntity<Object> deleteContent(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long idPOI, @RequestParam("id") Long id) {
+        if (viewController.viewContent(idComune, idPOI, id) == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato", HttpStatus.BAD_REQUEST);
+        Comune c = this.comuneRepository.findById(idComune).get();
+        c.deleteContent(idPOI, id);
+        this.comuneRepository.save(c);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    public List<POIGI> getAllPendingContentPOI() {
-        return comune.getAllPendingContentPOI();
+    @GetMapping("/getAllPendingContentPOI")
+    public ResponseEntity<Object> getAllPendingContentPOI(@RequestParam("comuneId") Long id){
+       if (this.comuneRepository.findById(id).isEmpty())
+           return new ResponseEntity<>("Errore: Comune non trovato", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(this.comuneRepository.findById(id).get().getAllPendingContentPOI(), HttpStatus.OK);
     }
 
-    public ContentFD selectedPendingContent(int i) {
-        return viewController.selectedPendingContent(i);
+    @GetMapping("/viewPendingContent")
+    public ResponseEntity<Object> viewPendingContent(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long idPOI, @RequestParam("id") Long id){
+        ContentFD c = viewController.selectedPendingContent(idComune, idPOI, id);
+        if(c == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato tra i contenuti in pending", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(c, HttpStatus.OK);
     }
 
-    public void deletePendingContent() {
-        //comune.deletePendingContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+    @DeleteMapping("/deletePendingContent")
+    public ResponseEntity<Object> deletePendingContent(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long idPOI, @RequestParam("id") Long id) {
+       if(viewController.selectedPendingContent(idComune, idPOI, id) == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato tra i contenuti in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.deletePendingContent(idPOI, id);
+            this.comuneRepository.save(c);
+            this.contentRepository.deleteById(id);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
     }
 
-    public void validateSelectedContent() {
-        //comune.validateSelectedContent(this.viewController.getLastViewedPoi().getId(), this.viewController.getLastViewedContent().getId());
+    @PutMapping("/validateSelectedContent")
+        public ResponseEntity<Object> validateSelectedContent(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long idPOI, @RequestParam("id") Long id) {
+        if(viewController.selectedPendingContent(idComune, idPOI, id) == null)
+            return new ResponseEntity<>("Errore: Contenuto non trovato tra i contenuti in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.validateSelectedContent(idPOI, id);
+            this.comuneRepository.save(c);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
     }
 
-    public List<ItineraryGI> getAllPendingItinerary() {
-        return comune.getAllPendingItinerary();
+    @GetMapping("/getAllPendingItinerary")
+    public ResponseEntity<Object> getAllPendingItinerary(@RequestParam("comuneId") Long id){
+        return new ResponseEntity<>(this.comuneRepository.findById(id).get().getAllPendingItinerary(), HttpStatus.OK);
     }
 
-    public ItineraryFD selectedPendingItinerary(int i) {
-        return viewController.selectedPendingItinerary(i);
+    @GetMapping("/viewPendingItinerary")
+    public ResponseEntity<Object> viewPendingItinerary(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id){
+        ItineraryFD i = viewController.selectedPendingItinerary(idComune, id);
+        if(i == null)
+            return new ResponseEntity<>("Errore: Itinerario non trovato tra gli itinerari in pending", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(i, HttpStatus.OK);
     }
 
-    public void validateSelectedItinerary() {
-//        comune.validateSelectedItinerary(this.viewController.getLastViewedItinerary().getId());
+    @PutMapping("/validateSelectedItinerary")
+    public ResponseEntity<Object> validateSelectedItinerary(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if(this.comuneRepository.findById(idComune).get().selectedPendingItinerary(id) == null)
+            return new ResponseEntity<>("Errore: Itinerario non trovato tra gli itinerari in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.validateSelectedItinerary(id);
+            this.comuneRepository.save(c);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
     }
 
-    public void deletePendingItinerary() {
-//        comune.deletePendingItinerary(this.viewController.getLastViewedItinerary().getId());
+    @DeleteMapping("/deletePendingItinerary")
+    public ResponseEntity<Object> deletePendingItinerary(@RequestParam("idComune") Long idComune, @RequestParam("id") Long id) {
+        if(this.comuneRepository.findById(idComune).get().selectedPendingItinerary(id) == null)
+            return new ResponseEntity<>("Errore: Itinerario non trovato tra gli itinerari in pending", HttpStatus.BAD_REQUEST);
+        else {
+            Comune c = this.comuneRepository.findById(idComune).get();
+            c.deletePendingItinerary(id);
+            this.comuneRepository.save(c);
+            this.itineraryRepository.deleteById(id);
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }
     }
 
     public void insertContestInfo(String name, String objective) {
@@ -344,13 +429,13 @@ public class Controller {
         this.contestController.selectedWinnerContent(i);
     }
 
-    public boolean addPOIToFavorites(int id, int POIid) {
+   /* public boolean addPOIToFavorites(int id, int POIid) {
         return this.favouritesManager.addPOIToFavorites(id, POIid, this.comune);
     }
 
     public boolean addItineraryToFavorites(int id, int itineraryId) {
        return this.favouritesManager.addItineraryToFavorites(id, itineraryId, this.comune);
-    }
+    }*/
 
     public List<POIGI> viewFavoritesPOIs(int id) {
         return this.favouritesManager.getAllFavouritesPOI(id);

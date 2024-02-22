@@ -17,15 +17,17 @@ public class Itinerary {
     private String descrizione;
     private LocalDateTime startDate = null;
     private LocalDateTime closetDate = null;
-    @OneToMany
-    private List<POI> POIs = new ArrayList();
+    @ManyToMany
+    private List<POI> POIs;
 
     public Itinerary(String nome, String descrizione) {
         this.nome = nome;
         this.descrizione = descrizione;
+        this.POIs = new ArrayList<>();
     }
 
     public Itinerary() {
+        this.POIs = new ArrayList<>();
     }
 
     public String getNome() {
@@ -79,5 +81,13 @@ public class Itinerary {
 
     public void addPOI(POI p){
         this.POIs.add(p);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Itinerary)) return false;
+        Itinerary itinerary = (Itinerary) obj;
+        return getId().equals(itinerary.getId());
     }
 }

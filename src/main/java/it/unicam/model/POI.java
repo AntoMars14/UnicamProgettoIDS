@@ -20,7 +20,7 @@ public abstract class POI {
     @Embedded
     private Coordinates coord;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Content> contents;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Content> contentsPending;
@@ -97,29 +97,30 @@ public abstract class POI {
         return POIId;
     }
 
-    public Long setPOIId(Long POIId) {
-        return this.POIId = POIId;
-    }
-
     public abstract void insertPOIInfo(String name, String description);
 
     public abstract POIGI getPOIGeneralInfo();
 
     public abstract POIFD getFullDetailedPOI();
 
-    public void deleteContent(int contentId) {
-        this.contents.remove(contentId - 1);
-        this.contents.stream().forEach(content -> content.setContentId(this.contents.indexOf(content)+1));
+    public void deleteContent(Long contentId) {
+        this.contents.removeIf(c -> c.getContentId().equals(contentId));
     }
 
-    public void validateContent(int id){
-        this.contents.add(this.contentsPending.get(id-1));
-        this.contentsPending.get(id-1).setContentId(this.contents.size());
+    public void validateContent(Long id){
+        this.contents.add(this.contentsPending.stream().filter(c -> c.getContentId().equals(id)).findFirst().get());
         this.deletePendingContent(id);
     }
 
-    public void deletePendingContent(int id) {
-        this.contentsPending.remove(id-1);
-        this.contentsPending.stream().forEach(c -> c.setContentId(this.contentsPending.indexOf(c)+1));
+    public void deletePendingContent(Long id) {
+        this.contentsPending.removeIf(c -> c.getContentId().equals(id));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof POI)) return false;
+        POI poi = (POI) o;
+        return getPOIId().equals(poi.getPOIId());
     }
 }

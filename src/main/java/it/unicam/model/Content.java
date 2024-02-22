@@ -49,9 +49,6 @@ public class Content {
         return this.contentId;
     }
 
-    public void setContentId(int contentId) {
-
-    }
 
     public ContentGI getContentGeneralInfo(){
         return new ContentGI(this.getContentId(), this.getNome(), this.getDescrizione());
@@ -61,4 +58,12 @@ public class Content {
         return new ContentFD(this.getContentId(), this.getNome(), this.getDescrizione(), this.getFile());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != this.getClass()) return false;
+        Content c = (Content) obj;
+        return c.getContentId().equals(this.getContentId());
+    }
 }
