@@ -3,16 +3,18 @@ package it.unicam.model;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class UtentiUtenticatiManager {
 
     private List<UtenteAutenticato> utenti = new ArrayList<>();
     private List<UtenteAutenticato> registrazioniUtenti = new ArrayList<>();
     public void addUtente(UtenteAutenticato utente){
-        utente.setId(this.utenti.size()+1);
+        //utente.setId(this.utenti.size()+1);
         this.utenti.add(utente);
     }
 
@@ -38,7 +40,7 @@ public class UtentiUtenticatiManager {
     }
 
     public void addRegistrationUser(UtenteAutenticato lastUser) {
-        lastUser.setId(this.registrazioniUtenti.size()+1);
+        //lastUser.setId(this.registrazioniUtenti.size()+1);
         this.registrazioniUtenti.add(lastUser);
     }
 

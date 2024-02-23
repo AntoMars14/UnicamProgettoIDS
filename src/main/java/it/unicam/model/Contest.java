@@ -4,35 +4,44 @@ import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.ContestGI;
+import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
+@Entity
 public class Contest {
-
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contest_generator")
+    private Long id;
     private String name;
     private String objective;
     private boolean onInvite;
     private boolean isClosed;
+    @ManyToMany
     private List<UtenteAutenticato> invitedUsers;
-    private Map<Content, UtenteAutenticato> partecipations;
-    private Map<Content, UtenteAutenticato> validatedPartecipations;
+    //private Map<Content, UtenteAutenticato> partecipations;
+    //private Map<Content, UtenteAutenticato> validatedPartecipations;
+    @OneToMany
+    private List<Partecipation> partecipations;
+    @OneToMany
+    private List<Partecipation> validatedPartecipations;
 
     public Contest(String name, String objective) {
         this.name = name;
         this.objective = objective;
         this.isClosed = false;
         this.invitedUsers = new ArrayList<>();
-        this.partecipations = new HashMap<>();
-        this.validatedPartecipations = new HashMap<>();
+        //this.partecipations = new HashMap<>();
+        //this.validatedPartecipations = new HashMap<>();
     }
 
-    public int getId() {
+    public Contest() {
+
+    }
+
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -79,6 +88,7 @@ public class Contest {
         this.invitedUsers.add(user);
     }
 
+    /*
     public boolean contributorInvited(int contributorId) {
         if (isOnInvite()){
             for (UtenteAutenticato u : this.invitedUsers) {
@@ -140,4 +150,5 @@ public class Contest {
     public ContentFD viewSelectedContestContent(int contentId) {
         return this.validatedPartecipations.keySet().stream().filter(c -> c.getContentId() == contentId).map(c -> c.getFullDetailedContent()).findFirst().orElse(null);
     }
+     */
 }

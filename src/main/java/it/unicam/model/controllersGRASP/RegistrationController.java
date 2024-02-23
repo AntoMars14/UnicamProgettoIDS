@@ -32,13 +32,13 @@ public class RegistrationController {
         this.lastUser = this.utentiUtenticatiManager.getRegistrationUser(i);
     }
 
-    public void refuseRegistration() {
-        this.utentiUtenticatiManager.approveRegistration(this.lastUser.getId());
-    }
+//    public void refuseRegistration() {
+//        this.utentiUtenticatiManager.approveRegistration(this.lastUser.getId());
+//    }
 
-    public void approveRegistration() {
-        this.utentiUtenticatiManager.refuseRegistration(this.lastUser.getId());
-        //sono richieste le credenziali
-        //SMTPUtil.sendEmail(SMTPUtil.createSession(), this.lastUser.getEmail(), "Registrazione approvata", "La tua registrazione è stata approvata");
-    }
+//    public void approveRegistration() {
+//        this.utentiUtenticatiManager.refuseRegistration(this.lastUser.getId());
+//        //sono richieste le credenziali
+//        //SMTPUtil.sendEmail(SMTPUtil.createSession(), this.lastUser.getEmail(), "Registrazione approvata", "La tua registrazione è stata approvata");
+//    }
 }

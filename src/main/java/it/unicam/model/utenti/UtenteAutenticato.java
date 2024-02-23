@@ -2,10 +2,17 @@ package it.unicam.model.utenti;
 
 import it.unicam.controller.Controller;
 import it.unicam.model.util.UtenteAutenticatoGI;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class UtenteAutenticato implements Utente{
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "utente_generator")
+    private Long id;
     private String username;
     private String password;
     private String email;
@@ -19,13 +26,13 @@ public class UtenteAutenticato implements Utente{
         this.role = role;
     }
 
+    public UtenteAutenticato() {
 
-    public int getId() {
-        return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {

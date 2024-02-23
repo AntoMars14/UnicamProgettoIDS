@@ -5,14 +5,13 @@ import it.unicam.model.Contest;
 import it.unicam.model.ContestManager;
 import it.unicam.model.UtentiUtenticatiManager;
 import it.unicam.model.utenti.UtenteAutenticato;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.ContentGI;
-import it.unicam.model.util.SMTPUtil;
-import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.model.util.*;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
 
+@Service
 public class ContestController {
 
     private ContestManager contestManager;
@@ -26,6 +25,12 @@ public class ContestController {
         this.utentiUtenticatiManager = utentiUtenticatiManager;
     }
 
+    public void createContest(ContestGI c) {
+        Contest contest = new Contest(c.getName(), c.getObjective());
+        contest.setOnInvite(c.isOnInvite());
+        this.contestManager.addContest(contest);
+    }
+
     public void insertContestInfo(String name, String objective) {
         this.lastContest = new Contest(name, objective);
         this.contestManager.addContest(lastContest);
@@ -36,7 +41,7 @@ public class ContestController {
     }
 
     public List<UtenteAutenticatoGI> selectedContestContibutors(int i) {
-        this.lastContest = this.contestManager.getContest(i);
+//        this.lastContest = this.contestManager.getContest(i);
         return this.utentiUtenticatiManager.getAllContributors();
     }
 
@@ -46,7 +51,7 @@ public class ContestController {
     }
 
     public void partecipateContest(int id, int contributorId) {
-        this.lastContest = this.contestManager.getContest(id);
+//        this.lastContest = this.contestManager.getContest(id);
         this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
     }
 
@@ -54,6 +59,8 @@ public class ContestController {
 //        this.lastContent = new Content(name, desc, f,0);
 //    }
 
+
+    /*
     public void confirmPartecipation() {
         this.lastContest.addContent(this.lastContent, this.lastContributor);
     }
@@ -96,4 +103,5 @@ public class ContestController {
     public ContentFD viewSelectedContestContent(int contentId) {
         return this.lastContest.viewSelectedContestContent(contentId);
     }
+     */
 }

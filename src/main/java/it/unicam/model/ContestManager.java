@@ -2,19 +2,26 @@ package it.unicam.model;
 
 import it.unicam.model.util.ContentGI;
 import it.unicam.model.util.ContestGI;
+import it.unicam.repositories.ContestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ContestManager {
 
-    private List<Contest> contests = new ArrayList<>();
+    //private List<Contest> contests = new ArrayList<>();
+    @Autowired
+    private ContestRepository contestRepository;
 
     public void addContest(Contest constest){
-        constest.setId(this.contests.size()+1);
-        this.contests.add(constest);
+//        constest.setId(this.contests.size()+1);
+//        this.contests.add(constest);
+        this.contestRepository.save(constest);
     }
-
+/*
     public Contest getContest(int id){
         return this.contests.get(id-1);
     }
@@ -37,4 +44,5 @@ public class ContestManager {
     public List<ContentGI> viewSelectedContestContents(int contestId) {
         return this.contests.get(contestId-1).getContents();
     }
+ */
 }

@@ -49,6 +49,7 @@ public class Controller {
     private ContentController contentController;
     @Autowired
     private ViewController viewController;
+    @Autowired
     private ContestController contestController;
     private FavouritesManager favouritesManager;
     private RoleManager roleManager;
@@ -365,6 +366,11 @@ public class Controller {
         }
     }
 
+    @PostMapping("/createContest")
+    public ResponseEntity<Object> createContest(@RequestBody ContestGI c){
+        this.contestController.createContest(c);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    };
     public void insertContestInfo(String name, String objective) {
         this.contestController.insertContestInfo(name, objective);
     }
@@ -373,9 +379,9 @@ public class Controller {
         this.contestController.onInvite(flag);
     }
 
-    public List<ContestGI> getAllOpenedContestOnInvite() {
-        return this.contestManager.getAllOpenedContestOnInvite();
-    }
+//    public List<ContestGI> getAllOpenedContestOnInvite() {
+//        return this.contestManager.getAllOpenedContestOnInvite();
+//    }
 
     public List<UtenteAutenticatoGI> selectedContestContibutors(int i) {
         return this.contestController.selectedContestContibutors(i);
@@ -385,9 +391,9 @@ public class Controller {
         this.contestController.inviteContributor(i);
     }
 
-    public List<ContestGI> getAllContest(int contributeId) {
-        return this.contestManager.getAllContest(contributeId);
-    }
+//    public List<ContestGI> getAllContest(int contributeId) {
+//        return this.contestManager.getAllContest(contributeId);
+//    }
 
     public void partecipateContest(int id, int contributorId) {
         this.contestController.partecipateContest(id, contributorId);
@@ -397,6 +403,8 @@ public class Controller {
 //        this.contestController.insertContestContentInfo(name, desc, f);
 //    }
 
+
+    /*
     public void confirmPartecipation() {
         this.contestController.confirmPartecipation();
     }
@@ -445,6 +453,7 @@ public class Controller {
         return this.favouritesManager.getAllFavouritesItinerary(id);
     }
 
+    /*
     public List<ContestGI> getAllContests(){
         return this.contestManager.getAllContests();
     }
@@ -456,6 +465,7 @@ public class Controller {
     public ContentFD viewSelectedContestContent(int contentId) {
         return this.contestController.viewSelectedContestContent(contentId);
     }
+    */
 
     public void requestChangeRole(int id) {
         this.roleManager.requestChangeRole(id);
@@ -497,11 +507,11 @@ public class Controller {
         this.registrationController.selectedRegistrationUser(i);
     }
 
-    public void refuseRegistration() {
-        this.registrationController.refuseRegistration();
-    }
+//    public void refuseRegistration() {
+//        this.registrationController.refuseRegistration();
+//    }
 
-    public void approveRegistration() {
-        this.registrationController.approveRegistration();
-    }
+//    public void approveRegistration() {
+//        this.registrationController.approveRegistration();
+//    }
 }
