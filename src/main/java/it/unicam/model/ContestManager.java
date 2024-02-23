@@ -21,14 +21,22 @@ public class ContestManager {
 //        this.contests.add(constest);
         this.contestRepository.save(constest);
     }
-/*
-    public Contest getContest(int id){
-        return this.contests.get(id-1);
+
+    public Contest getContest(Long id){
+       // return this.contests.get(id-1);
+        return this.contestRepository.findById(id).get();
     }
     public List<ContestGI> getAllOpenedContestOnInvite() {
-        return this.contests.stream().filter(contest -> contest.isOnInvite() && (!contest.isClosed()) && (contest.numUtentiInvitati() == 0)).map(contest -> contest.getGeneralInfoContest()).toList();
+        List <ContestGI> contests = new ArrayList<ContestGI>();
+         this.contestRepository.findAll().forEach(contest -> {
+            if(contest.isOnInvite() && (!contest.isClosed()) && (contest.numUtentiInvitati() == 0)){
+                contests.add(contest.getGeneralInfoContest());
+            }
+        });
+        return contests;
+       // return this.contests.stream().filter(contest -> contest.isOnInvite() && (!contest.isClosed()) && (contest.numUtentiInvitati() == 0)).map(contest -> contest.getGeneralInfoContest()).toList();
     }
-
+/*
     public List<ContestGI> getAllContest(int contributorId) {
        return this.contests.stream().filter(contest -> !contest.isClosed() && contest.contributorInvited(contributorId)).map(contest -> contest.getGeneralInfoContest()).toList();
     }

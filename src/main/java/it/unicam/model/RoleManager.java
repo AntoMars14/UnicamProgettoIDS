@@ -28,12 +28,14 @@ public class RoleManager {
     }
 
     public void approveRequest(int id) {
-        UtenteAutenticato u = this.utentiAutenticatiManager.getUser(id);
+    /*   UtenteAutenticato u = this.utentiAutenticatiManager.getUser(id);
         switch (u.getRole()){
             case CONTRIBUTOR -> u.setRole(Role.CONTRIBUTORAUTORIZZATO);
             case TURISTAUTENTICATO -> u.setRole(Role.CONTRIBUTOR);
             default -> throw new IllegalArgumentException("Unexpected value: " + u.getRole());
         }
         this.changeRoleIDs.remove(Integer.valueOf(id));
+
+     */
     }
 }

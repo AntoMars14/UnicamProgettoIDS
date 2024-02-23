@@ -6,6 +6,7 @@ import it.unicam.model.ContestManager;
 import it.unicam.model.UtentiUtenticatiManager;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -13,8 +14,9 @@ import java.util.List;
 
 @Service
 public class ContestController {
-
+    @Autowired
     private ContestManager contestManager;
+    @Autowired
     private UtentiUtenticatiManager utentiUtenticatiManager;
     private Contest lastContest;
     private UtenteAutenticato lastContributor;
@@ -45,14 +47,15 @@ public class ContestController {
         return this.utentiUtenticatiManager.getAllContributors();
     }
 
-    public void inviteContributor(int i) {
-        this.lastContest.inviteContributor(this.utentiUtenticatiManager.getUser(i));
+    public void inviteContributor(Long id, Long idContributor) {
+        this.contestManager.getContest(id).inviteContributor(this.utentiUtenticatiManager.getUser(idContributor));
+      //  this.lastContest.inviteContributor(this.utentiUtenticatiManager.getUser(i));
 
     }
 
     public void partecipateContest(int id, int contributorId) {
 //        this.lastContest = this.contestManager.getContest(id);
-        this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
+       // this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
     }
 
 //    public void insertContestContentInfo(String name, String desc, File f) {

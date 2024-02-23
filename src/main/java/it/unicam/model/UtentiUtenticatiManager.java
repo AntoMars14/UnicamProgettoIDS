@@ -3,6 +3,8 @@ package it.unicam.model;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.repositories.UtenteAutenticatoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.List;
 @Component
 public class UtentiUtenticatiManager {
 
+    @Autowired
+    private UtenteAutenticatoRepository utenteAutenticatoRepository;
     private List<UtenteAutenticato> utenti = new ArrayList<>();
     private List<UtenteAutenticato> registrazioniUtenti = new ArrayList<>();
     public void addUtente(UtenteAutenticato utente){
@@ -18,8 +22,9 @@ public class UtentiUtenticatiManager {
         this.utenti.add(utente);
     }
 
-    public UtenteAutenticato getUser(int id){
-        return this.utenti.get(id-1);
+    public UtenteAutenticato getUser(Long id){
+        //return this.utenti.get(id-1);
+        return this.utenteAutenticatoRepository.findById(id).get();
     }
     public List<UtenteAutenticatoGI> getAllContributors() {
         return this.utenti.stream()
@@ -29,6 +34,7 @@ public class UtentiUtenticatiManager {
 
     public UtenteAutenticatoGI getUserGI(int id) {
         return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
+
     }
 
     public List<UtenteAutenticatoGI> viewAllUsers() {

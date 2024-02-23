@@ -37,7 +37,7 @@ public class Controller {
     private POIRepository poiRepository;
     @Autowired
     private ItineraryRepository itineraryRepository;
-
+    @Autowired
     private ContestManager contestManager;
 
     @Autowired
@@ -379,6 +379,10 @@ public class Controller {
         this.contestController.onInvite(flag);
     }
 
+    @GetMapping ("/getAllOpenedContestOnInvite")
+    public ResponseEntity<Object> getAllOpenedContestOnInvite(){
+        return new ResponseEntity<>(this.contestManager.getAllOpenedContestOnInvite(), HttpStatus.OK);
+    }
 //    public List<ContestGI> getAllOpenedContestOnInvite() {
 //        return this.contestManager.getAllOpenedContestOnInvite();
 //    }
@@ -387,9 +391,17 @@ public class Controller {
         return this.contestController.selectedContestContibutors(i);
     }
 
-    public void inviteContributor(int i) {
-        this.contestController.inviteContributor(i);
+    @PostMapping("/inviteContributor")
+    public ResponseEntity<Object> inviteContributor(@RequestParam("id") Long id, @RequestParam("contributorId") Long[] contributorId) {
+        for (Long cId : contributorId) {
+            this.contestController.inviteContributor(id, cId);
+        }
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+    //public void inviteContributor(int i) {
+      //  this.contestController.inviteContributor(i);
+   // }
+
 
 //    public List<ContestGI> getAllContest(int contributeId) {
 //        return this.contestManager.getAllContest(contributeId);
