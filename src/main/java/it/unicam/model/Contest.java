@@ -128,25 +128,29 @@ public class Contest {
         //this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
         this.partecipations.remove(content);
     }
-    /*
+
     public void validateContestC(Content content) {
+        this.validatedPartecipations.add(this.partecipations.stream().filter(p -> p.getContent().equals(content)).findFirst().orElse(null));
+        this.partecipations.removeIf(p -> p.getContent().equals(content));
         //content.setContentId(this.validatedPartecipations.size() + 1);
-        this.validatedPartecipations.put(content, this.partecipations.get(content));
-        this.deleteContestContent(content);
+        //this.validatedPartecipations.put(content, this.partecipations.get(content));
+       // this.deleteContestContent(content);
     }
-
     public List<ContentGI> getContestContentValidate() {
-        return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
+       return this.validatedPartecipations.stream().map(p -> p.getContent().getContentGeneralInfo()).toList();
+
+       // return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
     }
 
-    public String getAutoreContentEmail(int i) {
-        return this.validatedPartecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getValue().getEmail()).findFirst().orElse(null);
+    public String getAutoreContentEmail(Long id) {
+        return this.partecipations.stream().filter(p -> p.getContent().getContentId().equals(id)).map(p -> p.getUser().getEmail()).findFirst().orElse(null);
+      //  return this.validatedPartecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getValue().getEmail()).findFirst().orElse(null);
     }
 
     public void closeContest() {
         this.isClosed = true;
     }
-
+/*
     public List<ContentGI> getContents() {
         return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
     }

@@ -93,23 +93,32 @@ public class ContestController {
         this.contestRepository.save(contest);
 //        this.lastContest.deleteContestContent(this.lastContent);
     }
-    /*
-    public void validateContestC() {
-        this.lastContest.validateContestC(this.lastContent);
+
+    public void validateContestC(Long contestId, Long id) {
+        Contest contest = this.contestRepository.findById(contestId).get();
+        contest.validateContestC(contest.selectedContestContent(id));
+        this.contestRepository.save(contest);
+
+     //   this.lastContest.validateContestC(this.lastContent);
     }
 
-    public List<ContentGI> selectedContestValidatedContent(int i) {
-        this.lastContest = this.contestManager.getContest(i);
-        return this.lastContest.getContestContentValidate();
+    public List<ContentGI> selectedContestValidatedContent(Long contestId, Long id) {
+        Contest contest = this.contestRepository.findById(contestId).get();
+        return contest.getContestContentValidate();
+
+       // this.lastContest = this.contestManager.getContest(i);
+       // return this.lastContest.getContestContentValidate();
     }
 
-    public void selectedWinnerContent(int i) {
+    public void selectedWinnerContent(Long contestId, Long id) {
+        Contest contest = this.contestRepository.findById(contestId).get();
+        contest.closeContest();
         //codice per inviare email necessita di impostare le credenziali, provato con gmail attivando l'opzione app meno sicure
         //SMTPUtil.sendEmail(SMTPUtil.createSession(), this.lastContest.getAutoreContentEmail(i), "Vincitore contest di contribuzione", "Congratulazioni, sei il vincitore del contest di contribuzione, mostra questa mail per ritirare il premio");
-        this.lastContest.closeContest();
+      //  this.lastContest.closeContest();
 
     }
-
+/*
     public List<ContentGI> viewSelectedContestContents(int contestId) {
         this.lastContest = this.contestManager.getContest(contestId);
         return this.contestManager.viewSelectedContestContents(contestId);

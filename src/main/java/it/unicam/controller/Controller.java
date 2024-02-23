@@ -476,16 +476,37 @@ public class Controller {
     public void deleteContestContent() {
         this.contestController.deleteContestContent();
     }
-
-    public void validateContestC() {
-        this.contestController.validateContestC();
+     */
+    @PutMapping ("/validateContestC")
+    public ResponseEntity<Object> validateContestC(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
+        this.contestController.validateContestC(contestId, id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+/*
+    public void validateContestC() {
+        this.contestController.validateContestC();
+    }*/
+
+    @GetMapping("/selectedContestValidatedContent")
+    public ResponseEntity<Object> selectedContestValidatedContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
+        return new ResponseEntity<>(this.contestController.selectedContestValidatedContent(contestId, id), HttpStatus.OK);
+    }
+
+/*
     public List<ContentGI> selectedContestValidatedContent(int i) {
         return this.contestController.selectedContestValidatedContent(i);
     }
+ */
 
-    public void selectedWinnerContent(int i) {
+    @PostMapping("/selectedWinnerContent")
+    public ResponseEntity<Object> selectedWinnerContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
+        this.contestController.selectedWinnerContent(contestId, id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+
+  /*  public void selectedWinnerContent(int i) {
         this.contestController.selectedWinnerContent(i);
     }
 
