@@ -7,7 +7,6 @@ import it.unicam.repositories.ContestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 
 @Service
@@ -72,21 +71,29 @@ public class ContestController {
     public void confirmPartecipation() {
         this.lastContest.addContent(this.lastContent, this.lastContributor);
     }
+    */
 
-    public List<ContentGI> viewPendingContentContest(int i) {
-        this.lastContest = this.contestManager.getContest(i);
-        return this.lastContest.getContestContentPending();
+    public List<ContentGI> viewPendingContentContest(Long i) {
+        Contest contest = this.contestRepository.findById(i).get();
+        return contest.getContestContentPending();
+//        this.lastContest = this.contestManager.getContest(i);
+//        return this.lastContest.getContestContentPending();
     }
 
-    public ContentFD selectedContestContent(int i) {
-        this.lastContent = this.lastContest.selectedContestContent(i);
-        return this.lastContent.getFullDetailedContent();
+    public ContentFD selectedContestContent(Long i) {
+        Contest contest = this.contestRepository.findById(i).get();
+        return contest.selectedContestContent(i).getFullDetailedContent();
+//        this.lastContent = this.lastContest.selectedContestContent(i);
+//        return this.lastContent.getFullDetailedContent();
     }
 
-    public void deleteContestContent() {
-        this.lastContest.deleteContestContent(this.lastContent);
+    public void deleteContestContent(Long contestId, Long id) {
+        Contest contest = this.contestRepository.findById(contestId).get();
+        contest.deleteContestContent(contest.selectedContestContent(id));
+        this.contestRepository.save(contest);
+//        this.lastContest.deleteContestContent(this.lastContent);
     }
-
+    /*
     public void validateContestC() {
         this.lastContest.validateContestC(this.lastContent);
     }

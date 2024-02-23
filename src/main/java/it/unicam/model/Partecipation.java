@@ -29,4 +29,8 @@ public class Partecipation {
     public UtenteAutenticato getUser() {
         return user;
     }
+
+    public Content getContent() {
+        return content;
+    }
 }

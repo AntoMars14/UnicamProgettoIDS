@@ -47,11 +47,21 @@ public class ContestManager {
         return contests;
        //return this.contests.stream().filter(contest -> !contest.isClosed() && contest.contributorInvited(contributorId)).map(contest -> contest.getGeneralInfoContest()).toList();
     }
-/*
     public List<ContestGI> getAllOpenedContest() {
-        return this.contests.stream().filter(contest -> !contest.isClosed()).map(contest -> contest.getGeneralInfoContest()).toList();
+        List <ContestGI> contests = new ArrayList<ContestGI>();
+        this.contestRepository.findAll().forEach(contest -> {
+            if(!contest.isClosed()){
+                contests.add(contest.getGeneralInfoContest());
+            }
+        });
+        return contests;
+        //return this.contests.stream().filter(contest -> !contest.isClosed()).map(contest -> contest.getGeneralInfoContest()).toList();
     }
 
+
+
+
+    /*
     public List<ContestGI> getAllContests() {
         return this.contests.stream().map(contest -> contest.getGeneralInfoContest()).toList();
     }

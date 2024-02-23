@@ -421,6 +421,8 @@ public class Controller {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+
+
    /* public void partecipateContest(int id, int contributorId) {
         this.contestController.partecipateContest(id, contributorId);
     }*/
@@ -434,19 +436,43 @@ public class Controller {
     public void confirmPartecipation() {
         this.contestController.confirmPartecipation();
     }
+     */
 
+    @GetMapping("/getAllOpenedContest")
+    public ResponseEntity<Object> getAllOpenedContest(){
+        return new ResponseEntity<>(this.contestManager.getAllOpenedContest(), HttpStatus.OK);
+    }
+    /*
     public List<ContestGI> getAllOpenedContest() {
         return this.contestManager.getAllOpenedContest();
     }
+    */
 
+    @GetMapping("/viewPendingContentContest")
+    public ResponseEntity<Object> viewPendingContentContest(@RequestParam("id") Long id){
+        return new ResponseEntity<>(this.contestController.viewPendingContentContest(id), HttpStatus.OK);
+    }
+    /*
     public List<ContentGI> viewPendingContentContest(int i) {
         return this.contestController.viewPendingContentContest(i);
     }
+    */
 
+    @GetMapping("/selectedContestContent")
+    public ResponseEntity<Object> selectedContestContent(@RequestParam("id") Long id){
+        return new ResponseEntity<>(this.contestController.selectedContestContent(id), HttpStatus.OK);
+    }
+    /*
     public ContentFD selectedContestContent(int i) {
         return this.contestController.selectedContestContent(i);
     }
-
+    */
+    @DeleteMapping("/deleteContestContent")
+    public ResponseEntity<Object> deleteContestContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
+        this.contestController.deleteContestContent(contestId, id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+    /*
     public void deleteContestContent() {
         this.contestController.deleteContestContent();
     }

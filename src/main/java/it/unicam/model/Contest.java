@@ -114,20 +114,21 @@ public class Contest {
         //content.setContentId(this.partecipations.size() + 1);
         this.partecipations.add(new Partecipation(content, contributor));
     }
-/*
     public List<ContentGI> getContestContentPending() {
-        return this.partecipations.entrySet().stream().map(entry -> entry.getKey().getContentGeneralInfo()).toList();
+        return this.partecipations.stream().map(p -> p.getContent().getContentGeneralInfo()).toList();
+        //return this.partecipations.entrySet().stream().map(entry -> entry.getKey().getContentGeneralInfo()).toList();
     }
 
-    public Content selectedContestContent(int i) {
-        return this.partecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getKey()).findFirst().orElse(null);
+    public Content selectedContestContent(Long i) {
+        return this.partecipations.stream().filter(p -> p.getContent().getContentId().equals(i)).map(p -> p.getContent()).findFirst().orElse(null);
+        //return this.partecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getKey()).findFirst().orElse(null);
     }
 
     public void deleteContestContent(Content content) {
         //this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
         this.partecipations.remove(content);
     }
-
+    /*
     public void validateContestC(Content content) {
         //content.setContentId(this.validatedPartecipations.size() + 1);
         this.validatedPartecipations.put(content, this.partecipations.get(content));
