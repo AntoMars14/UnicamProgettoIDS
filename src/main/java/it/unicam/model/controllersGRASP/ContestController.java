@@ -1,11 +1,9 @@
 package it.unicam.model.controllersGRASP;
 
-import it.unicam.model.Content;
-import it.unicam.model.Contest;
-import it.unicam.model.ContestManager;
-import it.unicam.model.UtentiUtenticatiManager;
+import it.unicam.model.*;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.*;
+import it.unicam.repositories.ContestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,8 @@ public class ContestController {
     private ContestManager contestManager;
     @Autowired
     private UtentiUtenticatiManager utentiUtenticatiManager;
+    @Autowired
+    private ContestRepository contestRepository;
     private Contest lastContest;
     private UtenteAutenticato lastContributor;
     private Content lastContent;
@@ -53,7 +53,12 @@ public class ContestController {
 
     }
 
-    public void partecipateContest(int id, int contributorId) {
+    public void partecipateContest(Long id, ContentFD content, Long contributorId) {
+        Content c = new Content(content.getNome(), content.getDescrizione(), content.getFile());
+        Contest contest = this.contestRepository.findById(id).get();
+        contest.addContent(c, this.utentiUtenticatiManager.getUser(contributorId));
+        this.contestRepository.save(contest);
+
 //        this.lastContest = this.contestManager.getContest(id);
        // this.lastContributor = this.utentiUtenticatiManager.getUser(contributorId);
     }

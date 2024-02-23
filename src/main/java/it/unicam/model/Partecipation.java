@@ -1,21 +1,32 @@
 package it.unicam.model;
 
 import it.unicam.model.utenti.UtenteAutenticato;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
 
 @Entity
 public class Partecipation {
     @EmbeddedId
     private ParticipationId id;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId("contentId")
     private Content content;
 
     @ManyToOne
     @MapsId("userId")
     private UtenteAutenticato user;
+
+    public Partecipation(Content content, UtenteAutenticato contributor) {
+        this.content = content;
+        this.user = contributor;
+        this.id = new ParticipationId(content.getContentId(), contributor.getId());
+    }
+
+    public Partecipation() {
+
+    }
+
+    public UtenteAutenticato getUser() {
+        return user;
+    }
 }

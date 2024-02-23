@@ -19,13 +19,13 @@ public class Contest {
     private boolean onInvite;
     private boolean isClosed;
     @ManyToMany
-    private List<UtenteAutenticato> invitedUsers;
+    private List<UtenteAutenticato> invitedUsers = new ArrayList<>();
     //private Map<Content, UtenteAutenticato> partecipations;
     //private Map<Content, UtenteAutenticato> validatedPartecipations;
-    @OneToMany
-    private List<Partecipation> partecipations;
-    @OneToMany
-    private List<Partecipation> validatedPartecipations;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Partecipation> partecipations = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Partecipation> validatedPartecipations = new ArrayList<>();
 
     public Contest(String name, String objective) {
         this.name = name;
@@ -88,30 +88,33 @@ public class Contest {
         this.invitedUsers.add(user);
     }
 
-    /*
-    public boolean contributorInvited(int contributorId) {
+
+    public boolean contributorInvited(Long contributorId) {
         if (isOnInvite()){
             for (UtenteAutenticato u : this.invitedUsers) {
                 if (u.getId() == contributorId) {
-                    return !this.partecipations.containsValue(u);
+                    return (this.partecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0
+                            && this.validatedPartecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0);
                 }
             }
             return false;
         }else {
-            for(UtenteAutenticato u : this.partecipations.values()){
+            return (this.partecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0
+                    && this.validatedPartecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0);
+           /* for(UtenteAutenticato u : this.partecipations.values()){
                 if (u.getId() == contributorId) {
                     return false;
                 }
             }
-            return true;
+            return true;*/
         }
     }
 
     public void addContent(Content content, UtenteAutenticato contributor) {
         //content.setContentId(this.partecipations.size() + 1);
-        this.partecipations.put(content, contributor);
+        this.partecipations.add(new Partecipation(content, contributor));
     }
-
+/*
     public List<ContentGI> getContestContentPending() {
         return this.partecipations.entrySet().stream().map(entry -> entry.getKey().getContentGeneralInfo()).toList();
     }

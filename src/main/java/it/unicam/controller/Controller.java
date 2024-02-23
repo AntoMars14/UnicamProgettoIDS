@@ -402,14 +402,28 @@ public class Controller {
       //  this.contestController.inviteContributor(i);
    // }
 
-
+    @GetMapping("/getAllContest")
+    public ResponseEntity<Object> getAllContest(@RequestParam("contributeId") Long contributeId){
+        return new ResponseEntity<>(this.contestManager.getAllContest(contributeId), HttpStatus.OK);
+    }
 //    public List<ContestGI> getAllContest(int contributeId) {
 //        return this.contestManager.getAllContest(contributeId);
 //    }
 
-    public void partecipateContest(int id, int contributorId) {
-        this.contestController.partecipateContest(id, contributorId);
+    @PostMapping("/partecipateContest")
+    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, @RequestParam("contributorId") Long contributorId) {
+        try {
+            content.addFile(f.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.contestController.partecipateContest(id, content, contributorId);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+
+   /* public void partecipateContest(int id, int contributorId) {
+        this.contestController.partecipateContest(id, contributorId);
+    }*/
 
 //    public void insertContestContentInfo(String name, String desc, File f) {
 //        this.contestController.insertContestContentInfo(name, desc, f);
