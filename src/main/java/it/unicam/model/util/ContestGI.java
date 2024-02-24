@@ -2,17 +2,21 @@ package it.unicam.model.util;
 
 public class ContestGI {
 
-    private final Long contestId;
-    private final String name;
-    private final String objective;
-    private final boolean isClosed;
+    private Long contestId;
+    private String name;
+    private String objective;
     private boolean onInvite;
+    private boolean isClosed;
 
-    public ContestGI(Long contestId, String name, String objective, boolean isClosed) {
+    public ContestGI(Long contestId, String name, String objective, boolean onInvite, boolean isClosed) {
         this.contestId = contestId;
         this.name = name;
         this.objective = objective;
         this.isClosed = isClosed;
+        this.onInvite = onInvite;
+    }
+
+    public ContestGI() {
     }
 
     public boolean isOnInvite() {
@@ -33,6 +37,9 @@ public class ContestGI {
 
     public boolean isClosed() {
         return isClosed;
+    }
+    public void isOnInvite(boolean onInvite) {
+        this.onInvite = onInvite;
     }
 
 

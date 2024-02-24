@@ -27,9 +27,12 @@ public class UtentiUtenticatiManager {
         return this.utenteAutenticatoRepository.findById(id).get();
     }
     public List<UtenteAutenticatoGI> getAllContributors() {
-        return this.utenti.stream()
-                .filter(u -> u.getRole().equals(Role.CONTRIBUTOR) || u.getRole().equals(Role.CONTRIBUTORAUTORIZZATO) || u.getRole().equals(Role.CURATORE))
-                .map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
+        List<UtenteAutenticatoGI> contributors = new ArrayList<>();
+        this.utenteAutenticatoRepository.findAll().forEach(utente -> {
+            if(utente.getRole().equals(Role.CONTRIBUTOR) || utente.getRole().equals(Role.CONTRIBUTORAUTORIZZATO) || utente.getRole().equals(Role.CURATORE))
+                contributors.add(utente.getGeneralInfoUtenteAutenticato());
+        });
+        return contributors;
     }
 
     public UtenteAutenticatoGI getUserGI(int id) {

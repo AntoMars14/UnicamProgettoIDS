@@ -38,19 +38,13 @@ public class Controller {
     @Autowired
     private ItineraryRepository itineraryRepository;
     @Autowired
-    private ContestManager contestManager;
-
-    @Autowired
     private POIController poiController;
     @Autowired
     private ItineraryController itineraryController;
-
     @Autowired
     private ContentController contentController;
     @Autowired
     private ViewController viewController;
-    @Autowired
-    private ContestController contestController;
     private FavouritesManager favouritesManager;
     private RoleManager roleManager;
     private UtentiUtenticatiManager utentiUtenticatiManager;
@@ -366,149 +360,6 @@ public class Controller {
         }
     }
 
-    @PostMapping("/createContest")
-    public ResponseEntity<Object> createContest(@RequestBody ContestGI c){
-        this.contestController.createContest(c);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    };
-    public void insertContestInfo(String name, String objective) {
-        this.contestController.insertContestInfo(name, objective);
-    }
-
-    public void onInvite(boolean flag) {
-        this.contestController.onInvite(flag);
-    }
-
-    @GetMapping ("/getAllOpenedContestOnInvite")
-    public ResponseEntity<Object> getAllOpenedContestOnInvite(){
-        return new ResponseEntity<>(this.contestManager.getAllOpenedContestOnInvite(), HttpStatus.OK);
-    }
-//    public List<ContestGI> getAllOpenedContestOnInvite() {
-//        return this.contestManager.getAllOpenedContestOnInvite();
-//    }
-
-    public List<UtenteAutenticatoGI> selectedContestContibutors(int i) {
-        return this.contestController.selectedContestContibutors(i);
-    }
-
-    @PostMapping("/inviteContributor")
-    public ResponseEntity<Object> inviteContributor(@RequestParam("id") Long id, @RequestParam("contributorId") Long[] contributorId) {
-        for (Long cId : contributorId) {
-            this.contestController.inviteContributor(id, cId);
-        }
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-    //public void inviteContributor(int i) {
-      //  this.contestController.inviteContributor(i);
-   // }
-
-    @GetMapping("/getAllContest")
-    public ResponseEntity<Object> getAllContest(@RequestParam("contributeId") Long contributeId){
-        return new ResponseEntity<>(this.contestManager.getAllContest(contributeId), HttpStatus.OK);
-    }
-//    public List<ContestGI> getAllContest(int contributeId) {
-//        return this.contestManager.getAllContest(contributeId);
-//    }
-
-    @PostMapping("/partecipateContest")
-    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, @RequestParam("contributorId") Long contributorId) {
-        try {
-            content.addFile(f.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        this.contestController.partecipateContest(id, content, contributorId);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-
-
-
-   /* public void partecipateContest(int id, int contributorId) {
-        this.contestController.partecipateContest(id, contributorId);
-    }*/
-
-//    public void insertContestContentInfo(String name, String desc, File f) {
-//        this.contestController.insertContestContentInfo(name, desc, f);
-//    }
-
-
-    /*
-    public void confirmPartecipation() {
-        this.contestController.confirmPartecipation();
-    }
-     */
-
-    @GetMapping("/getAllOpenedContest")
-    public ResponseEntity<Object> getAllOpenedContest(){
-        return new ResponseEntity<>(this.contestManager.getAllOpenedContest(), HttpStatus.OK);
-    }
-    /*
-    public List<ContestGI> getAllOpenedContest() {
-        return this.contestManager.getAllOpenedContest();
-    }
-    */
-
-    @GetMapping("/viewPendingContentContest")
-    public ResponseEntity<Object> viewPendingContentContest(@RequestParam("id") Long id){
-        return new ResponseEntity<>(this.contestController.viewPendingContentContest(id), HttpStatus.OK);
-    }
-    /*
-    public List<ContentGI> viewPendingContentContest(int i) {
-        return this.contestController.viewPendingContentContest(i);
-    }
-    */
-
-    @GetMapping("/selectedContestContent")
-    public ResponseEntity<Object> selectedContestContent(@RequestParam("id") Long id){
-        return new ResponseEntity<>(this.contestController.selectedContestContent(id), HttpStatus.OK);
-    }
-    /*
-    public ContentFD selectedContestContent(int i) {
-        return this.contestController.selectedContestContent(i);
-    }
-    */
-    @DeleteMapping("/deleteContestContent")
-    public ResponseEntity<Object> deleteContestContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
-        this.contestController.deleteContestContent(contestId, id);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-    /*
-    public void deleteContestContent() {
-        this.contestController.deleteContestContent();
-    }
-     */
-    @PutMapping ("/validateContestC")
-    public ResponseEntity<Object> validateContestC(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
-        this.contestController.validateContestC(contestId, id);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-
-/*
-    public void validateContestC() {
-        this.contestController.validateContestC();
-    }*/
-
-    @GetMapping("/selectedContestValidatedContent")
-    public ResponseEntity<Object> selectedContestValidatedContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
-        return new ResponseEntity<>(this.contestController.selectedContestValidatedContent(contestId, id), HttpStatus.OK);
-    }
-
-/*
-    public List<ContentGI> selectedContestValidatedContent(int i) {
-        return this.contestController.selectedContestValidatedContent(i);
-    }
- */
-
-    @PostMapping("/selectedWinnerContent")
-    public ResponseEntity<Object> selectedWinnerContent(@RequestParam("contestId") Long contestId, @RequestParam("id") Long id){
-        this.contestController.selectedWinnerContent(contestId, id);
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-
-
-  /*  public void selectedWinnerContent(int i) {
-        this.contestController.selectedWinnerContent(i);
-    }
 
    /* public boolean addPOIToFavorites(int id, int POIid) {
         return this.favouritesManager.addPOIToFavorites(id, POIid, this.comune);
@@ -525,20 +376,6 @@ public class Controller {
     public List<ItineraryGI> viewFavoritesItineraries(int id) {
         return this.favouritesManager.getAllFavouritesItinerary(id);
     }
-
-    /*
-    public List<ContestGI> getAllContests(){
-        return this.contestManager.getAllContests();
-    }
-
-    public List<ContentGI> viewSelectedContestContents(int contestId) {
-        return this.contestController.viewSelectedContestContents(contestId);
-    }
-
-    public ContentFD viewSelectedContestContent(int contentId) {
-        return this.contestController.viewSelectedContestContent(contentId);
-    }
-    */
 
     public void requestChangeRole(int id) {
         this.roleManager.requestChangeRole(id);

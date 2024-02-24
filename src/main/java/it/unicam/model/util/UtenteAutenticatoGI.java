@@ -19,6 +19,10 @@ public class UtenteAutenticatoGI {
         this.role = role;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "UtenteAutenticato id = " + id + " - Ruolo = "+this.role +

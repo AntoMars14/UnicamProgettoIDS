@@ -20,8 +20,6 @@ public class Contest {
     private boolean isClosed;
     @ManyToMany
     private List<UtenteAutenticato> invitedUsers = new ArrayList<>();
-    //private Map<Content, UtenteAutenticato> partecipations;
-    //private Map<Content, UtenteAutenticato> validatedPartecipations;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Partecipation> partecipations = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
@@ -32,8 +30,6 @@ public class Contest {
         this.objective = objective;
         this.isClosed = false;
         this.invitedUsers = new ArrayList<>();
-        //this.partecipations = new HashMap<>();
-        //this.validatedPartecipations = new HashMap<>();
     }
 
     public Contest() {
@@ -81,7 +77,7 @@ public class Contest {
     }
 
     public ContestGI getGeneralInfoContest() {
-        return new ContestGI(this.id, this.name, this.objective, this.isClosed);
+        return new ContestGI(this.id, this.name, this.objective, this.onInvite, this.isClosed);
     }
 
     public void inviteContributor(UtenteAutenticato user) {
@@ -101,62 +97,45 @@ public class Contest {
         }else {
             return (this.partecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0
                     && this.validatedPartecipations.stream().filter(p -> p.getUser().getId().equals(contributorId)).toList().size() == 0);
-           /* for(UtenteAutenticato u : this.partecipations.values()){
-                if (u.getId() == contributorId) {
-                    return false;
-                }
-            }
-            return true;*/
         }
     }
 
     public void addContent(Content content, UtenteAutenticato contributor) {
-        //content.setContentId(this.partecipations.size() + 1);
         this.partecipations.add(new Partecipation(content, contributor));
     }
     public List<ContentGI> getContestContentPending() {
         return this.partecipations.stream().map(p -> p.getContent().getContentGeneralInfo()).toList();
-        //return this.partecipations.entrySet().stream().map(entry -> entry.getKey().getContentGeneralInfo()).toList();
     }
 
     public Content selectedContestContent(Long i) {
         return this.partecipations.stream().filter(p -> p.getContent().getContentId().equals(i)).map(p -> p.getContent()).findFirst().orElse(null);
-        //return this.partecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getKey()).findFirst().orElse(null);
     }
 
     public void deleteContestContent(Content content) {
-        //this.partecipations.keySet().stream().filter(c -> c.getContentId() > content.getContentId()).forEach(c -> c.setContentId(c.getContentId() - 1));
         this.partecipations.remove(content);
     }
 
     public void validateContestC(Content content) {
         this.validatedPartecipations.add(this.partecipations.stream().filter(p -> p.getContent().equals(content)).findFirst().orElse(null));
         this.partecipations.removeIf(p -> p.getContent().equals(content));
-        //content.setContentId(this.validatedPartecipations.size() + 1);
-        //this.validatedPartecipations.put(content, this.partecipations.get(content));
-       // this.deleteContestContent(content);
     }
     public List<ContentGI> getContestContentValidate() {
        return this.validatedPartecipations.stream().map(p -> p.getContent().getContentGeneralInfo()).toList();
-
-       // return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
     }
 
     public String getAutoreContentEmail(Long id) {
         return this.partecipations.stream().filter(p -> p.getContent().getContentId().equals(id)).map(p -> p.getUser().getEmail()).findFirst().orElse(null);
-      //  return this.validatedPartecipations.entrySet().stream().filter(entry -> entry.getKey().getContentId() == i).map(entry -> entry.getValue().getEmail()).findFirst().orElse(null);
     }
 
     public void closeContest() {
         this.isClosed = true;
     }
-/*
-    public List<ContentGI> getContents() {
-        return this.validatedPartecipations.keySet().stream().map(c -> c.getContentGeneralInfo()).toList();
+
+    public ContentFD viewSelectedContestContent(Long contentId) {
+        if(this.validatedPartecipations.stream().filter(p -> p.getContent().getContentId().equals(contentId)).toList().size() == 0)
+            return null;
+        else
+            return this.validatedPartecipations.stream().filter(p -> p.getContent().getContentId().equals(contentId)).map(p -> p.getContent().getFullDetailedContent()).findFirst().orElse(null);
     }
 
-    public ContentFD viewSelectedContestContent(int contentId) {
-        return this.validatedPartecipations.keySet().stream().filter(c -> c.getContentId() == contentId).map(c -> c.getFullDetailedContent()).findFirst().orElse(null);
-    }
-     */
 }
