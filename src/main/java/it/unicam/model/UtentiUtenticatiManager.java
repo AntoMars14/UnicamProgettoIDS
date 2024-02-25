@@ -4,6 +4,7 @@ import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
 import it.unicam.repositories.UtenteAutenticatoRepository;
+import jakarta.persistence.OneToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class UtentiUtenticatiManager {
     @Autowired
     private UtenteAutenticatoRepository utenteAutenticatoRepository;
     private List<UtenteAutenticato> utenti = new ArrayList<>();
+    @OneToMany
     private List<UtenteAutenticato> registrazioniUtenti = new ArrayList<>();
     public void addUtente(UtenteAutenticato utente){
         //utente.setId(this.utenti.size()+1);
@@ -42,14 +44,21 @@ public class UtentiUtenticatiManager {
     }
 
     public List<UtenteAutenticatoGI> viewAllUsers() {
-        return this.utenti.stream().filter(u-> !u.getRole().equals(Role.GESTORE)).map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
+        List<UtenteAutenticatoGI> utenti = new ArrayList<>();
+        this.utenteAutenticatoRepository.findAll().forEach(utente -> utenti.add(utente.getGeneralInfoUtenteAutenticato()));
+        return utenti;
+       // return this.utenti.stream().filter(u-> !u.getRole().equals(Role.GESTORE)).map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
     }
 
-    public void changeRole(int id, Role role) {
-        this.utenti.get(id-1).setRole(role);
+    public void changeRole(Long id, Role role) {
+        UtenteAutenticato utente = this.utenteAutenticatoRepository.findById(id).get();
+        utente.setRole(role);
+        this.utenteAutenticatoRepository.save(utente);
+        //this.utenti.get(id-1).setRole(role);
     }
 
     public void addRegistrationUser(UtenteAutenticato lastUser) {
+        this.utenteAutenticatoRepository.save(lastUser);
         //lastUser.setId(this.registrazioniUtenti.size()+1);
         this.registrazioniUtenti.add(lastUser);
     }

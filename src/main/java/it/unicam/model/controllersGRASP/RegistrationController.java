@@ -20,13 +20,15 @@ public class RegistrationController {
         if(this.utentiUtenticatiManager.containsUser(email, username)){
             return false;
         }
-        this.lastUser = new UtenteAutenticato(email, username, password, role);
+        this.utentiUtenticatiManager.addRegistrationUser(new UtenteAutenticato(email, username, password, role));
         return true;
     }
-
+/*
     public void confirmRegistration() {
         this.utentiUtenticatiManager.addRegistrationUser(this.lastUser);
     }
+
+ */
 
     public void selectedRegistrationUser(int i) {
         this.lastUser = this.utentiUtenticatiManager.getRegistrationUser(i);

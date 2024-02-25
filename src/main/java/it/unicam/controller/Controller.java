@@ -415,21 +415,41 @@ public class Controller {
 //        this.roleManager.approveRequest(id);
 //    }
 
-    public List<UtenteAutenticatoGI> viewAllUsers() {
-        return this.utentiUtenticatiManager.viewAllUsers();
+    @GetMapping("/viewAllUsers")
+    public ResponseEntity<Object> viewAllUsers() {
+        return new ResponseEntity<>(this.utentiUtenticatiManager.viewAllUsers(), HttpStatus.OK);
     }
-
+  //  public List<UtenteAutenticatoGI> viewAllUsers() {
+       // return this.utentiUtenticatiManager.viewAllUsers();
+   // }
+    @PutMapping ("/changeRole")
+    public ResponseEntity<Object> changeRole(@RequestParam("id") Long id, @RequestParam("role") Role role) {
+        this.utentiUtenticatiManager.changeRole(id, role);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+/*
     public void changeRole(int id, Role role) {
         this.utentiUtenticatiManager.changeRole(id, role);
     }
+ */
 
-    public boolean registrationUser(String email, String username, String password, Role role) {
+
+   @PostMapping("/registrationUser")
+    public ResponseEntity<Object> registrationUser(@RequestParam("email")String email, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("role") Role role) {
+        this.registrationController.registrationUser(email, username, password, role);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+   /* public boolean registrationUser(String email, String username, String password, Role role) {
         return this.registrationController.registrationUser(email, username, password, role);
     }
 
     public void confirmRegistration() {
         this.registrationController.confirmRegistration();
     }
+    */
+
+
 
     public List<UtenteAutenticatoGI> viewRegistrationUsers() {
         return this.utentiUtenticatiManager.viewRegistrationUsers();
