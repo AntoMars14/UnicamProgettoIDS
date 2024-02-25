@@ -6,9 +6,11 @@ import it.unicam.model.controllersGRASP.ContestController;
 import it.unicam.model.util.ContentFD;
 import it.unicam.model.util.ContestGI;
 import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,8 @@ public class ContestsController {
     private ContestController contestController;
     @Autowired
     private ContestManager contestManager;
+    @Autowired
+    private UtenteAutenticatoRepository utenteAutenticatoRepository;
 
     @PostMapping("/createContest")
     public ResponseEntity<Object> createContest(@RequestBody ContestGI c){
@@ -57,12 +61,14 @@ public class ContestsController {
     }
 
     @GetMapping("/getAllContest")
-    public ResponseEntity<Object> getAllContest(@RequestParam("contributeId") Long contributeId){
+    public ResponseEntity<Object> getAllContest(Authentication authentication){
+        Long contributeId = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
         return new ResponseEntity<>(this.contestManager.getAllContest(contributeId), HttpStatus.OK);
     }
 
     @PostMapping("/partecipateContest")
-    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, @RequestParam("contributorId") Long contributorId) {
+    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, Authentication authentication) {
+        Long contributorId = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
         if(this.contestManager.getContest(id).isClosed())
             return new ResponseEntity<>("Contest closed", HttpStatus.BAD_REQUEST);
         if(!this.contestManager.getContest(id).contributorInvited(contributorId))

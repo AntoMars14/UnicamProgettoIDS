@@ -29,12 +29,12 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/h2-console/**", "/").permitAll()
-                        .requestMatchers("/addComune/**").hasRole("CURATORE")
+                        .requestMatchers("/addComune/**", "/partecipateContest/**").hasRole("CURATORE")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .permitAll()
+                        .permitAll().successHandler((request, response, authentication) -> response.setStatus(200))
                 ).csrf((csrf) -> csrf.ignoringRequestMatchers("/**"))
                 .headers((headers) -> headers.frameOptions(option -> option.disable()))
                 .logout((logout) -> logout.permitAll());

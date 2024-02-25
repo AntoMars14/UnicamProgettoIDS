@@ -6,15 +6,13 @@ import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.util.*;
-import it.unicam.repositories.ComuneRepository;
-import it.unicam.repositories.ContentRepository;
-import it.unicam.repositories.ItineraryRepository;
-import it.unicam.repositories.POIRepository;
+import it.unicam.repositories.*;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +43,8 @@ public class Controller {
     private ContentController contentController;
     @Autowired
     private ViewController viewController;
+    @Autowired
+    private UtenteAutenticatoRepository utenteAutenticatoRepository;
     private FavouritesManager favouritesManager;
     private RoleManager roleManager;
     private UtentiUtenticatiManager utentiUtenticatiManager;
@@ -377,21 +377,43 @@ public class Controller {
         return this.favouritesManager.getAllFavouritesItinerary(id);
     }
 
-    public void requestChangeRole(int id) {
+    @PostMapping("/requestChangeRole")
+    public ResponseEntity<Object> requestChangeRole(Authentication authentication) {
+        Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
         this.roleManager.requestChangeRole(id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+//    public void requestChangeRole(int id) {
+//        this.roleManager.requestChangeRole(id);
+//    }
 
-    public List<UtenteAutenticatoGI> viewChangeRoleRequests() {
-        return this.roleManager.viewChangeRoleRequests();
+
+    @PostMapping("/viewChangeRoleRequests")
+    public ResponseEntity<Object> viewChangeRoleRequests() {
+        return new ResponseEntity<>(this.roleManager.viewChangeRoleRequests(), HttpStatus.OK);
     }
+//    public List<UtenteAutenticatoGI> viewChangeRoleRequests() {
+//        return this.roleManager.viewChangeRoleRequests();
+//    }
 
-    public void disapproveRequest(int id) {
+    @DeleteMapping("/disapproveRequest")
+    public ResponseEntity<Object> disapproveRequest(@RequestParam("id") Long id) {
         this.roleManager.disapproveRequest(id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+//    public void disapproveRequest(int id) {
+//        this.roleManager.disapproveRequest(id);
+//    }
 
-    public void approveRequest(int id) {
+
+    @PutMapping("/approveRequest")
+    public ResponseEntity<Object> approveRequest(@RequestParam("id") Long id) {
         this.roleManager.approveRequest(id);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+//    public void approveRequest(int id) {
+//        this.roleManager.approveRequest(id);
+//    }
 
     public List<UtenteAutenticatoGI> viewAllUsers() {
         return this.utentiUtenticatiManager.viewAllUsers();

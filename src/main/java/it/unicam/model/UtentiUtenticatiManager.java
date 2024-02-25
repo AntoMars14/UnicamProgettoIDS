@@ -35,8 +35,9 @@ public class UtentiUtenticatiManager {
         return contributors;
     }
 
-    public UtenteAutenticatoGI getUserGI(int id) {
-        return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
+    public UtenteAutenticatoGI getUserGI(Long id) {
+//        return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
+        return this.utenteAutenticatoRepository.findById(id).get().getGeneralInfoUtenteAutenticato();
 
     }
 
