@@ -5,12 +5,15 @@ import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -25,25 +28,21 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/h2-console/**", "/").permitAll()
+                        .requestMatchers("/addComune/**").hasRole("CURATORE")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
-                )
+                ).csrf((csrf) -> csrf.ignoringRequestMatchers("/**"))
+                .headers((headers) -> headers.frameOptions(option -> option.disable()))
                 .logout((logout) -> logout.permitAll());
 
 
         return http.build();
     }
 
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
-    }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -53,11 +52,17 @@ public class WebSecurityConfig {
                 return User
                         .withUsername(utenteAutenticato.getUsername())
                         .password(utenteAutenticato.getPassword())
-                        .roles("ROLE_"+utenteAutenticato.getRole().name())
+                        .roles(utenteAutenticato.getRole().name())
                         .build();
             } else {
                 throw new UsernameNotFoundException("Utente non trovato.");
             }
         };
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }
