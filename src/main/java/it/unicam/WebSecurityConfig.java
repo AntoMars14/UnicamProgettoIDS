@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -24,12 +26,23 @@ public class WebSecurityConfig {
     private UtenteAutenticatoRepository utenteAutenticatoRepository;
 
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/h2-console/**", "/").permitAll()
-                        .requestMatchers("/addComune/**", "/partecipateContest/**").hasRole("CURATORE")
+                        .requestMatchers("/h2-console/**", "/", "/user/registrationUser", "/comune/getAllPOI", "/comune/viewSelectedPOI",
+                                "/comune/viewContent", "/comune/getAllItineraries", "/comune/viewItinerary").permitAll()
+                        .requestMatchers("/contributor/insertPendingContentToPOI", "/user/atourist/requestChangeRole").hasAnyRole("CONTRIBUTOR", "TURISTAUTENTICATO")
+                        .requestMatchers("/contributor/viewSelectedContestValidatedContents", "/contributor/getAllContests",
+                                "/contibutor/viewSelectedContestValidatedContent").hasAnyRole("CONTRIBUTOR", "TURISTAUTENTICATO")
+                        .requestMatchers("/user/atourist/**").hasRole("TURISTAUTENTICATO")
+                        .requestMatchers("/contests/contributor/**").hasAnyRole("CONTRIBUTOR", "CONTRIBUTORAUTORIZZATO", "ANIMATORE", "CURATORE")
+                        .requestMatchers("/comune/contributor/**").hasRole("CONTRIBUTOR")
+                        .requestMatchers("/comune/acontributor/**").hasAnyRole("CONTRIBUTORAUTORIZZATO", "CURATORE")
+                        .requestMatchers("/contests/animator/**").hasRole("ANIMATORE")
+                        .requestMatchers("/comune/curator/**").hasRole("CURATORE")
+                        .requestMatchers("/comune/gestore/**", "/user/gestore/**").hasRole("GESTORE")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

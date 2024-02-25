@@ -4,12 +4,11 @@ import it.unicam.model.utenti.Role;
 
 public class UtenteAutenticatoGI {
 
-    private final Long id;
-    private final String username;
-    private final String email;
-    private final String password;
-
-    private final Role role;
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+    private Role role;
 
     public UtenteAutenticatoGI(Long id, String username, String email, String password, Role role) {
         this.id = id;
@@ -18,10 +17,26 @@ public class UtenteAutenticatoGI {
         this.password = password;
         this.role = role;
     }
+    public UtenteAutenticatoGI(){
+
+    }
 
     public Long getId() {
         return id;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
 
     @Override
     public String toString() {

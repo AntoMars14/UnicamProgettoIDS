@@ -19,13 +19,11 @@ public class UtentiUtenticatiManager {
     private List<UtenteAutenticato> utenti = new ArrayList<>();
     @OneToMany
     private List<UtenteAutenticato> registrazioniUtenti = new ArrayList<>();
-    public void addUtente(UtenteAutenticato utente){
-        //utente.setId(this.utenti.size()+1);
-        this.utenti.add(utente);
-    }
 
+    public void addUtente(UtenteAutenticato utenteAutenticato) {
+        this.utenti.add(utenteAutenticato);
+    }
     public UtenteAutenticato getUser(Long id){
-        //return this.utenti.get(id-1);
         return this.utenteAutenticatoRepository.findById(id).get();
     }
     public List<UtenteAutenticatoGI> getAllContributors() {
@@ -38,46 +36,37 @@ public class UtentiUtenticatiManager {
     }
 
     public UtenteAutenticatoGI getUserGI(Long id) {
-//        return this.utenti.get(id -1).getGeneralInfoUtenteAutenticato();
         return this.utenteAutenticatoRepository.findById(id).get().getGeneralInfoUtenteAutenticato();
-
     }
 
     public List<UtenteAutenticatoGI> viewAllUsers() {
-        List<UtenteAutenticatoGI> utenti = new ArrayList<>();
-        this.utenteAutenticatoRepository.findAll().forEach(utente -> utenti.add(utente.getGeneralInfoUtenteAutenticato()));
-        return utenti;
-       // return this.utenti.stream().filter(u-> !u.getRole().equals(Role.GESTORE)).map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
+        return this.utenti.stream().filter(u -> !u.getRole().equals(Role.GESTORE)).map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
     }
 
     public void changeRole(Long id, Role role) {
         UtenteAutenticato utente = this.utenteAutenticatoRepository.findById(id).get();
         utente.setRole(role);
         this.utenteAutenticatoRepository.save(utente);
-        //this.utenti.get(id-1).setRole(role);
     }
 
-    public void addRegistrationUser(UtenteAutenticato lastUser) {
-        this.utenteAutenticatoRepository.save(lastUser);
-        //lastUser.setId(this.registrazioniUtenti.size()+1);
-        this.registrazioniUtenti.add(lastUser);
+    public void addRegistrationUser(UtenteAutenticato user) {
+        this.utenteAutenticatoRepository.save(user);
+        this.registrazioniUtenti.add(user);
     }
 
     public List<UtenteAutenticatoGI> viewRegistrationUsers() {
         return this.registrazioniUtenti.stream().map(UtenteAutenticato::getGeneralInfoUtenteAutenticato).toList();
     }
 
-    public UtenteAutenticato getRegistrationUser(int i) {
-        return this.registrazioniUtenti.get(i-1);
+
+    public void approveRegistration(Long id) {
+        this.utenti.add(this.registrazioniUtenti.stream().filter(u -> u.getId().equals(id)).findFirst().get());
+        this.registrazioniUtenti.removeIf(u -> u.getId().equals(id));
     }
 
-    public void approveRegistration(int id) {
-        this.utenti.add(this.registrazioniUtenti.get(id-1));
-        this.registrazioniUtenti.remove(id-1);
-    }
-
-    public void refuseRegistration(int id) {
-        this.registrazioniUtenti.remove(id-1);
+    public void refuseRegistration(Long id) {
+        this.registrazioniUtenti.removeIf(u -> u.getId().equals(id));
+        this.utenteAutenticatoRepository.deleteById(id);
     }
 
     public boolean containsUser(String email, String username) {

@@ -4,6 +4,7 @@ import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
 import it.unicam.repositories.RichiestaRuoloRepository;
+import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -13,30 +14,28 @@ import java.util.List;
 
 @Service
 public class RoleManager {
-//    private List<Integer> changeRoleIDs;
+
     @Autowired
     private RichiestaRuoloRepository richiestaRuoloRepository;
+    @Autowired
     private UtentiUtenticatiManager utentiAutenticatiManager;
+    @Autowired
+    private UtenteAutenticatoRepository utenteAutenticatoRepository;
 
-    public RoleManager(UtentiUtenticatiManager utentiAutenticatiManager) {
-        this.utentiAutenticatiManager = utentiAutenticatiManager;
-//        this.changeRoleIDs = new ArrayList<>();
+    public RoleManager() {
     }
 
     public void requestChangeRole(Long id) {
         this.richiestaRuoloRepository.save(new RichiestaRuolo(id));
-//        this.changeRoleIDs.add(id);
     }
 
     public List<UtenteAutenticatoGI> viewChangeRoleRequests() {
-//        return this.changeRoleIDs.stream().map(id -> this.utentiAutenticatiManager.getUserGI(id)).toList();
         List<UtenteAutenticatoGI> utenti = new ArrayList<>();
         this.richiestaRuoloRepository.findAll().forEach(richiestaRuolo -> utenti.add(this.utentiAutenticatiManager.getUserGI(richiestaRuolo.getIdUtente())));
         return utenti;
     }
 
     public void disapproveRequest(Long id) {
-//        this.changeRoleIDs.remove(Integer.valueOf(id));
         this.richiestaRuoloRepository.findAll().forEach(richiestaRuolo -> {
             if(richiestaRuolo.getIdUtente().equals(id))
                 this.richiestaRuoloRepository.delete(richiestaRuolo);
@@ -50,7 +49,7 @@ public class RoleManager {
             case TURISTAUTENTICATO -> u.setRole(Role.CONTRIBUTOR);
             default -> throw new IllegalArgumentException("Unexpected value: " + u.getRole());
         }
-        this.utentiAutenticatiManager.addUtente(u);
+        this.utenteAutenticatoRepository.save(u);
         this.richiestaRuoloRepository.findAll().forEach(richiestaRuolo -> {
             if(richiestaRuolo.getIdUtente().equals(id))
                 this.richiestaRuoloRepository.delete(richiestaRuolo);

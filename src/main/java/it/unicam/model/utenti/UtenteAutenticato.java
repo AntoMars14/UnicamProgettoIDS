@@ -1,6 +1,6 @@
 package it.unicam.model.utenti;
 
-import it.unicam.controller.Controller;
+import it.unicam.controllersRest.ComuneController;
 import it.unicam.model.util.UtenteAutenticatoGI;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,10 +35,12 @@ public class UtenteAutenticato implements Utente{
         return id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -47,23 +49,11 @@ public class UtenteAutenticato implements Utente{
         return email;
     }
 
+    @Override
     public Role getRole() {
         return role;
     }
 
-
-    @Override
-    public void utenteView(Controller controller) {
-//        this.view =  switch (this.role) {
-//            case ANIMATORE -> new AnimatorView(controller);
-//            case CURATORE -> new CuratorView(controller, this.id);
-//            case CONTRIBUTOR -> new ContributorView(controller, this.id);
-//            case CONTRIBUTORAUTORIZZATO -> new AuthorizedContributorView(controller,this.id);
-//            case TURISTAUTENTICATO -> new AuthenticatedTouristView(controller, this.id);
-//            case GESTORE -> new PlatformManagerView(controller);
-//        };
-//        this.view.getView();
-    }
 
     public UtenteAutenticatoGI getGeneralInfoUtenteAutenticato() {
         return new UtenteAutenticatoGI(this.id, this.username, this.email, this.password, this.role);
