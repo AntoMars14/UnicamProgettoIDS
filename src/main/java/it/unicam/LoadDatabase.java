@@ -1,14 +1,16 @@
 package it.unicam;
 
-import it.unicam.model.UtentiUtenticatiManager;
+import it.unicam.model.Comune;
+import it.unicam.model.Coordinates;
+import it.unicam.model.utenti.UtentiAutenticatiManager;
 import it.unicam.model.utenti.Role;
 import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.repositories.ComuneRepository;
 import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -18,7 +20,7 @@ public class LoadDatabase {
     PasswordEncoder passwordEncoder;
 
      @Bean
-     CommandLineRunner initDatabase(UtenteAutenticatoRepository repository, UtentiUtenticatiManager utentiUtenticatiManager) {
+     CommandLineRunner initDatabase(UtenteAutenticatoRepository repository, UtentiAutenticatiManager utentiAutenticatiManager, ComuneRepository comuneRepository) {
          return args -> {
              UtenteAutenticato u1 = new UtenteAutenticato("giovanni", passwordEncoder.encode("pass"), "giovanni@gmail.it", Role.TURISTAUTENTICATO);
              UtenteAutenticato u2 = new UtenteAutenticato("antonio", passwordEncoder.encode("pass"), "anto@gmail.it", Role.CONTRIBUTOR);
@@ -32,12 +34,13 @@ public class LoadDatabase {
              repository.save(u4);
              repository.save(u5);
              repository.save(u6);
-             utentiUtenticatiManager.addUtente(u1);
-             utentiUtenticatiManager.addUtente(u2);
-             utentiUtenticatiManager.addUtente(u3);
-             utentiUtenticatiManager.addUtente(u4);
-             utentiUtenticatiManager.addUtente(u5);
-             utentiUtenticatiManager.addUtente(u6);
+             utentiAutenticatiManager.addUtente(u1);
+             utentiAutenticatiManager.addUtente(u2);
+             utentiAutenticatiManager.addUtente(u3);
+             utentiAutenticatiManager.addUtente(u4);
+             utentiAutenticatiManager.addUtente(u5);
+             utentiAutenticatiManager.addUtente(u6);
+             comuneRepository.save(new Comune("Camerino",new Coordinates(43.1351,13.0683)));
          };
      }
 

@@ -1,4 +1,4 @@
-package it.unicam.model;
+package it.unicam.model.utenti;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

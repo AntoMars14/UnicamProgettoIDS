@@ -1,7 +1,7 @@
 package it.unicam.model.controllersGRASP;
 
 import it.unicam.model.*;
-import it.unicam.model.utenti.UtenteAutenticato;
+import it.unicam.model.utenti.UtentiAutenticatiManager;
 import it.unicam.model.util.*;
 import it.unicam.repositories.ContestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class ContestController {
     @Autowired
     private ContestManager contestManager;
     @Autowired
-    private UtentiUtenticatiManager utentiUtenticatiManager;
+    private UtentiAutenticatiManager utentiAutenticatiManager;
     @Autowired
     private ContestRepository contestRepository;
 
@@ -27,19 +27,19 @@ public class ContestController {
 
 
     public List<UtenteAutenticatoGI> selectedContestContibutors() {
-        return this.utentiUtenticatiManager.getAllContributors();
+        return this.utentiAutenticatiManager.getAllContributors();
     }
 
     public void inviteContributor(Long id, Long idContributor) {
         Contest contest = this.contestRepository.findById(id).get();
-        contest.inviteContributor(this.utentiUtenticatiManager.getUser(idContributor));
+        contest.inviteContributor(this.utentiAutenticatiManager.getUser(idContributor));
         this.contestRepository.save(contest);
     }
 
     public void partecipateContest(Long id, ContentFD content, Long contributorId) {
         Content c = new Content(content.getNome(), content.getDescrizione(), content.getFile());
         Contest contest = this.contestRepository.findById(id).get();
-        contest.addContent(c, this.utentiUtenticatiManager.getUser(contributorId));
+        contest.addContent(c, this.utentiAutenticatiManager.getUser(contributorId));
         this.contestRepository.save(contest);
     }
 

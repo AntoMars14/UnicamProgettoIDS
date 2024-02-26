@@ -14,7 +14,7 @@ public class DeleteExpiredPOIs {
     private POIRepository poiRepository;
 
 
-    @Scheduled(cron = "0 0 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredPOIs()  {
     this.poiRepository.findAll().forEach(p -> {
         if (p instanceof POIEvento e) {

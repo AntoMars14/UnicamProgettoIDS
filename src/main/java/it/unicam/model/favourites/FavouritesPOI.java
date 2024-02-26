@@ -1,15 +1,16 @@
-package it.unicam.model;
+package it.unicam.model.favourites;
 
+import it.unicam.model.POI;
 import it.unicam.model.utenti.UtenteAutenticato;
 import jakarta.persistence.*;
 
 
 @Entity
-public class FavoritesPOI {
+public class FavouritesPOI {
     @EmbeddedId
-    private FavoritesPOIId id;
+    private FavouritesPOIId id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @MapsId("POIId")
     private POI poi;
 
@@ -18,13 +19,13 @@ public class FavoritesPOI {
     private UtenteAutenticato user;
 
 
-    public FavoritesPOI(POI poi, UtenteAutenticato contributor) {
+    public FavouritesPOI(POI poi, UtenteAutenticato contributor) {
         this.poi = poi;
         this.user = contributor;
-        this.id = new FavoritesPOIId(poi.getPOIId(), contributor.getId());
+        this.id = new FavouritesPOIId(poi.getPOIId(), contributor.getId());
     }
 
-    public FavoritesPOI() {
+    public FavouritesPOI() {
 
     }
 
@@ -36,7 +37,7 @@ public class FavoritesPOI {
         return poi;
     }
 
-    public FavoritesPOIId getId() {
+    public FavouritesPOIId getId() {
         return id;
     }
 }

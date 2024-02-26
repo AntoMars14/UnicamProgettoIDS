@@ -2,6 +2,7 @@ package it.unicam.controllersRest;
 
 import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
+import it.unicam.model.favourites.FavouritesManager;
 import it.unicam.model.util.*;
 import it.unicam.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class ComuneController {
     private ContentController contentController;
     @Autowired
     private ViewController viewController;
+    @Autowired
+    private FavouritesManager favouritesManager;
 
 
     @PostMapping("/gestore/addComune")
@@ -218,13 +221,17 @@ public class ComuneController {
         if (viewController.viewSelectedPOI(idComune, id) == null)
            return new ResponseEntity<>("Errore: POI non trovato", HttpStatus.BAD_REQUEST);
         Comune c = this.comuneRepository.findById(idComune).get();
+        this.favouritesManager.deletePOI(id);
         c.deletePOI(id);
-       this.comuneRepository.save(c);
+        for(Long i : c.notItinerary()){
+            this.favouritesManager.deleteItinerary(i);
+        }
+        c.deleteNotItinerary();
+        this.comuneRepository.save(c);
         this.itineraryRepository.findAll().forEach(i -> {
             if(i.getPOIs().size() < 2)
                 this.itineraryRepository.deleteById(i.getId());
        });
-        //this.favouritesManager.deletePOI(id);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
@@ -234,8 +241,8 @@ public class ComuneController {
             return new ResponseEntity<>("Errore: Itinerario non trovato", HttpStatus.BAD_REQUEST);
         Comune c = this.comuneRepository.findById(idComune).get();
         c.deleteItinerary(id);
+        this.favouritesManager.deleteItinerary(id);
         this.comuneRepository.save(c);
-        //this.favouritesManager.deleteItinerary(id);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 

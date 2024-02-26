@@ -1,12 +1,9 @@
-package it.unicam.model;
+package it.unicam.model.utenti;
 
-import it.unicam.model.utenti.Role;
-import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.UtenteAutenticatoGI;
 import it.unicam.repositories.RichiestaRuoloRepository;
 import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ public class RoleManager {
     @Autowired
     private RichiestaRuoloRepository richiestaRuoloRepository;
     @Autowired
-    private UtentiUtenticatiManager utentiAutenticatiManager;
+    private UtentiAutenticatiManager utentiAutenticatiManager;
     @Autowired
     private UtenteAutenticatoRepository utenteAutenticatoRepository;
 

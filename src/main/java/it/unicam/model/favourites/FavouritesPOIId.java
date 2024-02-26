@@ -1,20 +1,20 @@
-package it.unicam.model;
+package it.unicam.model.favourites;
 
 import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 
 @Embeddable
-public class FavoritesPOIId implements Serializable {
+public class FavouritesPOIId implements Serializable {
     private Long POIId;
     private Long userId;
 
-    public FavoritesPOIId(Long POIId, Long userId) {
+    public FavouritesPOIId(Long POIId, Long userId) {
         this.POIId = POIId;
         this.userId = userId;
     }
 
-    public FavoritesPOIId() {
+    public FavouritesPOIId() {
 
     }
 

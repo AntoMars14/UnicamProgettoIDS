@@ -1,14 +1,15 @@
-package it.unicam.model;
+package it.unicam.model.favourites;
 
+import it.unicam.model.Itinerary;
 import it.unicam.model.utenti.UtenteAutenticato;
 import jakarta.persistence.*;
 
 @Entity
-public class FavoritesItinerary {
+public class FavouritesItinerary {
     @EmbeddedId
-    private FavoritesItineraryId id;
+    private FavouritesItineraryId id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @MapsId("itineraryId")
     private Itinerary itinerary;
 
@@ -17,13 +18,13 @@ public class FavoritesItinerary {
     private UtenteAutenticato user;
 
 
-    public FavoritesItinerary(Itinerary itinerary, UtenteAutenticato contributor) {
+    public FavouritesItinerary(Itinerary itinerary, UtenteAutenticato contributor) {
         this.itinerary = itinerary;
         this.user = contributor;
-        this.id = new FavoritesItineraryId(itinerary.getId(), contributor.getId());
+        this.id = new FavouritesItineraryId(itinerary.getId(), contributor.getId());
     }
 
-    public FavoritesItinerary() {
+    public FavouritesItinerary() {
 
     }
 
@@ -35,7 +36,7 @@ public class FavoritesItinerary {
         return itinerary;
     }
 
-    public FavoritesItineraryId getId() {
+    public FavouritesItineraryId getId() {
         return id;
     }
 }

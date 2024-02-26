@@ -1,4 +1,5 @@
 package it.unicam.model.util.tasks;
+import it.unicam.repositories.ComuneRepository;
 import it.unicam.repositories.ItineraryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,11 +14,14 @@ public class DeleteExpiredItineraries {
     @Autowired
     private ItineraryRepository itineraryRepository;
 
-    @Scheduled(cron = "0 0 * * *")
+
+    @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredItineraries(){
         this.itineraryRepository.findAll().forEach(i -> {
-            if (i.getClosetDate().isBefore(LocalDateTime.now())) {
-                this.itineraryRepository.delete(i);
+            if(i.getClosetDate() != null){
+                if (i.getClosetDate().isBefore(LocalDateTime.now())) {
+                    this.itineraryRepository.delete(i);
+                }
             }
         });
     }

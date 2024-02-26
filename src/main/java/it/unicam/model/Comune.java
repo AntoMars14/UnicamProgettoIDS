@@ -1,4 +1,5 @@
 package it.unicam.model;
+import it.unicam.model.favourites.FavouritesManager;
 import it.unicam.model.util.*;
 import it.unicam.repositories.ContentRepository;
 import it.unicam.repositories.ItineraryRepository;
@@ -116,7 +117,7 @@ public class Comune {
     }
 
     public POI getPOI(Long i) {
-        return this.POIValidate.stream().filter(p -> p.getPOIId().equals(i)).findFirst().get();
+        return this.POIValidate.stream().filter(p -> p.getPOIId().equals(i)).findFirst().orElse(null);
     }
 
     public void insertPendingItinerary(Itinerary itinerary) {
@@ -170,9 +171,15 @@ public class Comune {
     public void deletePOI(Long id) {
         this.itineraries.stream().forEach(itinerary -> itinerary.getPOIs().removeIf(p -> p.getPOIId().equals(id)));
         this.itinerariesPending.stream().forEach(itinerary -> itinerary.getPOIs().removeIf(p -> p.getPOIId().equals(id)));
+        this.POIValidate.removeIf(poi -> poi.getPOIId().equals(id));
+    }
+
+    public List<Long> notItinerary(){
+        return this.itineraries.stream().filter(i -> i.getPOIs().size() < 2).map(i -> i.getId()).toList();
+    }
+    public void deleteNotItinerary(){
         this.itineraries.removeIf(i -> i.getPOIs().size() < 2);
         this.itinerariesPending.removeIf(i -> i.getPOIs().size() < 2);
-        this.POIValidate.removeIf(poi -> poi.getPOIId().equals(id));
     }
 
     public void deleteItinerary(Long id) {
@@ -226,15 +233,7 @@ public class Comune {
         this.itinerariesPending.removeIf(itinerary -> itinerary.getId().equals(id));
     }
 
-    public List<POIEvento> getAllPOIEvento() {
-        return this.POIValidate.stream().filter(p -> p instanceof POIEvento).map(p -> (POIEvento) p).toList();
-    }
-
-    public List<Itinerary> getAllItinerariesWithValidity() {
-        return this.itineraries.stream().filter(i -> i.getClosetDate()!=null).toList();
-    }
-
-    public Itinerary getItinerary(int itineraryId) {
-        return this.itineraries.get(itineraryId-1);
+    public Itinerary getItinerary(Long itineraryId) {
+        return this.itineraries.stream().filter(i -> i.getId().equals(itineraryId)).findFirst().orElse(null);
     }
 }
