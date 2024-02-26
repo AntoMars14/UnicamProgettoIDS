@@ -1,15 +1,24 @@
 package it.unicam.model.util.tasks;
-import it.unicam.model.Comune;
+import it.unicam.repositories.ItineraryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-public class DeleteExpiredItineraries implements Runnable{
-    private Comune comune;
-    public DeleteExpiredItineraries(Comune comune) {
-        this.comune = comune;
-    }
 
-    @Override
-    public void run() {
-//        comune.getAllItinerariesWithValidity().stream().filter(i -> i.getClosetDate().isBefore(LocalDateTime.now())).forEach(i -> comune.deleteItinerary(i.getId()));
+
+@Component
+public class DeleteExpiredItineraries {
+
+    @Autowired
+    private ItineraryRepository itineraryRepository;
+
+    @Scheduled(cron = "0 0 * * *")
+    public void deleteExpiredItineraries(){
+        this.itineraryRepository.findAll().forEach(i -> {
+            if (i.getClosetDate().isBefore(LocalDateTime.now())) {
+                this.itineraryRepository.delete(i);
+            }
+        });
     }
 }
