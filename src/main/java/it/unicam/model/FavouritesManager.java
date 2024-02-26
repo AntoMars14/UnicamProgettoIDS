@@ -2,7 +2,9 @@ package it.unicam.model;
 
 import it.unicam.model.util.ItineraryGI;
 import it.unicam.model.util.POIGI;
+import it.unicam.repositories.FavoritesItineraryRepository;
 import it.unicam.repositories.FavoritesPOIRepository;
+import it.unicam.repositories.ItineraryRepository;
 import it.unicam.repositories.POIRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,16 +20,15 @@ public class FavouritesManager {
     @Autowired
     private FavoritesPOIRepository favoritesPOIRepository;
     //private Map<Integer, List<POI>> favouritesPOI;
-    private Map<Integer, List<Itinerary>> favouritesItinerary;
+   // private Map<Integer, List<Itinerary>> favouritesItinerary;
+    @Autowired
+    private FavoritesItineraryRepository favoritesItineraryRepository;
     @Autowired
     private POIRepository poiRepository;
     @Autowired
+    private ItineraryRepository itineraryRepository;
+    @Autowired
     private UtentiUtenticatiManager utentiUtenticatiManager;
-
-    public FavouritesManager() {
-        //this.favouritesPOI = new HashMap<>();
-        this.favouritesItinerary = new HashMap<>();
-    }
 
     public boolean addPOIToFavorites(Long id, Long POIid, Long idComune) {
         if (!this.favoritesPOIRepository.existsById(new FavoritesPOIId(POIid, id))) {
@@ -49,7 +50,15 @@ public class FavouritesManager {
 
      */
 
-    public boolean addItineraryToFavorites(int id, int itineraryId, Comune comune) {
+    public boolean addItineraryToFavorites(Long id, Long itineraryId, Long idComune) {
+        if (!this.favoritesItineraryRepository.existsById(new FavoritesItineraryId(itineraryId, id))) {
+            this.favoritesItineraryRepository.save(new FavoritesItinerary(this.itineraryRepository.findById(itineraryId).get(), this.utentiUtenticatiManager.getUser(id)));
+            return true;
+        }
+        return false;
+    }
+
+    /*public boolean addItineraryToFavorites(int id, int itineraryId, Comune comune) {
         if (!this.favouritesItinerary.containsKey(id)) {
             this.favouritesItinerary.put(id, new ArrayList<>());
         }
@@ -59,6 +68,8 @@ public class FavouritesManager {
         this.favouritesItinerary.get(id).add(comune.getItinerary(itineraryId));
           return true;
     }
+
+     */
 
 
     public List<POIGI> getAllFavouritesPOI(Long id) {
@@ -74,9 +85,21 @@ public class FavouritesManager {
 //        return this.favouritesPOI.get(id).stream().map(p -> p.getPOIGeneralInfo()).toList();
 //    }
 
-    public List<ItineraryGI> getAllFavouritesItinerary(int id) {
+    public List<ItineraryGI> getAllFavouritesItinerary(Long id) {
+        List<ItineraryGI> list = new ArrayList<>();
+        this.favoritesItineraryRepository.findAll().forEach(f -> {
+            if (f.getId().getUserId().equals(id)) {
+                list.add(f.getItinerary().getGeneralInfoItinerary());
+            }
+        });
+        return list;
+    }
+
+    /* public List<ItineraryGI> getAllFavouritesItinerary(int id) {
         return this.favouritesItinerary.get(id).stream().map(i -> i.getGeneralInfoItinerary()).toList();
     }
+
+     */
 
 //    public void deletePOI(int id) {
 //        this.favouritesPOI.values().stream().forEach(p -> p.removeIf(poi -> poi.getPOIId() == id));
@@ -84,7 +107,7 @@ public class FavouritesManager {
 //    }
 
     public void deleteItinerary(int id) {
-        this.favouritesItinerary.values().stream().forEach(i -> i.removeIf(itinerary -> itinerary.getId() == id));
+       // this.favouritesItinerary.values().stream().forEach(i -> i.removeIf(itinerary -> itinerary.getId() == id));
 //        this.favouritesItinerary.values().stream().forEach(i -> i.stream().filter(it -> it.getId() > id).forEach(it -> it.setId(it.getId() - 1)));
     }
 

@@ -40,6 +40,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/addItineraryToFavorites")
+    public ResponseEntity<Object> addItineraryToFavorites(Authentication authentication, @RequestParam("itineraryId") Long itineraryId, @RequestParam("idComune") Long idComune) {
+        Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
+        if (this.favouritesManager.addItineraryToFavorites(id, itineraryId, idComune)) {
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Itinerario già presente tra i preferiti o inesistente", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
    /* public boolean addPOIToFavorites(int id, int POIid) {
         return this.favouritesManager.addPOIToFavorites(id, POIid, this.comune);
     }
@@ -59,10 +70,15 @@ public class UserController {
 
      */
 
-    public List<ItineraryGI> viewFavoritesItineraries(int id) {
+    @GetMapping("/viewFavoritesItineraries")
+    public ResponseEntity<Object> viewFavoritesItineraries(Authentication authentication) {
+        Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
+        return new ResponseEntity<>(this.favouritesManager.getAllFavouritesItinerary(id), HttpStatus.OK);
+    }
+   /* public List<ItineraryGI> viewFavoritesItineraries(int id) {
         return this.favouritesManager.getAllFavouritesItinerary(id);
     }
-
+    */
     @PostMapping("/atourist/requestChangeRole")
     public ResponseEntity<Object> requestChangeRole(Authentication authentication) {
         Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
