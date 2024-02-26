@@ -1,8 +1,8 @@
 package it.unicam.model.favourites;
 
 import it.unicam.model.utenti.UtentiAutenticatiManager;
-import it.unicam.model.util.ItineraryGI;
-import it.unicam.model.util.POIGI;
+import it.unicam.model.util.dtos.ItineraryGI;
+import it.unicam.model.util.dtos.POIGI;
 import it.unicam.repositories.FavouritesItineraryRepository;
 import it.unicam.repositories.FavouritesPOIRepository;
 import it.unicam.repositories.ItineraryRepository;

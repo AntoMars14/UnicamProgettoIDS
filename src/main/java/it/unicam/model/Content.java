@@ -1,11 +1,8 @@
 package it.unicam.model;
 
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.ContentGI;
+import it.unicam.model.util.dtos.ContentFD;
+import it.unicam.model.util.dtos.ContentGI;
 import jakarta.persistence.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Entity
 public class Content {

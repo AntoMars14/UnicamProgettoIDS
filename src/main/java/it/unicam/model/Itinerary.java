@@ -1,7 +1,7 @@
 package it.unicam.model;
 
-import it.unicam.model.util.ItineraryFD;
-import it.unicam.model.util.ItineraryGI;
+import it.unicam.model.util.dtos.ItineraryFD;
+import it.unicam.model.util.dtos.ItineraryGI;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

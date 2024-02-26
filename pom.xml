@@ -16,14 +16,6 @@
         <java.version>21</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>josm-public</id>
-            <name>josm public releases</name>
-            <url>https://josm.openstreetmap.de/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,9 +57,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openstreetmap.jmapviewer</groupId>
-            <artifactId>jmapviewer</artifactId>
-            <version>2.16</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>

@@ -3,8 +3,12 @@ package it.unicam.controllersRest;
 import it.unicam.model.*;
 import it.unicam.model.controllersGRASP.*;
 import it.unicam.model.favourites.FavouritesManager;
-import it.unicam.model.util.*;
+import it.unicam.model.util.dtos.ComuneGI;
+import it.unicam.model.util.dtos.ContentFD;
+import it.unicam.model.util.dtos.ItineraryFD;
+import it.unicam.model.util.dtos.POIFD;
 import it.unicam.repositories.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +41,9 @@ public class ComuneController {
 
 
     @PostMapping("/gestore/addComune")
-    public ResponseEntity<Object> addComune(@RequestBody Comune c){
-        //c.insertPOI(new POILuogo());
-        comuneRepository.save(c);
+    public ResponseEntity<Object> addComune(@Valid @RequestBody ComuneGI c){
+        Comune comune = new Comune(c.getNome(), c.getCoordinates());
+        comuneRepository.save(comune);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
@@ -68,7 +72,7 @@ public class ComuneController {
     }
 
     @PostMapping("/acontributor/insertPOI")
-    public ResponseEntity<Object> insertPOI(@RequestParam("idComune") Long idComune, @RequestPart("poi") POIFD p) {
+    public ResponseEntity<Object> insertPOI(@RequestParam("idComune") Long idComune, @Valid @RequestPart("poi") POIFD p) {
         POIFactory pf;
         switch (p.getType()){
             case Type.LUOGO -> pf = new POILuogoFactory();
@@ -85,7 +89,7 @@ public class ComuneController {
     }
 
     @PostMapping("/contributor/insertPOIPending")
-    public ResponseEntity<Object> insertPOIPending(@RequestParam("idComune") Long idComune, @RequestPart("poi") POIFD p) {
+    public ResponseEntity<Object> insertPOIPending(@RequestParam("idComune") Long idComune, @Valid @RequestPart("poi") POIFD p) {
         POIFactory pf;
         switch (p.getType()){
             case Type.LUOGO -> pf = new POILuogoFactory();
@@ -102,7 +106,7 @@ public class ComuneController {
     }
 
     @PostMapping("/acontributor/createItinerary")
-    public ResponseEntity<Object> createItinerary(@RequestParam("idComune") Long idComune, @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
+    public ResponseEntity<Object> createItinerary(@RequestParam("idComune") Long idComune, @Valid @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
         if(pois.length < 2)
             return new ResponseEntity<>("Errore: Itinerario deve contenere almeno 2 POI", HttpStatus.BAD_REQUEST);
         for (Long poi : pois) {
@@ -114,7 +118,7 @@ public class ComuneController {
     }
 
     @PostMapping("/contributor/createPendingItinerary")
-    public ResponseEntity<Object> createPendingItinerary(@RequestParam("idComune") Long idComune, @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
+    public ResponseEntity<Object> createPendingItinerary(@RequestParam("idComune") Long idComune, @Valid @RequestPart("itinerary") ItineraryFD i, @RequestParam("pois") Long [] pois) {
         if(pois.length < 2)
             return new ResponseEntity<>("Errore: Itinerario deve contenere almeno 2 POI", HttpStatus.BAD_REQUEST);
         for (Long poi : pois) {
@@ -194,23 +198,27 @@ public class ComuneController {
 
 
     @PostMapping("/acontributor/insertContentToPOI")
-    public ResponseEntity<Object> insertContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Object> insertContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @Valid @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
         try {
             c.addFile(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if(viewController.viewSelectedPOI(idComune, id) == null)
+            return new ResponseEntity<>("Errore: POI non trovato", HttpStatus.BAD_REQUEST);
         contentController.insertContentToPOI(idComune, id, c);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @PostMapping("/contributor/insertPendingContentToPOI")
-    public ResponseEntity<Object> insertPendingContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
+    public ResponseEntity<Object> insertPendingContentToPOI(@RequestParam("idComune") Long idComune, @RequestParam("idPOI") Long id, @Valid @RequestPart("content") ContentFD c, @RequestPart("file") MultipartFile file) {
         try {
             c.addFile(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if(viewController.viewSelectedPOI(idComune, id) == null)
+            return new ResponseEntity<>("Errore: POI non trovato", HttpStatus.BAD_REQUEST);
         contentController.insertPendingContentToPOI(idComune, id, c);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }

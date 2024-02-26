@@ -1,21 +1,28 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
 import it.unicam.model.Coordinates;
 import it.unicam.model.Type;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import java.net.Proxy;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class POIFD {
     private Long id;
+    @NotNull
+    @NotBlank
     private String name;
+    @NotNull
+    @NotBlank
     private String description;
+    @NotNull
     private Type type;
+    @NotNull
     private Coordinates coordinates;
     private LocalTime[] openingTime;
     private LocalTime[] closingTime;
@@ -25,20 +32,6 @@ public class POIFD {
     private List<ContentGI> pendingContentsGI;
 
     public POIFD(){
-    }
-
-    public POIFD(String name, String description, Coordinates coord) {
-        this.name = name;
-        this.description = description;
-        this.coordinates = coord;
-        this.type = Type.LUOGO;
-        this.openingDate = null;
-        this.closingDate = null;
-        this.openingTime = null;
-        this.closingTime = null;
-        this.contentsGI = null;
-        this.pendingContentsGI = null;
-        this.id = null;
     }
 
     public POIFD(Long id, String name, String description, Coordinates coord, Type type, List<ContentGI> contentsGI, List<ContentGI> pendingContentsGI) {

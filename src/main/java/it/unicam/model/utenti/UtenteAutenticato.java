@@ -1,7 +1,6 @@
 package it.unicam.model.utenti;
 
-import it.unicam.controllersRest.ComuneController;
-import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.model.util.dtos.UtenteAutenticatoGI;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

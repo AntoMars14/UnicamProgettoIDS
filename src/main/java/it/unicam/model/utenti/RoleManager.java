@@ -1,6 +1,6 @@
 package it.unicam.model.utenti;
 
-import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.model.util.dtos.UtenteAutenticatoGI;
 import it.unicam.repositories.RichiestaRuoloRepository;
 import it.unicam.repositories.UtenteAutenticatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

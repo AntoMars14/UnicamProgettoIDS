@@ -1,12 +1,8 @@
 package it.unicam.model.utenti;
 
-import it.unicam.model.utenti.Role;
-import it.unicam.model.utenti.UtenteAutenticato;
-import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.model.util.dtos.UtenteAutenticatoGI;
 import it.unicam.repositories.UtenteAutenticatoRepository;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
-import org.hibernate.engine.internal.Cascade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

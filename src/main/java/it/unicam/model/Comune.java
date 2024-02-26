@@ -1,23 +1,13 @@
 package it.unicam.model;
-import it.unicam.model.favourites.FavouritesManager;
-import it.unicam.model.util.*;
-import it.unicam.repositories.ContentRepository;
-import it.unicam.repositories.ItineraryRepository;
-import it.unicam.repositories.POIRepository;
+import it.unicam.model.util.dtos.*;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 @Entity
 public class Comune {
@@ -46,7 +36,7 @@ public class Comune {
         this.name = name;
         this.coordinates = coord;
         POILuogo comune = new POILuogo(coord);
-        comune.insertPOIInfo(name, "Questo è il comune");
+        comune.insertPOIInfo(name, "Questo è il punto di interesse logico del Comune di "+name);
         this.insertPOI(comune);
     }
 

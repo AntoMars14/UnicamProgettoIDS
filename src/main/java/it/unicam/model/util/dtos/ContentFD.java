@@ -1,11 +1,16 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
-import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ContentFD {
     private Long id;
+    @NotNull
+    @NotBlank
     private String nome;
+    @NotNull
+    @NotBlank
     private String descrizione;
     private byte[] file;
 

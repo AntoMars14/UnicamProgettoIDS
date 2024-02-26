@@ -1,17 +1,10 @@
 package it.unicam.model.controllersGRASP;
 
 import it.unicam.model.*;
-import it.unicam.model.util.POIFD;
-import it.unicam.model.util.POIGI;
+import it.unicam.model.util.dtos.POIFD;
 import it.unicam.repositories.ComuneRepository;
-import it.unicam.repositories.POIRepository;
-import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 
 @Service
 public class POIController {

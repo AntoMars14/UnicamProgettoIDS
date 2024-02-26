@@ -1,11 +1,20 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ContestGI {
 
     private Long contestId;
+    @NotNull
+    @NotBlank
     private String name;
+    @NotNull
+    @NotBlank
     private String objective;
+    @NotNull
     private boolean onInvite;
+    @NotNull
     private boolean isClosed;
 
     public ContestGI(Long contestId, String name, String objective, boolean onInvite, boolean isClosed) {
@@ -38,6 +47,7 @@ public class ContestGI {
     public boolean isClosed() {
         return isClosed;
     }
+
     public void isOnInvite(boolean onInvite) {
         this.onInvite = onInvite;
     }

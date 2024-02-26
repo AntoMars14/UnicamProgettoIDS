@@ -1,7 +1,7 @@
 package it.unicam.model;
 
-import it.unicam.model.util.ContentGI;
-import it.unicam.model.util.ContestGI;
+import it.unicam.model.util.dtos.ContentGI;
+import it.unicam.model.util.dtos.ContestGI;
 import it.unicam.repositories.ContestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

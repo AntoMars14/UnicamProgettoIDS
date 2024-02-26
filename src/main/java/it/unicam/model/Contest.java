@@ -1,11 +1,10 @@
 package it.unicam.model;
 
 import it.unicam.model.utenti.UtenteAutenticato;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.ContentGI;
-import it.unicam.model.util.ContestGI;
+import it.unicam.model.util.dtos.ContentFD;
+import it.unicam.model.util.dtos.ContentGI;
+import it.unicam.model.util.dtos.ContestGI;
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 

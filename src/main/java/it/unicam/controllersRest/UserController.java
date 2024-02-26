@@ -79,6 +79,9 @@ public class UserController {
     @PostMapping("/atourist/requestChangeRole")
     public ResponseEntity<Object> requestChangeRole(Authentication authentication) {
         Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
+        if(this.roleManager.viewChangeRoleRequests().stream().filter(x -> x.getId().equals(id)).count() > 0){
+            return new ResponseEntity<>("Richiesta già inviata", HttpStatus.BAD_REQUEST);
+        }
         this.roleManager.requestChangeRole(id);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }

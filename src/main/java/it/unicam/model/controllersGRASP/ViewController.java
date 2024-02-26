@@ -1,12 +1,9 @@
 package it.unicam.model.controllersGRASP;
 
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.ItineraryFD;
-import it.unicam.model.util.POIFD;
+import it.unicam.model.util.dtos.ContentFD;
+import it.unicam.model.util.dtos.ItineraryFD;
+import it.unicam.model.util.dtos.POIFD;
 import it.unicam.repositories.ComuneRepository;
-import it.unicam.repositories.ContentRepository;
-import it.unicam.repositories.ItineraryRepository;
-import it.unicam.repositories.POIRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

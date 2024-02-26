@@ -2,10 +2,11 @@ package it.unicam.controllersRest;
 
 import it.unicam.model.ContestManager;
 import it.unicam.model.controllersGRASP.ContestController;
-import it.unicam.model.util.ContentFD;
-import it.unicam.model.util.ContestGI;
-import it.unicam.model.util.UtenteAutenticatoGI;
+import it.unicam.model.util.dtos.ContentFD;
+import it.unicam.model.util.dtos.ContestGI;
+import it.unicam.model.util.dtos.UtenteAutenticatoGI;
 import it.unicam.repositories.UtenteAutenticatoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ContestsController {
     private UtenteAutenticatoRepository utenteAutenticatoRepository;
 
     @PostMapping("/animator/createContest")
-    public ResponseEntity<Object> createContest(@RequestBody ContestGI c){
+    public ResponseEntity<Object> createContest(@Valid @RequestBody ContestGI c){
         this.contestController.createContest(c);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
@@ -67,7 +68,7 @@ public class ContestsController {
     }
 
     @PostMapping("/contributor/partecipateContest")
-    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, Authentication authentication) {
+    public ResponseEntity<Object> partecipateContest(@RequestParam("id") Long id, @Valid @RequestPart("content") ContentFD content, @RequestParam("file") MultipartFile f, Authentication authentication) {
         Long contributorId = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
         if(this.contestManager.getContest(id).isClosed())
             return new ResponseEntity<>("Contest closed", HttpStatus.BAD_REQUEST);

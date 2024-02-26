@@ -1,4 +1,4 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
 import it.unicam.model.Coordinates;
 import it.unicam.model.Type;
@@ -38,9 +38,6 @@ public class POIGI {
         return coordinates;
     }
 
-    public Type getContentsGI() {
-        return type;
-    }
 
     @Override
     public String toString() {

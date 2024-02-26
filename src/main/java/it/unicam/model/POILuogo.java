@@ -1,12 +1,10 @@
 package it.unicam.model;
 
-import it.unicam.model.util.ContentGI;
-import it.unicam.model.util.POIFD;
-import it.unicam.model.util.POIGI;
-import jakarta.persistence.Basic;
+import it.unicam.model.util.dtos.ContentGI;
+import it.unicam.model.util.dtos.POIFD;
+import it.unicam.model.util.dtos.POIGI;
 import jakarta.persistence.Entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

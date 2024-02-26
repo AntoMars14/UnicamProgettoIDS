@@ -1,4 +1,4 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
 public class ContentGI {
     private final Long id;

@@ -1,32 +1,21 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class ItineraryFD {
+public class ItineraryGI {
     private final Long id;
     private final String nome;
     private final String descrizione;
-    private final List<POIGI> POIGIs;
     private final LocalDateTime startDate;
     private final LocalDateTime closetDate;
 
-
-    public ItineraryFD(Long id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate, List<POIGI> POIGIs) {
+    public ItineraryGI(Long id, String nome, String descrizione, LocalDateTime startDate, LocalDateTime closetDate) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
-        this.POIGIs = POIGIs;
         this.startDate = startDate;
         this.closetDate = closetDate;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getNome() {
@@ -37,8 +26,8 @@ public class ItineraryFD {
         return descrizione;
     }
 
-    public List<POIGI> getPOIGIs() {
-        return POIGIs;
+    public Long getId() {
+        return id;
     }
 
     public LocalDateTime getStartDate() {
@@ -59,8 +48,7 @@ public class ItineraryFD {
                     "Data di chiusura: "+this.closetDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         }
         return "Id= " + id + " Nome= " + nome +
-                "\nDescrizione= " + descrizione +
-                "\n"+s+
-                "\n"+"POI:\n"+POIGIs.stream().map(poigi -> poigi.toString()).collect(Collectors.joining("\n"));
+                "\nDescrizione= " + descrizione+
+                "\n"+s;
     }
 }

@@ -1,4 +1,4 @@
-package it.unicam.model.util;
+package it.unicam.model.util.dtos;
 
 import it.unicam.model.utenti.Role;
 
