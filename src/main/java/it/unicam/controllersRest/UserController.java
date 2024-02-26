@@ -21,6 +21,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UtenteAutenticatoRepository utenteAutenticatoRepository;
+    @Autowired
     private FavouritesManager favouritesManager;
     @Autowired
     private RoleManager roleManager;
@@ -29,6 +30,15 @@ public class UserController {
     @Autowired
     private RegistrationController registrationController;
 
+    @PostMapping("/addPOIToFavorites")
+    public ResponseEntity<Object> addPOIToFavorites(Authentication authentication, @RequestParam("POIid") Long POIid, @RequestParam("idComune") Long idComune) {
+        Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
+        if (this.favouritesManager.addPOIToFavorites(id, POIid, idComune)) {
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("POI già presente tra i preferiti o inesistente", HttpStatus.BAD_REQUEST);
+        }
+    }
 
    /* public boolean addPOIToFavorites(int id, int POIid) {
         return this.favouritesManager.addPOIToFavorites(id, POIid, this.comune);
@@ -38,9 +48,16 @@ public class UserController {
        return this.favouritesManager.addItineraryToFavorites(id, itineraryId, this.comune);
     }*/
 
-    public List<POIGI> viewFavoritesPOIs(int id) {
+    @GetMapping("/viewFavoritesPOIs")
+    public ResponseEntity<Object> viewFavoritesPOIs(Authentication authentication) {
+        Long id = this.utenteAutenticatoRepository.findByUsername(authentication.getName()).getId();
+        return new ResponseEntity<>(this.favouritesManager.getAllFavouritesPOI(id), HttpStatus.OK);
+    }
+    /*public List<POIGI> viewFavoritesPOIs(int id) {
         return this.favouritesManager.getAllFavouritesPOI(id);
     }
+
+     */
 
     public List<ItineraryGI> viewFavoritesItineraries(int id) {
         return this.favouritesManager.getAllFavouritesItinerary(id);
