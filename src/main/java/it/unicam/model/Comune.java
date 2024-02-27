@@ -40,6 +40,10 @@ public class Comune {
         this.insertPOI(comune);
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
     public void insertPOI(POI p) {
         this.POIValidate.add(p);
     }

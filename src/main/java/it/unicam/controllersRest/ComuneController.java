@@ -9,11 +9,14 @@ import it.unicam.model.util.dtos.ItineraryFD;
 import it.unicam.model.util.dtos.POIFD;
 import it.unicam.repositories.*;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 
@@ -343,4 +346,14 @@ public class ComuneController {
             return new ResponseEntity<>("ok", HttpStatus.OK);
         }
     }
+
+    @RequestMapping(value = "/map", method = RequestMethod.GET)
+    public ModelAndView getMap(@PathParam("idComune") Long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.getModelMap().addAttribute("latitudine", this.comuneRepository.findById(id).get().getCoordinates().getLat());
+        modelAndView.getModelMap().addAttribute("longitudine",this.comuneRepository.findById(id).get().getCoordinates().getLon());
+        modelAndView.setViewName("OpenStreetMap");
+        return modelAndView;
+    }
+
 }

@@ -32,7 +32,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/h2-console/**", "/", "/user/registrationUser", "/comune/getAllPOI", "/comune/viewSelectedPOI",
-                                "/comune/viewContent", "/comune/getAllItineraries", "/comune/viewItinerary").permitAll()
+                                "/comune/viewContent", "/comune/getAllItineraries", "/comune/viewItinerary", "/comune/map/**").permitAll()
                         .requestMatchers("/contributor/insertPendingContentToPOI", "/user/atourist/requestChangeRole").hasAnyRole("CONTRIBUTOR", "TURISTAUTENTICATO")
                         .requestMatchers("/contributor/viewSelectedContestValidatedContents", "/contributor/getAllContests",
                                 "/contibutor/viewSelectedContestValidatedContent").hasAnyRole("CONTRIBUTOR", "TURISTAUTENTICATO")
