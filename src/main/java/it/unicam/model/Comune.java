@@ -236,4 +236,8 @@ public class Comune {
     public List<POI> expiredPOIEvento(){
         return this.POIValidate.stream().filter(p -> p instanceof POIEvento e && e.getClosingDate().isBefore(LocalDateTime.now())).toList();
     }
+
+    public List <Itinerary> expiredItineraries(){
+        return this.itineraries.stream().filter(i -> i.getClosetDate() != null && i.getClosetDate().isBefore(LocalDateTime.now())).toList();
+    }
 }
