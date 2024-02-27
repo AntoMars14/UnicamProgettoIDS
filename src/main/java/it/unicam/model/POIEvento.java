@@ -61,11 +61,6 @@ public class POIEvento extends POI{
         this.closingDate = closingDate;
     }
 
-    /*@Override
-    public void setPOIId(int POIId) {
-        super.setPOIId(POIId);
-    }*/
-
     @Override
     public void setType(Type type) {
         super.setType(type);

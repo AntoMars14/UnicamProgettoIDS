@@ -66,10 +66,6 @@ public class Itinerary {
         return id;
     }
 
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-
 
     public ItineraryGI getGeneralInfoItinerary(){
         return new ItineraryGI(this.id, this.nome, this.descrizione, this.startDate, this.closetDate);

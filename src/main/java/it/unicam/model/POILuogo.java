@@ -60,11 +60,6 @@ public class POILuogo extends  POI{
         super.addContent(c);
     }
 
-    /*@Override
-    public void setPOIId(int POIId) {
-        super.setPOIId(POIId);
-    }*/
-
     @Override
     public void insertPOIInfo(String name, String description){
         if(name == null || description == null) throw new NullPointerException("Info null");

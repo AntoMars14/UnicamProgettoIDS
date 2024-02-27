@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -229,5 +231,9 @@ public class Comune {
 
     public Itinerary getItinerary(Long itineraryId) {
         return this.itineraries.stream().filter(i -> i.getId().equals(itineraryId)).findFirst().orElse(null);
+    }
+
+    public List<POI> expiredPOIEvento(){
+        return this.POIValidate.stream().filter(p -> p instanceof POIEvento e && e.getClosingDate().isBefore(LocalDateTime.now())).toList();
     }
 }
