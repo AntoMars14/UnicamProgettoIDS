@@ -40,7 +40,7 @@ public class LoadDatabase {
              utentiAutenticatiManager.addUtente(u4);
              utentiAutenticatiManager.addUtente(u5);
              utentiAutenticatiManager.addUtente(u6);
-             comuneRepository.save(new Comune("Camerino",new Coordinates(43.1351,13.0683)));
+             comuneRepository.save(new Comune("Camerino",new Coordinates(43.1351,13.0683), u5));
          };
      }
 

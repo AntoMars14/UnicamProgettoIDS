@@ -1,4 +1,6 @@
 package it.unicam.model;
+import it.unicam.model.utenti.Role;
+import it.unicam.model.utenti.UtenteAutenticato;
 import it.unicam.model.util.dtos.*;
 import jakarta.persistence.*;
 
@@ -19,6 +21,8 @@ public class Comune {
     private Long comuneId;
     private Coordinates coordinates;
     private String name;
+    @OneToOne
+    private UtenteAutenticato curatore;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<POI> POIValidate = new ArrayList<>();
@@ -34,7 +38,10 @@ public class Comune {
     public Comune() {
     }
 
-    public Comune(String name, Coordinates coord) {
+    public Comune(String name, Coordinates coord, UtenteAutenticato curatore) {
+        if(curatore.getRole().equals(Role.CURATORE))
+            this.curatore = curatore;
+        else throw new IllegalArgumentException("L'utente non è un curatore");
         this.name = name;
         this.coordinates = coord;
         POILuogo comune = new POILuogo(coord);
@@ -42,6 +49,9 @@ public class Comune {
         this.insertPOI(comune);
     }
 
+    public Long getComuneId() {
+        return comuneId;
+    }
     public Coordinates getCoordinates() {
         return coordinates;
     }

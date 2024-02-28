@@ -14,6 +14,7 @@ public class POIController {
 
 
     public boolean selectPoint(Long idComune, Coordinates c){
+        //commentato per facilitare i test con postman
         //return (this.comuneRepository.findById(idComune).get().isInComune(c)&&(!this.comuneRepository.findById(idComune).get().thereIsPOI(c)));
         return true;
     }

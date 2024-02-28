@@ -5,8 +5,10 @@ import it.unicam.model.utenti.RoleManager;
 import it.unicam.model.utenti.UtentiAutenticatiManager;
 import it.unicam.model.controllersGRASP.RegistrationController;
 import it.unicam.model.utenti.Role;
+import it.unicam.model.util.dtos.UtenteAutenticatoGI;
 import it.unicam.repositories.ComuneRepository;
 import it.unicam.repositories.UtenteAutenticatoRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -123,12 +125,15 @@ public class UserController {
 
 
     @PostMapping("/registrationUser")
-    public ResponseEntity<Object> registrationUser(@RequestParam("email")String email, @RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("role") Role role) {
+    public ResponseEntity<Object> registrationUser(@Valid @RequestBody UtenteAutenticatoGI utente) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             return new ResponseEntity<>("Utente già autenticato o ruolo non disponibile alla registrazione", HttpStatus.BAD_REQUEST);
         }
-        this.registrationController.registrationUser(email, username, passwordEncoder.encode(password), role);
+        if (this.utentiAutenticatiManager.containsUser(utente.getEmail(), utente.getUsername())) {
+            return new ResponseEntity<>("Username e/o email già utilizzate", HttpStatus.BAD_REQUEST);
+        }
+        this.registrationController.registrationUser(utente.getEmail(), utente.getUsername(), passwordEncoder.encode(utente.password()), utente.getRole());
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
